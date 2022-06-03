@@ -1,11 +1,16 @@
 import './App.css';
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import Home from "./pages/home/home";
 import Messageboard from "./pages/messageboard/messageboard";
 import Overview from "./pages/overview/overview";
 import Profile from "./pages/profile/profile";
+import Login from "./pages/login/login";
+import Registration from "./pages/registration/registration";
+import {useState} from "react";
 
 function App() {
+    const [ loggedIn, toggleLoggedIn ] = useState(false);
+
   return (
       <Switch>
           <Route exact path="/">
@@ -14,8 +19,17 @@ function App() {
           <Route path="/messageboard">
               <Messageboard />
           </Route>
+          <Route path="/login">
+              <Login
+                loggedIn={loggedIn}
+                toggleLoggedIn={toggleLoggedIn}
+              />
+          </Route>
+          <Route path="/registration">
+              <Registration />
+          </Route>
           <Route path="/profiles">
-              <Overview />
+              { loggedIn ? <Overview /> : <Redirect to="/login" />}
           </Route>
           <Route path="/profile/:profileId">
               <Profile />

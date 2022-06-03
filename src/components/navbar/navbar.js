@@ -1,7 +1,7 @@
 import './navbar.css'
 import {NavLink} from "react-router-dom";
 
-function Navbar() {
+function Navbar({ loggedIn }) {
     return (
         <nav>
             <ul>
@@ -16,9 +16,7 @@ function Navbar() {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/profiles">
-                        Overview
-                    </NavLink>
+                    { loggedIn ? <NavLink to="/profiles">Overview</NavLink> : <NavLink to="/login">Login</NavLink> }
                 </li>
             </ul>
         </nav>
