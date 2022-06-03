@@ -4,21 +4,20 @@ import Footer from "../../components/footer/footer";
 import {Link} from "react-router-dom";
 import Button from "../../components/button/button";
 
-function Login({ loggedIn, toggleLoggedIn }) {
+function Login({loggedIn, toggleLoggedIn}) {
     return (
         <>
-            <Header />
+            <Header/>
             <main>
-                <p>Login</p>
                 <Button
                     title="Log in"
                     onClick={() => {toggleLoggedIn(!loggedIn)}}
                 />
-                {loggedIn && <p>Je bent ingelogd</p>}
+                { loggedIn && <p>Ingelogd</p> }
                 <p>Nog geen account?</p>
                 <Link to="/registration">Klik hier om je te registreren!</Link>
             </main>
-            <Footer />
+            <Footer/>
         </>
     );
 }

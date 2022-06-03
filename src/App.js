@@ -7,35 +7,42 @@ import Profile from "./pages/profile/profile";
 import Login from "./pages/login/login";
 import Registration from "./pages/registration/registration";
 import {useState} from "react";
+import Navbar from "./components/navbar/navbar";
 
 function App() {
-    const [ loggedIn, toggleLoggedIn ] = useState(false);
+    const [loggedIn, toggleLoggedIn] = useState(false);
 
-  return (
-      <Switch>
-          <Route exact path="/">
-              <Home />
-          </Route>
-          <Route path="/messageboard">
-              <Messageboard />
-          </Route>
-          <Route path="/login">
-              <Login
+    return (
+        <>
+            <Navbar
                 loggedIn={loggedIn}
                 toggleLoggedIn={toggleLoggedIn}
-              />
-          </Route>
-          <Route path="/registration">
-              <Registration />
-          </Route>
-          <Route path="/profiles">
-              { loggedIn ? <Overview /> : <Redirect to="/login" />}
-          </Route>
-          <Route path="/profile/:profileId">
-              <Profile />
-          </Route>
-      </Switch>
-  );
+            />
+            <Switch>
+                <Route exact path="/">
+                    <Home/>
+                </Route>
+                <Route path="/messageboard">
+                    <Messageboard/>
+                </Route>
+                <Route path="/login">
+                    <Login
+                        loggedIn={loggedIn}
+                        toggleLoggedIn={toggleLoggedIn}
+                    />
+                </Route>
+                <Route path="/registration">
+                    <Registration/>
+                </Route>
+                <Route path="/profiles">
+                    {loggedIn ? <Overview/> : <Redirect to="/login"/>}
+                </Route>
+                <Route path="/profile/:profileId">
+                    <Profile/>
+                </Route>
+            </Switch>
+        </>
+    );
 }
 
 export default App;

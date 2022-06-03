@@ -1,7 +1,7 @@
 import './navbar.css'
 import {NavLink} from "react-router-dom";
 
-function Navbar({ loggedIn }) {
+function Navbar({ loggedIn, toggleLoggedIn }) {
     return (
         <nav>
             <ul>
@@ -16,7 +16,12 @@ function Navbar({ loggedIn }) {
                     </NavLink>
                 </li>
                 <li>
-                    { loggedIn ? <NavLink to="/profiles">Overview</NavLink> : <NavLink to="/login">Login</NavLink> }
+                    { loggedIn && <NavLink to="/profiles">Overview</NavLink>}
+                </li>
+                <li>
+                    { loggedIn ?
+                        <NavLink exact to="/" onClick={() => {toggleLoggedIn(!loggedIn)}}>Logout</NavLink> :
+                        <NavLink to="/login">Login</NavLink> }
                 </li>
             </ul>
         </nav>
