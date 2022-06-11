@@ -6,12 +6,17 @@ import Button from "../../components/button/button";
 function Registration() {
     return (
         <>
-            <Header />
+            <Header/>
             <main>
-                <p>Registration</p>
-                <Button title="Registreren" />
+                <form className="registration-form">
+                    <label for="first-name">Voornaam:</label>
+                    <input type="text" id="first-name"></input>
+                    <label for="last-name">Achternaam:</label>
+                    <input type="text" id="last-name"></input>
+                    <Button type="submit" title="Registreren"/>
+                </form>
             </main>
-            <Footer />
+            <Footer/>
         </>
     );
 }

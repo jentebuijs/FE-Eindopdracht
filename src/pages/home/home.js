@@ -8,7 +8,8 @@ function Home() {
         <>
             <Header/>
             <main>
-                <p>Home</p>
+                <h1>Welkom!</h1>
+                <p>Blablabla</p>
             </main>
             <Footer/>
         </>
