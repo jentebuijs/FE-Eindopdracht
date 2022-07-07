@@ -1,10 +1,10 @@
-import './header.css'
-import Navbar from "../navbar/navbar";
+import './Header.css'
+import NavBar from "../NavBar/NavBar";
 
 function Header() {
     return (
         <header>
-            <Navbar />
+            <NavBar />
             <p>Header</p>
         </header>
     );

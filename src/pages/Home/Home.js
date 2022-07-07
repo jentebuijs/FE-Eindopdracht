@@ -1,7 +1,7 @@
-import './home.css'
+import './Home.css'
 import React from "react";
-import Header from "../../components/header/header";
-import Footer from "../../components/footer/footer";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 function Home() {
     return (

@@ -1,7 +1,7 @@
-import './signUp.css'
-import Footer from "../../components/footer/footer";
-import Header from "../../components/header/header";
-import Button from "../../components/button/button";
+import './SignUp.css'
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import Button from "../../components/Button/Button";
 import {useState} from "react";
 
 function SignUp() {
@@ -13,7 +13,7 @@ function SignUp() {
         <>
             <Header/>
             <main>
-                <form className="registration-form">
+                <form className="sign-up-form">
                     <label htmlFor="username">Gebruikersnaam:</label>
                     <input type="text" id="username" onChange={(e) => setUsername(e.target.value)}/>
                     <label htmlFor="email">E-mail:</label>

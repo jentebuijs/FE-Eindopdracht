@@ -1,11 +1,11 @@
 import './App.css';
 import {Route, Switch} from "react-router-dom";
-import Home from "./pages/home/home";
-import Messageboard from "./pages/messageboard/messageboard";
-import Overview from "./pages/overview/overview";
-import Profile from "./pages/profile/profile";
-import SignIn from "./pages/signIn/signIn";
-import SignUp from "./pages/signUp/signUp";
+import Home from "./pages/Home/Home";
+import Messageboard from "./pages/Messageboard/Messageboard";
+import Overview from "./pages/Overview/Overview";
+import Profile from "./pages/Profile/Profile";
+import SignIn from "./pages/SignIn/SignIn";
+import SignUp from "./pages/SignUp/SignUp";
 
 function App() {
 

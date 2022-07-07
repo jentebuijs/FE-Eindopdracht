@@ -1,8 +1,8 @@
-import './signIn.css'
-import Header from "../../components/header/header";
-import Footer from "../../components/footer/footer";
+import './SignIn.css'
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import {Link} from "react-router-dom";
-import Button from "../../components/button/button";
+import Button from "../../components/Button/Button";
 import {useState} from "react";
 
 function SignIn() {
@@ -13,7 +13,7 @@ function SignIn() {
         <>
             <Header/>
             <main>
-                <form className="login-form">
+                <form className="sign-in-form">
                     <input
                         type="text"
                         id="username"
