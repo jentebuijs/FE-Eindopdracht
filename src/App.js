@@ -4,8 +4,8 @@ import Home from "./pages/home/home";
 import Messageboard from "./pages/messageboard/messageboard";
 import Overview from "./pages/overview/overview";
 import Profile from "./pages/profile/profile";
-import Login from "./pages/login/login";
-import Registration from "./pages/registration/registration";
+import SignIn from "./pages/signIn/signIn";
+import SignUp from "./pages/signUp/signUp";
 
 function App() {
 
@@ -15,19 +15,19 @@ function App() {
                 <Route exact path="/">
                     <Home/>
                 </Route>
-                <Route path="/messageboard">
+                <Route path="/prikbord">
                     <Messageboard/>
                 </Route>
-                <Route path="/login">
-                    <Login />
+                <Route path="/inloggen">
+                    <SignIn />
                 </Route>
-                <Route path="/registration">
-                    <Registration/>
+                <Route path="/registreren">
+                    <SignUp/>
                 </Route>
-                <Route path="/profiles">
+                <Route path="/profielen">
                     <Overview/>
                 </Route>
-                <Route path="/profile/:profileId">
+                <Route path="/profiel/:profileId">
                     <Profile/>
                 </Route>
             </Switch>

@@ -6,23 +6,19 @@ function Navbar() {
         <nav>
             <ul>
                 <li>
-                    <NavLink exact to="/">
-                        Home
-                    </NavLink>
+                    <NavLink exact to="/">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/messageboard">
-                        Messageboard
-                    </NavLink>
+                    <NavLink to="/prikbord">Messageboard</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/profiles">Overview</NavLink>
+                    <NavLink to="/profielen">Overview</NavLink>
                 </li>
                 <li>
-                        <NavLink to="/login">Login</NavLink>
+                    <NavLink to="/inloggen">Login</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/registration">Registratie</NavLink>
+                    <NavLink to="/registreren">Registratie</NavLink>
                 </li>
             </ul>
         </nav>
