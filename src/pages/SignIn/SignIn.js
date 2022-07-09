@@ -28,7 +28,7 @@ function SignIn() {
         <>
             <Header/>
             <main>
-                <form className="sign-in-form" onSubmit={makeLoginRequest}>
+                <form className="sign-in-form">
                     <input
                         type="text"
                         id="username"
