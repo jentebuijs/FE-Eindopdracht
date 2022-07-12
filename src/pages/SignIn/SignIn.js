@@ -32,13 +32,13 @@ function SignIn() {
                     <input
                         type="text"
                         id="username"
-                        placeholder="Username"
+                        placeholder="Gebruikersnaam"
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <input
                         type="password"
                         id="password"
-                        placeholder="Password"
+                        placeholder="Wachtwoord"
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button

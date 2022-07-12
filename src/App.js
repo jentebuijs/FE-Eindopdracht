@@ -6,6 +6,7 @@ import Overview from "./pages/Overview/Overview";
 import Profile from "./pages/Profile/Profile";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
+import ProfileChange from "./pages/ProfileChange/ProfileChange";
 
 function App() {
 
@@ -26,6 +27,9 @@ function App() {
                 </Route>
                 <Route path="/profielen">
                     <Overview/>
+                </Route>
+                <Route path="/profiel-bewerken">
+                    <ProfileChange />
                 </Route>
                 <Route path="/profiel/:profileId">
                     <Profile/>

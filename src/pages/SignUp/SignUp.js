@@ -11,7 +11,6 @@ function SignUp() {
     const [ isStudent, toggleIsStudent ] = useState(false);
 
 
-
     // async function addNewUser(){
     //     try {
     //         const response = await axios.post('http://localhost:8080/signup', {
