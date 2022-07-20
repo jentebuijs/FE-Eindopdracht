@@ -19,11 +19,9 @@ function NavBar() {
                     <NavLink to="/profielen">Overview</NavLink>
                 </li>
                 <li>
-                    {isAuth ? <NavLink onClick={logout}>Uitloggen</NavLink> : <NavLink to="/inloggen">Inloggen</NavLink>}
+                    {isAuth ? <NavLink onClick={logout} to="/">Uitloggen</NavLink> : <NavLink to="/inloggen">Inloggen</NavLink>}
                 </li>
-                <li>
-                    <NavLink to="/registreren">Registratie</NavLink>
-                </li>
+                    { !isAuth && <li><NavLink to="/registreren">Registratie</NavLink></li> }
             </ul>
         </nav>
     );

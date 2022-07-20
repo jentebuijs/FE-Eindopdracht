@@ -1,33 +1,41 @@
 import {createContext, useState} from "react";
 import {useHistory} from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 export const AuthContext = createContext({});
 
 function AuthContextProvider({ children }) {
-    const [ auth, toggleAuth ] = useState({
+    const [ auth, setAuth] = useState({
         isAuth: false,
         user: null
     });
     const history = useHistory();
 
-    function login() {
-        toggleAuth({
+    function login(token) {
+        console.log(token);
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        localStorage.setItem('JWT-token', token);
+        setAuth({
             isAuth: true,
-            user: null,
-        });
-        history.push('/')
+            user: {
+                username: decodedToken.sub,
+                banaan: 'geel'
+            }});
+        console.log(auth);
+        // history.push('/')
     }
 
     function logout() {
-        toggleAuth({
+        setAuth({
             isAuth: false,
             user: null,
         })
-        history.push('/')
     }
 
     const authData = {
         isAuth : auth.isAuth,
+        user : auth.user,
         login: login,
         logout: logout,
     };

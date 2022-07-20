@@ -31,10 +31,10 @@ function App() {
                 <Route path="/profielen">
                     <Overview/>
                 </Route>
-                <Route path="/profiel-bewerken">
+                <Route path="/profiel/:username/bewerken">
                     <ProfileChange />
                 </Route>
-                <Route path="/profiel/:profileId">
+                <Route path="/profiel/:username">
                     <Profile/>
                 </Route>
             </Switch>

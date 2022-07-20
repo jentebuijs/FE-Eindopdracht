@@ -3,6 +3,7 @@ import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 import {useState} from "react";
+import axios from "axios";
 
 function SignUp() {
     const [ username, setUsername ] = useState('');
@@ -11,18 +12,22 @@ function SignUp() {
     const [ isStudent, toggleIsStudent ] = useState(false);
 
 
-    // async function addNewUser(){
-    //     try {
-    //         const response = await axios.post('http://localhost:8080/signup', {
-    //             username: username,
-    //             email: email,
-    //             password: password,
-    //             isStudent : ???
-    //         })
-    //     } catch(e) {
-    //         console.error(e);
-    //     }
-    // }
+    async function addNewUser(){
+        try {
+            const response = await axios.post('http://localhost:8080/signup', {
+                username: username,
+                email: email,
+                password: password,
+                isStudent :
+            })
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function isUserStudent(userrole) {
+        if (userrole == buddy)
+    }
 
     return (
         <>

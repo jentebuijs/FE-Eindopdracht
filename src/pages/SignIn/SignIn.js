@@ -13,14 +13,15 @@ function SignIn() {
     const [ password, setPassword ] = useState('');
 
     async function makeLoginRequest(e) {
+        e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/signin', {
-                username: e.username,
-                password: e.password
+                username: username,
+                password: password
             });
-
-            login(response.data.jwt);
             console.log(response);
+            const jwtToken = response.data;
+            login(jwtToken);
         } catch(e) {
             console.error(e);
         }
