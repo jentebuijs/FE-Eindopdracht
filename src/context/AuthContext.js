@@ -27,7 +27,7 @@ function AuthContextProvider({ children }) {
     }
 
     const authData = {
-        auth : auth,
+        isAuth : auth.isAuth,
         login: login,
         logout: logout,
     };

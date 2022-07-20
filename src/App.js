@@ -7,8 +7,11 @@ import Profile from "./pages/Profile/Profile";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import ProfileChange from "./pages/ProfileChange/ProfileChange";
+import {useContext} from "react";
+import {AuthContext} from "./context/AuthContext";
 
 function App() {
+    const { isAuth } = useContext(AuthContext);
 
     return (
         <>

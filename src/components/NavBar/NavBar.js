@@ -1,7 +1,11 @@
 import './NavBar.css'
 import {NavLink} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "../../context/AuthContext";
 
 function NavBar() {
+    const { isAuth, logout } = useContext(AuthContext);
+
     return (
         <nav>
             <ul>
@@ -15,7 +19,7 @@ function NavBar() {
                     <NavLink to="/profielen">Overview</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/inloggen">Login</NavLink>
+                    {isAuth ? <NavLink onClick={logout}>Uitloggen</NavLink> : <NavLink to="/inloggen">Inloggen</NavLink>}
                 </li>
                 <li>
                     <NavLink to="/registreren">Registratie</NavLink>

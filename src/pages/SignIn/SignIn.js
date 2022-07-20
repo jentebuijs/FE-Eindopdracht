@@ -12,23 +12,25 @@ function SignIn() {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 
-    // async function makeLoginRequest() {
-    //     try {
-    //         const response = await axios.post('http://localhost:8080/signin', {
-    //             username: username,
-    //             password: password
-    //         });
-    //
-    //     } catch(e) {
-    //         console.error(e);
-    //     }
-    // }
+    async function makeLoginRequest(e) {
+        try {
+            const response = await axios.post('http://localhost:8080/signin', {
+                username: e.username,
+                password: e.password
+            });
+
+            login(response.data.jwt);
+            console.log(response);
+        } catch(e) {
+            console.error(e);
+        }
+    }
 
     return (
         <>
             <Header/>
             <main>
-                <form className="sign-in-form">
+                <form className="sign-in-form" onSubmit={makeLoginRequest}>
                     <input
                         type="text"
                         id="username"
@@ -44,9 +46,6 @@ function SignIn() {
                     <Button
                         type="submit"
                         title="Log in"
-                        onClick={() => {
-                            console.log("logt in")
-                        }}
                     />
                 </form>
                 <p>Nog geen account?</p>
