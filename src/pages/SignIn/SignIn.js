@@ -15,7 +15,7 @@ function SignIn() {
     async function makeLoginRequest(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/signin', {
+            const response = await axios.post('http://localhost:8080/users/signin', {
                 username: username,
                 password: password
             });

@@ -16,7 +16,7 @@ function SignUp() {
         e.preventDefault();
         console.log(username, email, password, isStudent);
         try {
-            const response = await axios.post('http://localhost:8080/users/new', {
+            const response = await axios.post('http://localhost:8080/users/signup', {
                 username: username,
                 email: email,
                 password: password,
