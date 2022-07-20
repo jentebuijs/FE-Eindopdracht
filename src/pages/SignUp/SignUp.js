@@ -12,28 +12,36 @@ function SignUp() {
     const [ isStudent, toggleIsStudent ] = useState(false);
 
 
-    async function addNewUser(){
+    async function addNewUser(e){
+        e.preventDefault();
+        console.log(username, email, password, isStudent);
         try {
-            const response = await axios.post('http://localhost:8080/signup', {
+            const response = await axios.post('http://localhost:8080/users/new', {
                 username: username,
                 email: email,
                 password: password,
-                isStudent :
+                isStudent : isStudent
             })
+            console.log(response);
         } catch(e) {
             console.error(e);
         }
     }
 
-    function isUserStudent(userrole) {
-        if (userrole == buddy)
+    function handleCheck(e) {
+        if(e.target.value === "Buddy") {
+            toggleIsStudent(false);
+        } else {
+            toggleIsStudent(true);
+        }
     }
+
 
     return (
         <>
             <Header/>
             <main>
-                <form className="sign-up-form">
+                <form className="sign-up-form" onSubmit={addNewUser}>
                     <label htmlFor="username">Gebruikersnaam:</label>
                     <input type="text" id="username" onChange={(e) => setUsername(e.target.value)}/>
                     <label htmlFor="email">E-mail:</label>
@@ -42,9 +50,9 @@ function SignUp() {
                     <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
                     <div>
                         <p>Ik wil mij aanmelden als:</p>
-                        <input type="radio" name="userrole" value="buddy" id="userrole1" checked/>
+                        <input type="radio" name="userrole" value="Buddy" id="userrole1" defaultChecked onClick={handleCheck}/>
                         <label htmlFor="userrole1">Buddy</label>
-                        <input type="radio" name="userrole" value="student" id="userrole2"/>
+                        <input type="radio" name="userrole" value="Student" id="userrole2" onClick={handleCheck}/>
                         <label htmlFor="userrole2">Student</label>
                     </div>
                     <Button type="submit" title="Registreren"/>
