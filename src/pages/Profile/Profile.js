@@ -12,7 +12,7 @@ function Profile() {
             <Header/>
             <main>
                 <p>Profile with id {profileId}</p>
-                <Link to="/profiel-bewerken" />
+                <Link to="/profiel/bewerken">Profiel bewerken</Link>
             </main>
             <Footer/>
         </>

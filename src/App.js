@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import ProfileChange from "./pages/ProfileChange/ProfileChange";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
+import ImageRequest from "./components/ImageRequest/ImageRequest";
 
 function App() {
     const { isAuth } = useContext(AuthContext);
@@ -31,10 +32,13 @@ function App() {
                 <Route path="/profielen">
                     <Overview/>
                 </Route>
-                <Route path="/profiel/:username/bewerken">
+                <Route path="/profiel/bewerken">
                     <ProfileChange />
                 </Route>
-                <Route path="/profiel/:username">
+                <Route path="/profiel/afbeelding">
+                    <ImageRequest />
+                </Route>
+                <Route path="/profiel">
                     <Profile/>
                 </Route>
             </Switch>

@@ -1,8 +1,10 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 function ProfileChange() {
     return (
       <>
+          <Link to="/profiel/afbeelding">Afbeelding aanpassen</Link>
           <form>
               <label htmlFor="first-name">Voornaam:</label>
               <input type="text" id="first-name"/>
@@ -12,10 +14,6 @@ function ProfileChange() {
               <textarea id="about-me" />
               <label htmlFor="dob">Geboortedatum:</label>
               <input type="date" id="dob"/>
-              <label htmlFor="contact">Contact:</label>
-              <select id="contact">
-
-              </select>
           </form>
 
       </>
