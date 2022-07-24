@@ -1,6 +1,7 @@
 import {createContext, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-import jwtDecode from "jwt-decode";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 export const AuthContext = createContext({});
 
@@ -13,24 +14,24 @@ function AuthContextProvider({ children }) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            //data ophalen
+        if (token && !isTokenExpired) {
+            getUserData(token);
         } else {
             //niks?
         }
     }, [])
 
+    function isTokenExpired(token) {
+        const decodedToken = jwt_decode(token);
+        if (decodedToken.exp < Date.now()) {
+            return true;
+        } return false;
+    }
+
     function login(token) {
         console.log(token);
-        const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
         localStorage.setItem('token', token);
-        setAuth({
-            isAuth: true,
-            user: {
-                username: decodedToken.sub,
-                banaan: 'geel'
-            }});
+        const userData = getUserData(token);
         console.log(auth);
         // history.push('/')
     }
@@ -40,6 +41,33 @@ function AuthContextProvider({ children }) {
             isAuth: false,
             user: null,
         })
+    }
+
+    async function getUserData(token) {
+        const decodedToken = jwt_decode(token);
+        console.log(decodedToken);
+        try {
+            const response = await axios.get(`http://localhost:8080/users/${decodedToken.sub}`, {
+                headers: {
+                    "Content-type" : "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+
+            setAuth({
+                isAuth: true,
+                user: {
+                    username: response.data.username,
+                    email: response.data.email,
+                    id: response.data.id,
+                    enabled: response.data.enabled,
+                    is_student: response.data.is_student,
+                }});
+            console.log(auth);
+        } catch(e) {
+            console.error(e);
+        }
     }
 
     const authData = {

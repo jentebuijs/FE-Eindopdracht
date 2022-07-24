@@ -36,7 +36,6 @@ function SignUp() {
         }
     }
 
-
     return (
         <>
             <Header/>
