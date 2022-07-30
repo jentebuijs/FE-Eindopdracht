@@ -4,10 +4,11 @@ import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
 
 function NavBar() {
-    const { isAuth, logout } = useContext(AuthContext);
+    const { user, isAuth, logout } = useContext(AuthContext);
 
     return (
         <nav>
+            {console.log(user)}
             <ul>
                 <li>
                     <NavLink exact to="/">Home</NavLink>
