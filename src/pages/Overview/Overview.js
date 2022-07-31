@@ -4,12 +4,14 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
 
 function Overview() {
     const { user: {is_student}} = useContext(AuthContext);
+    const token = localStorage.getItem('token');
     const [ profiles, setProfiles ] = useState();
 
-    const token = localStorage.getItem('token');
+
 
     useEffect(() => {
         async function fetchProfiles(is_student) {
@@ -21,6 +23,7 @@ function Overview() {
                         Authorization: `Bearer ${token}`
                     }
                 });
+                console.log(response);
                 setProfiles(response.data);
             } catch(e) {
                 console.error(e);
@@ -29,9 +32,9 @@ function Overview() {
     }, []);
 
     function getUserRole(is_student) {
-        if(is_student == true) {
-            const oppositeType = "buddy";
-        } const oppositeType = "student";
+        if(is_student === true) {
+            return `buddies`;
+        } return `students`;
     }
 
 
@@ -41,7 +44,7 @@ function Overview() {
             <main>
                 <h1>Profielenoverzicht</h1>
                 {profiles && profiles.map((profile) => {
-                    <h2>{profile}</h2>
+                    return (<ProfileCard profile={profile} />);
                 })}
             </main>
             <Footer/>

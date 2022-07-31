@@ -10,6 +10,7 @@ import ProfileChange from "./pages/ProfileChange/ProfileChange";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import ImageRequest from "./components/ImageRequest/ImageRequest";
+import RequestPage from "./pages/RequestPage/RequestPage";
 
 function App() {
     const { isAuth } = useContext(AuthContext);
@@ -32,15 +33,19 @@ function App() {
                 <Route path="/profielen">
                     <Overview/>
                 </Route>
-                <Route path="/profiel/bewerken">
-                    <ProfileChange />
-                </Route>
-                <Route path="/profiel/afbeelding">
-                    <ImageRequest />
-                </Route>
-                <Route path="/profiel">
+                <Route path="/profiel/:username">
                     <Profile/>
                 </Route>
+                <Route path="/profiel/:username/bewerken">
+                    <ProfileChange />
+                </Route>
+                <Route path="/profiel/:username/afbeelding">
+                    <ImageRequest />
+                </Route>
+                <Route path="/profiel/:username/verzoeken">
+                    <RequestPage />
+                </Route>
+
             </Switch>
         </>
     );

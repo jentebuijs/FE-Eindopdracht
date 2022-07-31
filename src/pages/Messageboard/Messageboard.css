@@ -1,0 +1,11 @@
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.options{
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+}

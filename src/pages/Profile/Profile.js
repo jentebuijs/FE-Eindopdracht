@@ -1,12 +1,14 @@
 import './Profile.css'
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 
 function Profile() {
+    const token = localStorage.getItem('token');
     const { profileId } = useParams();
+    const [ profile, setProfile ] = useState({});
 
     useEffect(() => {
         async function fetchProfile(profileId) {
@@ -17,6 +19,7 @@ function Profile() {
                         Authorization : `Bearer ${token}`
                     }
                 });
+                console.log(response);
             } catch(e) {
                 console.error(e);
             }
