@@ -1,45 +1,51 @@
 import './App.css';
-import {Redirect, Route, Switch} from "react-router-dom";
-import Home from "./pages/home/home";
-import Messageboard from "./pages/messageboard/messageboard";
-import Overview from "./pages/overview/overview";
-import Profile from "./pages/profile/profile";
-import Login from "./pages/login/login";
-import Registration from "./pages/registration/registration";
-import {useState} from "react";
-import Navbar from "./components/navbar/navbar";
+import {Route, Switch} from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Messageboard from "./pages/Messageboard/Messageboard";
+import Overview from "./pages/Overview/Overview";
+import Profile from "./pages/Profile/Profile";
+import SignIn from "./pages/SignIn/SignIn";
+import SignUp from "./pages/SignUp/SignUp";
+import ProfileChange from "./pages/ProfileChange/ProfileChange";
+import {useContext} from "react";
+import {AuthContext} from "./context/AuthContext";
+import ImageRequest from "./components/ImageRequest/ImageRequest";
+import RequestPage from "./pages/RequestPage/RequestPage";
 
 function App() {
-    const [loggedIn, toggleLoggedIn] = useState(false);
+    const { isAuth } = useContext(AuthContext);
 
     return (
         <>
-            <Navbar
-                loggedIn={loggedIn}
-                toggleLoggedIn={toggleLoggedIn}
-            />
             <Switch>
                 <Route exact path="/">
                     <Home/>
                 </Route>
-                <Route path="/messageboard">
+                <Route path="/prikbord">
                     <Messageboard/>
                 </Route>
-                <Route path="/login">
-                    <Login
-                        loggedIn={loggedIn}
-                        toggleLoggedIn={toggleLoggedIn}
-                    />
+                <Route path="/inloggen">
+                    <SignIn />
                 </Route>
-                <Route path="/registration">
-                    <Registration/>
+                <Route path="/registreren">
+                    <SignUp/>
                 </Route>
-                <Route path="/profiles">
-                    {loggedIn ? <Overview/> : <Redirect to="/login"/>}
+                <Route path="/profielen">
+                    <Overview/>
                 </Route>
-                <Route path="/profile/:profileId">
+                <Route path="/profiel/:username">
                     <Profile/>
                 </Route>
+                <Route path="/profiel/:username/bewerken">
+                    <ProfileChange />
+                </Route>
+                <Route path="/profiel/:username/afbeelding">
+                    <ImageRequest />
+                </Route>
+                <Route path="/profiel/:username/verzoeken">
+                    <RequestPage />
+                </Route>
+
             </Switch>
         </>
     );
