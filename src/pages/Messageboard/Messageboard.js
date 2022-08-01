@@ -12,23 +12,21 @@ function Messageboard() {
     const [sortingButtons, toggleSortingButtons] = useState(false);
 
     useEffect(() => {
+        const source = axios.CancelToken.source();
         async function fetchMessages() {
-            const source = axios.CancelToken.source();
             try {
                 const response = await axios.get("http://localhost:8080/messages", {
-                    cancelToken: source.token,
+                    cancelToken: source.token
                 });
                 setMessages(response.data);
                 toggleFilterButtons(false);
-                fetchMessages();
-
-
             } catch (e) {
                 console.error(e);
             }
-            return function cleanup() {
-                source.cancel;
-            }
+        }
+        fetchMessages();
+        return function cleanup() {
+            source.cancel();
         }
     }, [])
 
