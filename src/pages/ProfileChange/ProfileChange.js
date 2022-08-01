@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 function ProfileChange() {
+    const {user: {username}} = useContext(AuthContext);
     return (
       <>
-          <Link to="/profiel/afbeelding">Afbeelding aanpassen</Link>
+          <Link to={`/profiel/${username}/afbeelding`}>Afbeelding aanpassen</Link>
           <form>
               <label htmlFor="first-name">Voornaam:</label>
               <input type="text" id="first-name"/>

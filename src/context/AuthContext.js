@@ -8,7 +8,8 @@ export const AuthContext = createContext({});
 function AuthContextProvider({ children }) {
     const [ auth, setAuth] = useState({
         isAuth: false,
-        user: null
+        user: null,
+        status: 'pending',
     });
     const history = useHistory();
 
@@ -31,16 +32,15 @@ function AuthContextProvider({ children }) {
     function login(token) {
         console.log(token);
         localStorage.setItem('token', token);
-        const userData = getUserData(token);
-        console.log(auth);
-        // history.push('/')
+        getUserData(token);
     }
 
     function logout() {
         setAuth({
             isAuth: false,
             user: null,
-        })
+            status: 'done',
+        });
     }
 
     async function getUserData(token) {
@@ -63,7 +63,9 @@ function AuthContextProvider({ children }) {
                     id: response.data.id,
                     enabled: response.data.enabled,
                     is_student: response.data.is_student,
-                }});
+                },
+                status: 'done',
+            });
             console.log(auth);
         } catch(e) {
             console.error(e);

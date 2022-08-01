@@ -10,9 +10,9 @@ function Messageboard() {
     const [messages, setMessages] = useState([]);
     const [filterButtons, toggleFilterButtons] = useState(false);
     const [sortingButtons, toggleSortingButtons] = useState(false);
+    const source = axios.CancelToken.source();
 
     useEffect(() => {
-        const source = axios.CancelToken.source();
         async function fetchMessages() {
             try {
                 const response = await axios.get("http://localhost:8080/messages", {
@@ -29,8 +29,6 @@ function Messageboard() {
             source.cancel();
         }
     }, [])
-
-
 
     async function filterForBuddies() {
         try {
