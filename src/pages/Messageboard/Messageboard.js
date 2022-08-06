@@ -8,25 +8,26 @@ import Button from "../../components/Button/Button";
 
 function Messageboard() {
     const [messages, setMessages] = useState([]);
-    const source = axios.CancelToken.source();
 
     useEffect(() => {
+        const fetchController = new AbortController;
+        const {signal} = fetchController;
+        async function fetchMessages() {
+            try {
+                const response = await axios.get("http://localhost:8080/messages", {signal});
+                setMessages(response.data);
+            } catch (e) {
+                console.error(e);
+            }
+        }
         fetchMessages();
         return function cleanup() {
-            source.cancel();
+            console.log("abort");
+            fetchController.abort();
         }
     }, [])
 
-    async function fetchMessages() {
-        try {
-            const response = await axios.get("http://localhost:8080/messages", {
-                cancelToken: source.token
-            });
-            setMessages(response.data);
-        } catch (e) {
-            console.error(e);
-        }
-    }
+
 
     async function filterForBuddies() {
         try {
@@ -39,7 +40,7 @@ function Messageboard() {
 
     async function filterForBoth() {
         try {
-            const response = await axios.get("http://localhost:8080/messages/both-roles");
+            const response = await axios.get("http://localhost:8080/messages/both");
             setMessages(response.data);
         } catch (e) {
             console.error(e);
@@ -57,40 +58,40 @@ function Messageboard() {
 
     return (
         <>
-        <Header/>
-        <main>
-            <div className="buttons">
-                <Button type="button"
-                        title="+"/>
-                <Button type="button"
-                        title="Alles"
-                        onClick={fetchMessages}/>
-                <Button type="button"
-                        title="Buddies"
-                        onClick={filterForBuddies}/>
-                <Button type="button"
-                        title="Allebei"
-                        onClick={filterForBoth}/>
-                <Button type="button"
-                        title="Studenten"
-                        onClick={filterForStudents}/>
-            </div>
-            }
+            <Header/>
+            <main>
+                <div className="buttons">
+                    <Button type="button"
+                            title="+"/>
+                    <Button type="button"
+                            title="Alles"
+                            />
+                    <Button type="button"
+                            title="Buddies"
+                            onClick={filterForBuddies}/>
+                    <Button type="button"
+                            title="Allebei"
+                            onClick={filterForBoth}/>
+                    <Button type="button"
+                            title="Studenten"
+                            onClick={filterForStudents}/>
+                </div>
+                }
 
-    {
-        messages && messages.map((message) => {
-            return (
-                <Message key={message.id}
-                         title={message.title}
-                         content={message.content}/>
-            );
-        })
-    }
-</main>
-    <Footer/>
-</>
-)
-    ;
+                {
+                    messages && messages.map((message) => {
+                        return (
+                            <Message key={message.id}
+                                     title={message.title}
+                                     content={message.content}/>
+                        );
+                    })
+                }
+            </main>
+            <Footer/>
+        </>
+    )
+        ;
 }
 
 export default Messageboard;

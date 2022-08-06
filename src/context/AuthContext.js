@@ -37,8 +37,7 @@ function AuthContextProvider({ children }) {
 
     function logout() {
         setAuth({
-            isAuth: false,
-            user: null,
+            ...auth,
             status: 'done',
         });
     }
