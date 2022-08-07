@@ -5,29 +5,29 @@ import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import jwt_decode from "jwt-decode";
 
 function Overview() {
-    const { user: {is_student}} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const token = localStorage.getItem('token');
     const [ profiles, setProfiles ] = useState();
 
-
-
     useEffect(() => {
-        async function fetchProfiles(is_student) {
-            const oppositeType = getUserRole(is_student);
-            try {
-                const response = await axios.get(`http://localhost:8080/profiles/${oppositeType}`, {
-                    headers: {
-                        "Content-type" : "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                console.log(response);
-                setProfiles(response.data);
-            } catch(e) {
-                console.error(e);
-            }
+        async function fetchProfiles() {
+            const decodedToken = jwt_decode(token);
+            console.log(decodedToken);
+            // try {
+            //     const response = await axios.get(`http://localhost:8080/profiles/${}`, {
+            //         headers: {
+            //             "Content-type" : "application/json",
+            //             Authorization: `Bearer ${token}`
+            //         }
+            //     });
+            //     console.log(response);
+            //     setProfiles(response.data);
+            // } catch(e) {
+            //     console.error(e);
+            // }
         }
     }, []);
 

@@ -14,7 +14,7 @@ function Profile() {
     useEffect(() => {
         async function fetchProfile() {
             try {
-                const response = await axios.get(`http://localhost:8080/profiles/${id}`, {
+                const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
                     headers: {
                         "Content-type" : "application/json",
                         Authorization : `Bearer ${token}`
@@ -33,7 +33,7 @@ function Profile() {
             <Header/>
             <main>
                 <h2>Profiel met id {id}</h2>
-                <Link to={`${username}/bewerken`}>Profiel bewerken</Link>
+                <Link to='/profiel/:username/bewerken'>Profiel bewerken</Link>
             </main>
             <Footer/>
         </>

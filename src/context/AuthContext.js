@@ -18,7 +18,10 @@ function AuthContextProvider({ children }) {
         if (token && !isTokenExpired) {
             getUserData(token);
         } else {
-            //niks?
+            setAuth({
+                ...auth,
+                status: 'done',
+            })
         }
     }, [])
 
@@ -33,6 +36,7 @@ function AuthContextProvider({ children }) {
         console.log(token);
         localStorage.setItem('token', token);
         getUserData(token);
+        history.push("/");
     }
 
     function logout() {
@@ -59,9 +63,7 @@ function AuthContextProvider({ children }) {
                 user: {
                     username: response.data.username,
                     email: response.data.email,
-                    id: response.data.id,
                     enabled: response.data.enabled,
-                    is_student: response.data.is_student,
                 },
                 status: 'done',
             });
@@ -71,15 +73,16 @@ function AuthContextProvider({ children }) {
         }
     }
 
-    const authData = {
+    const contextData = {
         isAuth : auth.isAuth,
         user : auth.user,
+        status: auth.status,
         login: login,
         logout: logout,
     };
 
     return (
-        <AuthContext.Provider value={ authData }>
+        <AuthContext.Provider value={ contextData }>
             { children }
         </AuthContext.Provider>
     );

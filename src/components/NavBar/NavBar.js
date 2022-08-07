@@ -11,30 +11,23 @@ function NavBar() {
             {console.log(user)}
             <ul>
                 <li>
-                    <NavLink exact to="/">Home</NavLink>
+                    <NavLink exact to="/" activeClassName="active-navlink">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/prikbord">Messageboard</NavLink>
+                    <NavLink to="/prikbord" activeClassName="active-navlink">Prikbord</NavLink>
                 </li>
-                <li>
-                    {isAuth && <NavLink to="/profielen">Overview</NavLink>}
-                </li>
-                    {isAuth && <>
-                    <li><NavLink to={`/profiel/${user.username}`}>Profiel</NavLink></li>
-                    <li><NavLink to={`/profiel/${user.username}/verzoeken`}>Verzoeken</NavLink></li>
-                </>}
-                <li>
-                    {isAuth ? <NavLink onClick={logout} to="/">Uitloggen</NavLink> :
-                        <NavLink to="/inloggen">Inloggen</NavLink>}
-                </li>
-                    {!isAuth && <li><NavLink to="/registreren">Registratie</NavLink></li>}
+                { !isAuth && <>
+                    <li><NavLink to="/registreren">Registratie</NavLink></li>
+                    <li><NavLink to="/inloggen">Inloggen</NavLink></li></> }
+                { isAuth && <>
+                    <li><NavLink to="/profielen" activeClassName="active-navlink">Profielen</NavLink></li>
+                    <li><NavLink to="/" activeClassName="active-navlink" onClick={logout} >Uitloggen</NavLink></li></> }
             </ul>
-            <ul className="usermenu">
-                {isAuth && <li><h4>Hallo, {user.username}!</h4></li>}
+            <ul>
+                {isAuth && <li><NavLink to="/profiel/:username" activeClassName="active-navlink">Hallo, {user.username}!</NavLink></li>}
             </ul>
         </nav>
     );
 }
-
 
 export default NavBar;

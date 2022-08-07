@@ -1,11 +1,15 @@
+import './ProfileChange.css'
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 function ProfileChange() {
     const {user: {username}} = useContext(AuthContext);
     return (
       <>
+          <Header />
           <Link to={`/profiel/${username}/afbeelding`}>Afbeelding aanpassen</Link>
           <form>
               <label htmlFor="first-name">Voornaam:</label>
@@ -17,7 +21,7 @@ function ProfileChange() {
               <label htmlFor="dob">Geboortedatum:</label>
               <input type="date" id="dob"/>
           </form>
-
+          <Footer />
       </>
     );
 }

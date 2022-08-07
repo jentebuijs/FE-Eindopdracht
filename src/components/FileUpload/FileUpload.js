@@ -1,8 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 
-
-function ImageRequest() {
+function FileUpload() {
     const [file, setFile] = useState([]);
     const [previewUrl, setPreviewUrl] = useState('');
 
@@ -51,4 +50,4 @@ function ImageRequest() {
     );
 }
 
-export default ImageRequest;
+export default FileUpload;
