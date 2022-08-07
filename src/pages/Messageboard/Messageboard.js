@@ -49,8 +49,6 @@
 
 import './Messageboard.css'
 import React, {useEffect, useState} from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import Message from "../../components/Message/Message";
 import Button from "../../components/Button/Button";
 import axios from "axios";
@@ -61,9 +59,11 @@ function Messageboard() {
     const [visibleMessages, setVisibleMessages] = useState([]);
 
     useEffect(() => {
+        const fetchController = new AbortController;
+        const {signal} = fetchController;
         async function fetchData() {
             try {
-                const result = await axios.get("http://localhost:8080/messages")
+                const result = await axios.get("http://localhost:8080/messages", {signal})
                 setMessages(result.data);
                 setVisibleMessages(result.data);
                 toggleSuccess(true);
@@ -72,6 +72,10 @@ function Messageboard() {
             }
         }
         fetchData();
+        return function cleanup() {
+            fetchController.abort();
+        }
+
     }, []);
 
     function filterMessages(messageType) {
@@ -97,7 +101,7 @@ function Messageboard() {
 
     return (
         <>
-            {success && <div>
+            <div>
                 {console.log(messages)}
                 {console.log(visibleMessages)}
                 <div className="buttons">
@@ -125,7 +129,7 @@ function Messageboard() {
                             }}/>
                 </div>
 
-                {messages && messages.map((message) => {
+                {visibleMessages && visibleMessages.map((message) => {
                     return (
                         // <p>{message.id}</p>
                         <Message key={message.id}
@@ -133,7 +137,7 @@ function Messageboard() {
                                  content={message.content}/>
                     );
                 })}
-            </div>}
+            </div>
         </>
     );
 }
@@ -227,7 +231,7 @@ export default Messageboard;
 // import Button from "../../components/Button/Button";
 //
 // function Messageboard() {
-//     // const [success, toggleSuccess] = useState(false);
+    // const [success, toggleSuccess] = useState(false);
 //     const [messages, setMessages] = useState([]);
 //     const [visibleMessages, setVisibleMessages] = useState([]);
 //
