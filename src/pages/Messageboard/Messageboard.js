@@ -8,33 +8,40 @@ import Button from "../../components/Button/Button";
 
 function Messageboard() {
     const [messages, setMessages] = useState([]);
-    const [filterButtons, toggleFilterButtons] = useState(false);
-    const [sortingButtons, toggleSortingButtons] = useState(false);
-    const source = axios.CancelToken.source();
 
     useEffect(() => {
+        const fetchController = new AbortController;
+        const {signal} = fetchController;
         async function fetchMessages() {
             try {
-                const response = await axios.get("http://localhost:8080/messages", {
-                    cancelToken: source.token
-                });
+                const response = await axios.get("http://localhost:8080/messages", {signal});
                 setMessages(response.data);
-                toggleFilterButtons(false);
             } catch (e) {
                 console.error(e);
             }
         }
         fetchMessages();
         return function cleanup() {
-            source.cancel();
+            console.log("abort");
+            fetchController.abort();
         }
     }, [])
+
+
 
     async function filterForBuddies() {
         try {
             const response = await axios.get("http://localhost:8080/messages/buddies");
             setMessages(response.data);
-            toggleFilterButtons(false);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function filterForBoth() {
+        try {
+            const response = await axios.get("http://localhost:8080/messages/both");
+            setMessages(response.data);
         } catch (e) {
             console.error(e);
         }
@@ -44,17 +51,6 @@ function Messageboard() {
         try {
             const response = await axios.get("http://localhost:8080/messages/students");
             setMessages(response.data);
-            toggleFilterButtons(false);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    async function filterForBoth() {
-        try {
-            const response = await axios.get("http://localhost:8080/messages/both-roles");
-            setMessages(response.data);
-            toggleFilterButtons(false);
         } catch (e) {
             console.error(e);
         }
@@ -66,49 +62,36 @@ function Messageboard() {
             <main>
                 <div className="buttons">
                     <Button type="button"
-                            title="+" />
-                    <div className="options">
-                        <Button type="button"
-                                title="Filteren"
-                                onClick={() => toggleFilterButtons(!filterButtons)}/>
-                        {filterButtons && <>
-                            <Button type="button"
-                                    title="Voor buddies"
-                                    onClick={filterForBuddies}/>
-                            <Button type="button"
-                                    title="Voor studenten"
-                                    onClick={filterForStudents}/>
-                            <Button type="button"
-                                    title="Voor buddies en studenten"
-                                    onClick={filterForBoth}/>
-                            {/*<Button type="button"*/}
-                            {/*        title="Alles"*/}
-                            {/*        onClick={fetchMessages}/>*/}
-                        </>}
-                    </div>
-                    <div className="options">
-                        <Button type="button"
-                                title="Sorteren"
-                                onClick={() => toggleSortingButtons(!sortingButtons)}/>
-                        {sortingButtons && <>
-                            <Button type="button"
-                                    title="Op datum"/>
-                            <Button type="button"
-                                    title="Op titel"/>
-                        </>}
-                    </div>
+                            title="+"/>
+                    <Button type="button"
+                            title="Alles"
+                            />
+                    <Button type="button"
+                            title="Buddies"
+                            onClick={filterForBuddies}/>
+                    <Button type="button"
+                            title="Allebei"
+                            onClick={filterForBoth}/>
+                    <Button type="button"
+                            title="Studenten"
+                            onClick={filterForStudents}/>
                 </div>
-                {messages && messages.map((message) => {
-                    return (
-                        <Message key={message.id}
-                                 title={message.title}
-                                 content={message.content}/>
-                    );
-                })}
+                }
+
+                {
+                    messages && messages.map((message) => {
+                        return (
+                            <Message key={message.id}
+                                     title={message.title}
+                                     content={message.content}/>
+                        );
+                    })
+                }
             </main>
             <Footer/>
         </>
-    );
+    )
+        ;
 }
 
 export default Messageboard;
