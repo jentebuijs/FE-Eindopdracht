@@ -29,8 +29,6 @@ function SignIn() {
 
     return (
         <>
-            <Header/>
-            <main>
                 <form className="sign-in-form" onSubmit={makeLoginRequest}>
                     <input
                         type="text"
@@ -51,8 +49,6 @@ function SignIn() {
                 </form>
                 <p>Nog geen account?</p>
                 <Link to="/registreren">Klik hier om je te registreren!</Link>
-            </main>
-            <Footer/>
         </>
     );
 }

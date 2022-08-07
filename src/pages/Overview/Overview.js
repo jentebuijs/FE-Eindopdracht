@@ -40,14 +40,10 @@ function Overview() {
 
     return (
         <>
-            <Header/>
-            <main>
                 <h1>Profielenoverzicht</h1>
                 {profiles && profiles.map((profile) => {
                     return (<ProfileCard profile={profile} />);
                 })}
-            </main>
-            <Footer/>
         </>
     );
 }

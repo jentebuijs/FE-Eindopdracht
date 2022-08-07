@@ -37,8 +37,6 @@ function SignUp() {
 
     return (
         <>
-            <Header/>
-            <main>
                 <form className="sign-up-form" onSubmit={addNewUser}>
                     <fieldset>
                         <legend>Account:</legend>
@@ -76,8 +74,6 @@ function SignUp() {
                     </fieldset>
                     <Button type="submit" title="Registreren"/>
                 </form>
-            </main>
-            <Footer/>
         </>
     );
 }

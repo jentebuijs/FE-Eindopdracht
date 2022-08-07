@@ -10,42 +10,39 @@ import ProfileChange from "./pages/ProfileChange/ProfileChange";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import NavBar from "./components/NavBar/NavBar";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 function App() {
-    const { isAuth } = useContext(AuthContext);
+    const {isAuth} = useContext(AuthContext);
 
     return (
         <>
-            <div>
-                <div>
-                    <NavBar />
-                </div>
-                <div>
-                    <Switch>
-                        <Route exact path="/">
-                            <Home/>
-                        </Route>
-                        <Route path="/prikbord">
-                            <Messageboard/>
-                        </Route>
-                        <Route path="/inloggen">
-                            <SignIn />
-                        </Route>
-                        <Route path="/registreren">
-                            <SignUp/>
-                        </Route>
-                        <Route path="/profielen">
-                            <Overview/>
-                        </Route>
-                        <Route path="/profiel/:username">
-                            <Profile/>
-                        </Route>
-                        <Route path="/profiel/:username/bewerken">
-                            <ProfileChange />
-                        </Route>
-                    </Switch>
-                </div>
-            </div>
+            <Header/>
+            <Switch>
+                <Route exact path="/">
+                    <Home/>
+                </Route>
+                <Route path="/prikbord">
+                    <Messageboard/>
+                </Route>
+                <Route path="/inloggen">
+                    <SignIn/>
+                </Route>
+                <Route path="/registreren">
+                    <SignUp/>
+                </Route>
+                <Route path="/profielen">
+                    <Overview/>
+                </Route>
+                <Route path="/profiel/:username">
+                    <Profile/>
+                </Route>
+                <Route path="/profiel/:username/bewerken">
+                    <ProfileChange/>
+                </Route>
+            </Switch>
+            <Footer />
         </>
     );
 }
