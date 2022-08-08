@@ -41,7 +41,8 @@ function AuthContextProvider({ children }) {
 
     function logout() {
         setAuth({
-            ...auth,
+            isAuth: false,
+            user: null,
             status: 'done',
         });
     }
@@ -64,6 +65,7 @@ function AuthContextProvider({ children }) {
                     username: response.data.username,
                     email: response.data.email,
                     enabled: response.data.enabled,
+                    authorities: decodedToken.authorities,
                 },
                 status: 'done',
             });

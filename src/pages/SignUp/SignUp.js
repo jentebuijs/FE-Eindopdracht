@@ -2,9 +2,10 @@ import './SignUp.css'
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 function SignUp() {
     const [username, setUsername] = useState('');
@@ -64,13 +65,31 @@ function SignUp() {
                         <input type="text" id="lname" onChange={(e) => setLastName(e.target.value)}/>
                         <label htmlFor="dob">Geboortedatum:</label>
                         <input type="text" id="dob" onChange={(e) => setDob(e.target.value)}/>
-                        { authorities === "Student" && <>
-                        <label htmlFor="level">Taalniveau:</label>
-                        <select name="level" id="level">
-                            <option value=""></option>
+                        { authorities === "Student" && <span>
+                        <label htmlFor="level">Nederlands niveau:</label>
+                        <select name="level" id="level" onChange={(e) => setLevel(e.target.value)}>
+                            <option value="BEGINNER">Beginner - A1</option>
+                            <option value="ELEMENTARY">Beginner -A2</option>
+                            <option value="INTERMEDIATE">Gevorderd - B1</option>
+                            <option value="UPPER_INTERMEDIATE">Gevorderd - B2</option>
+                            <option value="ADVANCED">Vergevorderd - C1</option>
+                            <option value="PROFICIENT">Vergevorderd - C2</option>
                         </select>
-                        </> }
-
+                            <p>Weet je nog niet wat je taalniveau is?
+                                <a to="https://detaalbrigade.nl/taalniveaus/">Klik hier</a> voor meer informatie in het Nederlands</p>
+                            <p>Are you not sure about your language level?
+                                <a to="https://www.fluentin3months.com/cefr-levels/">Click here</a> for more information in English</p>
+                        </span> }
+                        <label htmlFor="personal">Over mij:</label>
+                        <input type="text" id="personal" onChange={(e) => setAboutMe(e.target.value)}/>
+                        {authorities === "Student" ? <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Buddy?</label> : <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Student?</label>}
+                        <select name="frequency" id="frequency" onChange={(e) => setFrequency(e.target.value)}>
+                            <option value="EVERY_DAY">Elke dag</option>
+                            <option value="ONCE_A_WEEK">Een keer per week</option>
+                            <option value="FEW_TIMES_A_WEEK">Een paar keer per week</option>
+                            <option value="ONCE_A_MONTH">Een keer per maand</option>
+                            <option value="FEW_TIMES_A_MONTH">Een paar keer per maand</option>
+                        </select>
                     </fieldset>
                     <Button type="submit" title="Registreren"/>
                 </form>

@@ -8,34 +8,31 @@ import {AuthContext} from "../../context/AuthContext";
 
 function Profile() {
     const token = localStorage.getItem('token');
-    const {user: { id, username }} = useContext(AuthContext);
-    const [ profile, setProfile ] = useState({});
+    const {user: {id, username}} = useContext(AuthContext);
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
         async function fetchProfile() {
             try {
                 const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
                     headers: {
-                        "Content-type" : "application/json",
-                        Authorization : `Bearer ${token}`
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${token}`
                     }
                 });
                 console.log(response);
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
             }
         }
+
         fetchProfile();
     }, []);
 
     return (
         <>
-            <Header/>
-            <main>
-                <h2>Profiel met id {id}</h2>
-                <Link to='/profiel/:username/bewerken'>Profiel bewerken</Link>
-            </main>
-            <Footer/>
+            <h2>Profiel met id {id}</h2>
+            <Link to='/profiel/:username/bewerken'>Profiel bewerken</Link>
         </>
     );
 }
