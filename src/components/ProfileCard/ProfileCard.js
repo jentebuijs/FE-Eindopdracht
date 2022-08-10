@@ -1,9 +1,9 @@
 import './ProfileCard.css'
 
-function ProfileCard({profile: {firstname, level, contact_intensity}}) {
+function ProfileCard({profile: {firstName, level, frequency}}) {
     return (
         <>
-            <h3>Hoi, ik ben {firstname}!</h3>
+            <h3>Hoi, ik ben {firstName}!</h3>
         </>
     );
 

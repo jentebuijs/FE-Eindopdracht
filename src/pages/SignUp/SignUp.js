@@ -1,17 +1,14 @@
 import './SignUp.css'
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext";
 
 function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [authorities, setAuthorities] = useState('');
+    const [authorities, setAuthorities] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [dob, setDob] = useState('');
@@ -22,14 +19,20 @@ function SignUp() {
 
     async function addNewUser(e) {
         e.preventDefault();
-        console.log(username, email, password, authorities);
+        console.log(username, email, password, authorities, firstName, lastName, dob, level, frequency, aboutMe);
         try {
             const response = await axios.post('http://localhost:8080/users/signup', {
                 username: username,
                 email: email,
                 password: password,
-                authorities: authorities
-            })
+                authorities: authorities,
+                firstName: firstName,
+                lastName: lastName,
+                dob: dob,
+                level: level,
+                frequency: frequency,
+                aboutMe: aboutMe
+            });
             console.log(response);
         } catch (e) {
             console.error(e);
@@ -49,12 +52,18 @@ function SignUp() {
                         <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
                         <div>
                             <p>Ik wil mij aanmelden als:</p>
-                            <input type="radio" name="authorities" value="Buddy" id="userrole1" defaultChecked
-                                   onChange={() => setAuthorities("Buddy")}/>
-                            <label htmlFor="userrole1">Buddy</label>
-                            <input type="radio" name="authorities" value="Student" id="userrole2"
-                                   onChange={() => setAuthorities("Student")}/>
-                            <label htmlFor="userrole2">Student</label>
+                            <input type="radio" name="userrole" value="Buddy" id="buddy" defaultChecked
+                                   onChange={(e) => {
+                                       setAuthorities(["Buddy"]);
+                                       console.log(authorities);
+                                   }}/>
+                            <label htmlFor="buddy">Buddy</label>
+                            <input type="radio" name="userrole" value="Student" id="student"
+                                   onChange={(e) => {
+                                       setAuthorities(["Student"]);
+                                       console.log(authorities);
+                                   }}/>
+                            <label htmlFor="student">Student</label>
                         </div>
                     </fieldset>
                     <fieldset>
@@ -65,9 +74,10 @@ function SignUp() {
                         <input type="text" id="lname" onChange={(e) => setLastName(e.target.value)}/>
                         <label htmlFor="dob">Geboortedatum:</label>
                         <input type="text" id="dob" onChange={(e) => setDob(e.target.value)}/>
-                        { authorities === "Student" && <span>
+                        { authorities && authorities.includes("Student") && <span>
                         <label htmlFor="level">Nederlands niveau:</label>
                         <select name="level" id="level" onChange={(e) => setLevel(e.target.value)}>
+                            <option value="none" disabled hidden>Kies een optie</option>
                             <option value="BEGINNER">Beginner - A1</option>
                             <option value="ELEMENTARY">Beginner -A2</option>
                             <option value="INTERMEDIATE">Gevorderd - B1</option>
@@ -82,8 +92,9 @@ function SignUp() {
                         </span> }
                         <label htmlFor="personal">Over mij:</label>
                         <input type="text" id="personal" onChange={(e) => setAboutMe(e.target.value)}/>
-                        {authorities === "Student" ? <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Buddy?</label> : <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Student?</label>}
+                        { authorities && authorities.includes("Student") ? <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Buddy?</label> : <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Student?</label>}
                         <select name="frequency" id="frequency" onChange={(e) => setFrequency(e.target.value)}>
+                            <option value="none" disabled hidden>Kies een optie</option>
                             <option value="EVERY_DAY">Elke dag</option>
                             <option value="ONCE_A_WEEK">Een keer per week</option>
                             <option value="FEW_TIMES_A_WEEK">Een paar keer per week</option>

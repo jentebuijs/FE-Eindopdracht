@@ -1,14 +1,14 @@
 import './SignIn.css'
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import {Link} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 function SignIn() {
     const { login } = useContext(AuthContext);
+    const {history} = useHistory();
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 

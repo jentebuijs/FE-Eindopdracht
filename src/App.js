@@ -9,7 +9,6 @@ import SignUp from "./pages/SignUp/SignUp";
 import ProfileChange from "./pages/ProfileChange/ProfileChange";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
-import NavBar from "./components/NavBar/NavBar";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 

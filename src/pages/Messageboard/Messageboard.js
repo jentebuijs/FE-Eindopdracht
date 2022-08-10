@@ -11,12 +11,13 @@ function Messageboard() {
     useEffect(() => {
         const fetchController = new AbortController;
         const {signal} = fetchController;
-        const CancelToken = axios.CancelToken;
-        const source = CancelToken.source();
+        // const CancelToken = axios.CancelToken;
+        // const source = CancelToken.source();
         async function fetchData() {
             // e.preventDefault();
             try {
-                const result = await axios.get("http://localhost:8080/messages", {cancelToken: source.token})
+                const result = await axios.get("http://localhost:8080/messages", {signal})
+                    // {cancelToken: source.token})
                 setMessages(result.data);
                 setVisibleMessages(result.data);
             } catch (e) {
@@ -25,8 +26,8 @@ function Messageboard() {
         }
         fetchData();
         return function cleanup() {
-            source.cancel();
-            // fetchController.abort();
+            // source.cancel();
+            fetchController.abort();
         }
     }, []);
 
