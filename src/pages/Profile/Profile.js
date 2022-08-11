@@ -1,17 +1,22 @@
 import './Profile.css'
-import { FaRegEdit } from "react-icons/fa";
+import {FaRegEdit, FaPhotoVideo, FaUserEdit} from "react-icons/fa";
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import ProfileChange from "../ProfileChange/ProfileChange";
+import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import Button from "../../components/Button/Button";
+import FileUpload from "../../components/FileUpload/FileUpload";
+import Requests from "../../components/Requests/Requests";
 
 function Profile() {
     const token = localStorage.getItem('token');
     const {user} = useContext(AuthContext);
-    const [edit, toggleEdit] = useState(false);
+    const [profileEdit, toggleProfileEdit] = useState(false);
+    const [userEdit, toggleUserEdit] = useState(false);
+    const [fileUpload, toggleFileUpload] = useState(false);
     const [profile, setProfile] = useState({});
+
 
     useEffect(() => {
         const controller = new AbortController;
@@ -37,13 +42,27 @@ function Profile() {
         }
     }, []);
 
+
     return (
         <>
-            <h2>Profiel met id {user.id}</h2>
-            <button type="button" onClick={() => toggleEdit(!edit)}><FaRegEdit/></button>
-            { edit && <ProfileChange profileData={profile}/> }
+            {profileEdit && <ProfileEdit profileData={profile}/>}
+            {fileUpload && <FileUpload/>}
+            {profile && <section>
+                <div>
+                    <h2>Hallo, {user.username}!</h2>
+                    <p>Naam: {profile.firstName} {profile.lastName}</p>
+                    <p>Profielinformatie blablabla</p>
+                </div>
+                <div>
+                    <button type="button" onClick={() => toggleUserEdit(!userEdit)}><FaUserEdit/></button>
+                    <button type="button" onClick={() => toggleProfileEdit(!profileEdit)}><FaRegEdit/></button>
+                    <button type="button" onClick={() => toggleFileUpload(!fileUpload)}><FaPhotoVideo/></button>
+                    {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
+                </div>
+            </section>}
+            <Requests/>
         </>
-);
+    );
 }
 
 export default Profile;

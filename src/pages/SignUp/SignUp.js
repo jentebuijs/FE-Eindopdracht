@@ -1,5 +1,4 @@
 import './SignUp.css'
-import Button from "../../components/Button/Button";
 import {useEffect, useState} from "react";
 import {useForm} from 'react-hook-form';
 import axios from "axios";

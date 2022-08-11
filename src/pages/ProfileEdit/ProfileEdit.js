@@ -1,11 +1,11 @@
-import './ProfileChange.css'
+import './ProfileEdit.css'
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
-function ProfileChange({ profileData }) {
+function ProfileEdit({ profileData }) {
     const {user} = useContext(AuthContext);
     return (
       <>
@@ -24,4 +24,4 @@ function ProfileChange({ profileData }) {
     );
 }
 
-export default ProfileChange;
+export default ProfileEdit;

@@ -6,7 +6,7 @@ import Overview from "./pages/Overview/Overview";
 import Profile from "./pages/Profile/Profile";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
-import ProfileChange from "./pages/ProfileChange/ProfileChange";
+import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import Header from "./components/Header/Header";
