@@ -7,13 +7,13 @@ import jwt_decode from "jwt-decode";
 
 function Overview() {
     const { isAuth, user } = useContext(AuthContext);
-    const [ profiles, setProfiles ] = useState();
+    const [ profiles, setProfiles ] = useState(null);
 
     useEffect(() => {
         async function fetchProfiles() {
             const token = localStorage.getItem('token');
             try {
-                const response = await axios.get(`http://localhost:8080/profiles/${user.authority}`, {
+                const response = await axios.get("http://localhost:8080/profiles/", {
                     headers: {
                         "Content-type" : "application/json",
                         Authorization: `Bearer ${token}`

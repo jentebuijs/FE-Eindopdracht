@@ -1,111 +1,188 @@
 import './SignUp.css'
 import Button from "../../components/Button/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useForm} from 'react-hook-form';
 import axios from "axios";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 function SignUp() {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [authorities, setAuthorities] = useState(null);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [dob, setDob] = useState('');
-    const [level, setLevel] = useState('');
-    const [frequency, setFrequency] = useState('');
-    const [aboutMe, setAboutMe] = useState('');
-    const {history} = useHistory();
+    const {register, watch, handleSubmit, formState: {errors}} = useForm();
+    const [success, toggleSuccess] = useState(false);
+    const authority = register("authority");
+    const role = watch("authority");
+    const history = useHistory();
 
-    async function addNewUser(e) {
-        e.preventDefault();
-        console.log(username, email, password, authorities, firstName, lastName, dob, level, frequency, aboutMe);
+    // function onSubmit(data) {
+    //     console.log(data);
+    // }
+
+    const onSubmit = data => {
         try {
-            const response = await axios.post('http://localhost:8080/users/signup', {
-                username: username,
-                email: email,
-                password: password,
-                authorities: authorities,
-                firstName: firstName,
-                lastName: lastName,
-                dob: dob,
-                level: level,
-                frequency: frequency,
-                aboutMe: aboutMe
-            });
-            console.log(response);
+            axios.post(
+                'http://localhost:8080/users/signup',
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(r => toggleSuccess(true));
         } catch (e) {
+            toggleSuccess(false);
             console.error(e);
         }
     }
 
     return (
         <>
-                <form className="sign-up-form" onSubmit={addNewUser}>
-                    <fieldset>
-                        <legend>Account:</legend>
-                        <label htmlFor="username">Gebruikersnaam:</label>
-                        <input type="text" id="username" onChange={(e) => setUsername(e.target.value)}/>
-                        <label htmlFor="email">E-mail:</label>
-                        <input type="text" id="email" onChange={(e) => setEmail(e.target.value)}/>
-                        <label htmlFor="password">Wachtwoord:</label>
-                        <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-                        <div>
-                            <p>Ik wil mij aanmelden als:</p>
-                            <input type="radio" name="userrole" value="Buddy" id="buddy" defaultChecked
-                                   onChange={(e) => {
-                                       setAuthorities(["Buddy"]);
-                                       console.log(authorities);
-                                   }}/>
-                            <label htmlFor="buddy">Buddy</label>
-                            <input type="radio" name="userrole" value="Student" id="student"
-                                   onChange={(e) => {
-                                       setAuthorities(["Student"]);
-                                       console.log(authorities);
-                                   }}/>
-                            <label htmlFor="student">Student</label>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Profiel:</legend>
-                        <label htmlFor="fname">Voornaam:</label>
-                        <input type="text" id="fname" onChange={(e) => setFirstName(e.target.value)}/>
-                        <label htmlFor="lname">Achternaam:</label>
-                        <input type="text" id="lname" onChange={(e) => setLastName(e.target.value)}/>
-                        <label htmlFor="dob">Geboortedatum:</label>
-                        <input type="text" id="dob" onChange={(e) => setDob(e.target.value)}/>
-                        { authorities && authorities.includes("Student") && <span>
-                        <label htmlFor="level">Nederlands niveau:</label>
-                        <select name="level" id="level" onChange={(e) => setLevel(e.target.value)}>
-                            <option value="none" disabled hidden>Kies een optie</option>
-                            <option value="BEGINNER">Beginner - A1</option>
-                            <option value="ELEMENTARY">Beginner -A2</option>
-                            <option value="INTERMEDIATE">Gevorderd - B1</option>
-                            <option value="UPPER_INTERMEDIATE">Gevorderd - B2</option>
-                            <option value="ADVANCED">Vergevorderd - C1</option>
-                            <option value="PROFICIENT">Vergevorderd - C2</option>
-                        </select>
-                            <p>Weet je nog niet wat je taalniveau is?
-                                <a to="https://detaalbrigade.nl/taalniveaus/">Klik hier</a> voor meer informatie in het Nederlands</p>
-                            <p>Are you not sure about your language level?
-                                <a to="https://www.fluentin3months.com/cefr-levels/">Click here</a> for more information in English</p>
-                        </span> }
-                        <label htmlFor="personal">Over mij:</label>
-                        <input type="text" id="personal" onChange={(e) => setAboutMe(e.target.value)}/>
-                        { authorities && authorities.includes("Student") ? <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Buddy?</label> : <label htmlFor="frequency">Hoe vaak wil je contact hebben met je Student?</label>}
-                        <select name="frequency" id="frequency" onChange={(e) => setFrequency(e.target.value)}>
-                            <option value="none" disabled hidden>Kies een optie</option>
-                            <option value="EVERY_DAY">Elke dag</option>
-                            <option value="ONCE_A_WEEK">Een keer per week</option>
-                            <option value="FEW_TIMES_A_WEEK">Een paar keer per week</option>
-                            <option value="ONCE_A_MONTH">Een keer per maand</option>
-                            <option value="FEW_TIMES_A_MONTH">Een paar keer per maand</option>
-                        </select>
-                    </fieldset>
-                    <Button type="submit" title="Registreren"/>
+            {!success ?
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <label htmlFor="username">Gebruikersnaam:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        {...register("username", {
+                            required: 'Dit veld is verplicht',
+                            minLength: {
+                                value: 2,
+                                message: "Voer een gebruikersnaam in van minstens 2 tekens"
+                            },
+                            maxLength: {
+                                value: 20,
+                                message: "Voer een gebruikersnaam in van maximaal 20 tekens"
+                            }
+                        })} />
+                    <br/>
+                    {errors.username && errors.username.message}
+                    <br/>
+                    <label htmlFor="email">Emailadres:</label>
+                    <input
+                        type="text"
+                        id="email"
+                        {...register("email", {
+                            required: 'Dit veld is verplicht',
+                            pattern: {
+                                value: /^\S+@\S+$/i,
+                                message: "Dit is geen juist emailadres",
+                            }
+                        })}
+                    />
+                    <br/>
+                    {errors.email && errors.email.message}
+                    <br/>
+                    <label htmlFor="password">Wachtwoord:</label>
+                    <input type="password" id="password" {...register("password", {
+                        required: 'Dit veld is verplicht',
+                        minLength: {
+                            value: 8,
+                            message: "Het wachtwoord moet minstens 8 tekens lang zijn"
+                        },
+                        maxLength: {
+                            value: 20,
+                            message: "Het wachtwoord mag maximaal 20 tekens lang zijn"
+                        }
+                    })} />
+                    <br/>
+                    {errors.password && errors.password.message}
+                    <br/>
+                    <label htmlFor="firstName">Voornaam:</label>
+                    <input type="text" id="firstName" {...register("firstName", {
+                        required: 'Dit veld is verplicht',
+                        minLength: {
+                            value: 2,
+                            message: "Voer de volledige voornaam in"
+                        },
+                        maxLength: {
+                            value: 20,
+                            message: "De voornaam mag maximaal 20 tekens lang zijn"
+                        }
+                    })} />
+                    <br/>
+                    {errors.firstName && errors.firstName.message}
+                    <br/>
+                    <label htmlFor="lastName">Achternaam:</label>
+                    <input type="text" id="lastName" {...register("lastName", {
+                        required: 'Dit veld is verplicht',
+                        minLength: {
+                            value: 3,
+                            message: "Voer de volledige achternaam in"
+                        },
+                        maxLength: {
+                            value: 20,
+                            message: "De achternaam mag maximaal 20 tekens lang zijn"
+                        }
+                    })} />
+                    <br/>
+                    {errors.lastName && errors.lastName.message}
+                    <br/>
+                    <label htmlFor="dob">Geboortedatum:</label>
+                    <input type="datetime" id="dob" {...register("dob", {
+                        required: 'Dit veld is verplicht'
+                    })} />
+                    <label htmlFor="aboutMe">Over mij:</label>
+                    <textarea id="aboutMe" {...register("aboutMe", {
+                        required: 'Dit veld is verplicht',
+                        minLength: {
+                            value: 20,
+                            message: "Vertel iets over jezelf"
+                        },
+                        maxLength: {
+                            value: 255,
+                            message: "Maximaal 255 tekens"
+                        }
+                    })} />
+                    <br/>
+                    {errors.dob && errors.dob.message}
+                    <br/>
+                    <label htmlFor="authority">Ik wil mij aanmelden als:</label>
+                    <select
+                        defaultValue="none"
+                        id="authority"
+                        {...register("authority", {required: true})}
+                        onChange={(e) => {
+                            authority.onChange(e);
+                            console.log(e);
+                        }}
+                    >
+                        <option value="none" disabled hidden>Kies een optie:</option>
+                        <option value="Buddy">Buddy</option>
+                        <option value="Student"> Student</option>
+                    </select>
+                    {errors.authority && errors.authority.message}
+                    {role === "Student" &&
+                        <label htmlFor="level">Nederlands Niveau:
+                            <select defaultValue="none" id="level" {...register("Level")}>
+                                <option value="none" disabled hidden>Kies een optie:</option>
+                                <option value="BEGINNER">Beginner (A1)</option>
+                                <option value="ELEMENTARY"> Beginner (A2)</option>
+                                <option value="INTERMEDIATE"> Gevorderd (B1)</option>
+                                <option value="UPPER_INTERMEDIATE"> Gevorderd (B2)</option>
+                                <option value="ADVANCED"> Vergevorderd (C1)</option>
+                                <option value="PROFICIENT"> Vergevorderd (C2)</option>
+                            </select>
+                        </label>}
+                    {errors.level && errors.level.message}
+                    <label htmlFor="frequency">Contact:</label>
+                    <select defaultValue="none" id="frequency" {...register("frequency", {
+                        required: 'Dit veld is verplicht',
+                    })}>
+                        <option value="none" disabled hidden>Kies een optie:</option>
+                        <option value="EVERY_DAY">Elke dag</option>
+                        <option value="FEW_TIMES_A_WEEK"> Paar keer per week</option>
+                        <option value="ONCE_A_WEEK"> Een keer per week</option>
+                        <option value="FEW_TIMES_A_MONTH"> Paar keer per maand</option>
+                        <option value="ONCE_A_MONTH"> Een keer per maand</option>
+                    </select>
+                    <br/>
+                    {errors.frequency && errors.frequency.message}
+                    <br/>
+                    {/*<button type="submit">Registreren</button>*/}
+                    <input type="submit"/>
+                    {/*<Button*/}
+                    {/*    title="Registreren"*/}
+                    {/*    type="submit"/>*/}
                 </form>
-        </>
-    );
+                : <p>Gebruiker is geregistreerd. <Link to="/inloggen">Ga naar de inlogpagina</Link></p>}
+        </>);
 }
 
 export default SignUp;

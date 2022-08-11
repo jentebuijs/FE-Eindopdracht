@@ -1,14 +1,16 @@
 import './Profile.css'
+import { FaRegEdit } from "react-icons/fa";
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import ProfileChange from "../ProfileChange/ProfileChange";
+import Button from "../../components/Button/Button";
 
 function Profile() {
     const token = localStorage.getItem('token');
-    const {user: {id, username}} = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
+    const [edit, toggleEdit] = useState(false);
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
@@ -16,7 +18,7 @@ function Profile() {
 
         async function fetchProfile() {
             try {
-                const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
+                const response = await axios.get(`http://localhost:8080/profiles/${user.username}`, {
                     headers: {
                         "Content-type": "application/json",
                         Authorization: `Bearer ${token}`
@@ -37,9 +39,9 @@ function Profile() {
 
     return (
         <>
-            <h2>Profiel met id {id}</h2>
-            <p>{profile}</p>
-            <Link to='/profiel/:username/bewerken'>Profiel bewerken</Link>
+            <h2>Profiel met id {user.id}</h2>
+            <button type="button" onClick={() => toggleEdit(!edit)}><FaRegEdit/></button>
+            { edit && <ProfileChange profileData={profile}/> }
         </>
 );
 }

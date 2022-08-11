@@ -1,5 +1,5 @@
 import './App.css';
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Messageboard from "./pages/Messageboard/Messageboard";
 import Overview from "./pages/Overview/Overview";
@@ -11,6 +11,14 @@ import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+
+function PrivateRoute({children, isAuth, ...rest}) {
+    return (
+        <Route {...rest}>
+            {isAuth ? children : <Redirect to="/inloggen"/>}
+        </Route>
+    )
+}
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -31,15 +39,12 @@ function App() {
                 <Route path="/registreren">
                     <SignUp/>
                 </Route>
-                <Route path="/profielen">
+                <PrivateRoute isAuth={isAuth} path="/profielen">
                     <Overview/>
-                </Route>
-                <Route path="/profiel/:username">
+                </PrivateRoute>
+                <PrivateRoute isAuth={isAuth} path="/profiel/:username">
                     <Profile/>
-                </Route>
-                <Route path="/profiel/:username/bewerken">
-                    <ProfileChange/>
-                </Route>
+                </PrivateRoute>
             </Switch>
             <Footer />
         </>

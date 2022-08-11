@@ -8,7 +8,6 @@ import {useHistory} from "react-router-dom";
 
 function SignIn() {
     const { login } = useContext(AuthContext);
-    const {history} = useHistory();
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 

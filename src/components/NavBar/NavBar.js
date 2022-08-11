@@ -8,7 +8,6 @@ function NavBar() {
 
     return (
         <nav>
-            {console.log(user)}
             <ul>
                 <li>
                     <NavLink exact to="/" activeClassName="active-navlink">Home</NavLink>
@@ -24,7 +23,7 @@ function NavBar() {
                     <li><NavLink to="/" activeClassName="active-navlink" onClick={logout} >Uitloggen</NavLink></li></> }
             </ul>
             <ul>
-                {isAuth && <li><NavLink to="/profiel/:username" activeClassName="active-navlink">Hallo, {user.username}!</NavLink></li>}
+                { user && <li><NavLink to={`/profiel/${user.username}`} activeClassName="active-navlink">Hallo, {user.username}!</NavLink></li>}
             </ul>
         </nav>
     );

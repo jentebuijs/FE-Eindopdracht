@@ -1,21 +1,23 @@
 import {createContext, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import isTokenValid from "../components/helpers/isTokenValid";
 
 export const AuthContext = createContext({});
 
 function AuthContextProvider({ children }) {
+    const history = useHistory();
     const [ auth, setAuth] = useState({
         isAuth: false,
         user: null,
         status: 'pending',
     });
-    const history = useHistory();
 
     useEffect(() => {
+        console.log("useeffect wordt geladen");
         const token = localStorage.getItem('token');
-        const decodedToken = jwt_decode(token);
-        if (token && !isTokenExpired) {
+        if (token && isTokenValid(token)) {
+            const decodedToken = jwt_decode(token);
             setAuth({
                 isAuth: true,
                 user: {
@@ -24,20 +26,16 @@ function AuthContextProvider({ children }) {
                 },
                 status: 'done',
             });
+            console.log("dit gaat goed");
         } else {
             setAuth({
-                ...auth,
+                isAuth: false,
+                user: null,
                 status: 'done',
-            })
+            });
+            console.log("dit gaat fout");
         }
     }, [])
-
-    function isTokenExpired(token) {
-        const decodedToken = jwt_decode(token);
-        if (decodedToken.exp < Date.now()) {
-            return true;
-        } return false;
-    }
 
     function login(token) {
         console.log(token);
@@ -55,11 +53,13 @@ function AuthContextProvider({ children }) {
     }
 
     function logout() {
+        localStorage.removeItem('token');
         setAuth({
             isAuth: false,
             user: null,
             status: 'done',
         });
+        history.push("/inloggen");
     }
 
     const contextData = {
