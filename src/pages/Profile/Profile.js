@@ -6,7 +6,7 @@ import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import Button from "../../components/Button/Button";
 import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
-import Requests from "../../components/Requests/Requests";
+import RequestSection from "../../components/RequestSection/RequestSection";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 
@@ -62,7 +62,7 @@ function Profile() {
                     {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
                 </div>
             </section>}
-            <Requests/>
+            <RequestSection/>
         </>
     );
 }
