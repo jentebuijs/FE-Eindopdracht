@@ -8,6 +8,7 @@ import Button from "../../components/Button/Button";
 import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
 import Requests from "../../components/Requests/Requests";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
+import UserEdit from "../../components/UserEdit/UserEdit";
 
 function Profile() {
     const token = localStorage.getItem('token');
@@ -47,6 +48,7 @@ function Profile() {
         <>
             {profileEdit && <ProfileEdit profileData={profile}/>}
             {fileUpload && <PhotoEdit/>}
+            {userEdit && <UserEdit/>}
             {profile && <section>
                 <div>
                     <h2>Hallo, {user.username}!</h2>

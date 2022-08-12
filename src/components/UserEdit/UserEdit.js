@@ -2,10 +2,12 @@ import './UserEdit.css'
 import React, {useContext, useState} from "react";
 import {useForm} from "react-hook-form";
 import axios from "axios";
-import authContext from "../../context/AuthContext";
+import {AuthContext} from "../../context/AuthContext";
+import {useHistory} from "react-router-dom";
 
 function UserEdit() {
-    const {user: {username}} = useContext(authContext);
+    const history = useHistory();
+    const { user: {username}, logout } = useContext(AuthContext);
     const token = localStorage.getItem('token');
     const {register, handleSubmit, formState: {errors}} = useForm();
     const [success, toggleSuccess] = useState();
@@ -26,21 +28,40 @@ function UserEdit() {
         }
     }
 
+    async function deleteUser() {
+        try {
+            const response = await axios.delete(`http://localhost:8080/users/${username}`, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                Authorization: `Bearer ${token}`
+            });
+            console.log(response);
+            logout();
+            history.push("/");
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
     return (
+        <>
+            {success && <p>Uw wijzigingen zijn opgeslagen</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
-            <label htmlFor="true">Actief</label>
             <input type="radio"
                    id="true"
                    name="enabled"
                    value="true"
                    {...register("enabled", { required: true })}
             />
-            <label htmlFor="false">Inactief</label>
+            <label htmlFor="true">Actief</label>
             <input type="radio"
                    id="false"
                    name="enabled"
                    value="false"
                    {...register("enabled", { required: true })}/>
+            <label htmlFor="false">Inactief</label>
+        <br/>
             <label htmlFor="email">Emailadres:</label>
             <input
                 type="text"
@@ -54,7 +75,11 @@ function UserEdit() {
             />
             <br/>
             {errors.email && errors.email.message}
-        </form>);
+            <button type="submit">Opslaan</button>
+        </form>
+            <button type="button" onClick={deleteUser}>Delete mijn account</button>
+            </>
+            );
 }
 
 export default UserEdit;

@@ -14,7 +14,6 @@ function AuthContextProvider({ children }) {
     });
 
     useEffect(() => {
-        console.log("useeffect wordt geladen");
         const token = localStorage.getItem('token');
         if (token && isTokenValid(token)) {
             const decodedToken = jwt_decode(token);
@@ -26,14 +25,12 @@ function AuthContextProvider({ children }) {
                 },
                 status: 'done',
             });
-            console.log("dit gaat goed");
         } else {
             setAuth({
                 isAuth: false,
                 user: null,
                 status: 'done',
             });
-            console.log("dit gaat fout");
         }
     }, [])
 
@@ -59,7 +56,7 @@ function AuthContextProvider({ children }) {
             user: null,
             status: 'done',
         });
-        history.push("/inloggen");
+        history.push("/");
     }
 
     const contextData = {
