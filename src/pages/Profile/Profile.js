@@ -4,10 +4,10 @@ import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import ProfileEdit from "../ProfileEdit/ProfileEdit";
 import Button from "../../components/Button/Button";
-import FileUpload from "../../components/FileUpload/FileUpload";
+import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
 import Requests from "../../components/Requests/Requests";
+import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 
 function Profile() {
     const token = localStorage.getItem('token');
@@ -46,7 +46,7 @@ function Profile() {
     return (
         <>
             {profileEdit && <ProfileEdit profileData={profile}/>}
-            {fileUpload && <FileUpload/>}
+            {fileUpload && <PhotoEdit/>}
             {profile && <section>
                 <div>
                     <h2>Hallo, {user.username}!</h2>

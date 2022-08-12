@@ -1,6 +1,5 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FaExclamationTriangle, FaThumbsDown, FaThumbsUp} from "react-icons/fa";
-import {useEffect, useState} from "@types/react";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 
