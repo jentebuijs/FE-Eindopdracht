@@ -14,28 +14,39 @@ function RequestSection() {
     useEffect(() => {
         const controller = new AbortController();
 
-        async function fetchRequests() {
-            try {
-                const response = await axios.get(`http://localhost:8080/requests/${user.username}`, {
-                    headers: {
-                        "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }, signal: controller.signal
-                });
-                console.log(response.data);
-                setRequests(response.data);
-                toggleSuccess(true);
-            } catch (e) {
-                toggleSuccess(false);
-                console.error(e);
-            }
-        }
+        fetchRequests(controller);
 
-        fetchRequests();
         return function cleanup() {
             controller.abort();
         }
     }, []);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        fetchRequests(controller);
+
+        return function cleanup() {
+            controller.abort();
+        }
+    }, [requests.length]);
+
+    async function fetchRequests(controller) {
+        try {
+            const response = await axios.get(`http://localhost:8080/requests/${user.username}`, {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }, signal: controller.signal
+            });
+            console.log(response.data);
+            setRequests(response.data);
+            toggleSuccess(true);
+        } catch (e) {
+            toggleSuccess(false);
+            console.error(e);
+        }
+    }
 
     requests.map((request) => {
         if (request.receiver.username === user.username) {
@@ -46,31 +57,19 @@ function RequestSection() {
         }
     })
 
-
-    // useEffect(() => {
-    //     requests.forEach((request) => {
-    //         if (request.sender.username === user.username) {
-    //             outgoing.push(request)
-    //         }
-    //         if (request.receiver.username === user.username) {
-    //             incoming.push(request)
-    //         }
-    //     });
-    // }, [requests]);
-
     return (<>
 
             {requests && console.log(requests)}
             <h3>Ontvangen</h3>
             <ul>
                 {incoming && incoming.map((request) => {
-                    return <Request request={request} incoming={true}/>
+                    return <Request key={request.id} request={request} incoming={true}/>
                 })}
             </ul>
             <h3>Verstuurd</h3>
             <ul>
                 {outgoing && outgoing.map((request) => {
-                    return <Request request={request} incoming={false}/>
+                    return <Request key={request.id} request={request} incoming={false}/>
                 })}
             </ul>
         </>

@@ -20,22 +20,6 @@ function Profile() {
     const [newRequest, toggleNewRequest] = useState(false);
     const [profile, setProfile] = useState({});
 
-    async function fetchProfile(controller) {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
-                headers: {
-                    "Content-type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }, signal: controller.signal
-            });
-            console.log(response);
-            setProfile(response.data);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
     useEffect(() => {
         const controller = new AbortController;
         fetchProfile(controller);
@@ -52,6 +36,25 @@ function Profile() {
         }
     }, [username]);
 
+    async function fetchProfile(controller) {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }, signal: controller.signal
+            });
+            console.log(response);
+            setProfile(response.data);
+        } catch (e) {
+            console.error(e);
+        }
+        return function cleanup() {
+            controller.abort();
+        }
+    }
+
     return (
         <>
             {username === user.username ?
@@ -62,7 +65,7 @@ function Profile() {
                 </span>
                 :
                 <span>
-                    {newRequest && <NewRequest/>}
+                    {newRequest && <NewRequest key={username} receiver={username} sender={user.username}/>}
                 </span>}
             {profile &&
                 <section>
