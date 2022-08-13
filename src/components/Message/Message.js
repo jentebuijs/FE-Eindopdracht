@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Message({title, content}) {
+function Message({ message: {title, content}}) {
     return (
         <>
             <h2>{title}</h2>

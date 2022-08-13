@@ -1,12 +1,17 @@
 import './Messageboard.css'
-import React, {useEffect, useState} from "react";
+import {FaPlusCircle} from "react-icons/fa";
+import React, {useContext, useEffect, useState} from "react";
 import Message from "../../components/Message/Message";
 import Button from "../../components/Button/Button";
 import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
+import NewMessage from "../../components/NewMessage/NewMessage";
 
 function Messageboard() {
+    const {isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
+    const [newMessage, toggleNewMessage] = useState(false);
 
     useEffect(() => {
         const fetchController = new AbortController;
@@ -17,13 +22,14 @@ function Messageboard() {
             // e.preventDefault();
             try {
                 const result = await axios.get("http://localhost:8080/messages", {signal})
-                    // {cancelToken: source.token})
+                // {cancelToken: source.token})
                 setMessages(result.data);
                 setVisibleMessages(result.data);
             } catch (e) {
                 console.error(e);
             }
         }
+
         fetchData();
         return function cleanup() {
             // source.cancel();
@@ -54,12 +60,17 @@ function Messageboard() {
 
     return (
         <>
-            <div>
                 {console.log(messages)}
                 {console.log(visibleMessages)}
-                <div className="buttons">
-                    <Button type="button"
-                            title="+"/>
+                <span className="buttons">
+                    {isAuth &&
+                        <button
+                            type="button"
+                            onClick={() => {
+                                toggleNewMessage(!newMessage)
+                            }}>
+                            <FaPlusCircle/>
+                        </button>}
                     <Button type="button"
                             title="Alles"
                             onClick={() => {
@@ -80,16 +91,15 @@ function Messageboard() {
                             onClick={() => {
                                 filterMessages("forStudents")
                             }}/>
-                </div>
+                </span>
+
+            { newMessage && <NewMessage/> }
 
                 {visibleMessages && visibleMessages.map((message) => {
                     return (
-                        <Message key={message.id}
-                                 title={message.title}
-                                 content={message.content}/>
+                        <Message key={message.id} message={message}/>
                     );
                 })}
-            </div>
         </>
     );
 }
