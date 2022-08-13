@@ -38,12 +38,12 @@ function RequestSection() {
     }, []);
 
     requests.map((request) => {
-            if (request.receiver.username === user.username) {
-                incoming.push(request);
-            }
-            if (request.sender.username === user.username) {
-                outgoing.push(request);
-            }
+        if (request.receiver.username === user.username) {
+            incoming.push(request);
+        }
+        if (request.sender.username === user.username) {
+            outgoing.push(request);
+        }
     })
 
 
@@ -61,13 +61,18 @@ function RequestSection() {
     return (<>
 
             {requests && console.log(requests)}
-            {incoming && incoming.map((request) => {
-               return <Request request={request} incoming={true}/>
-            })}
-            {outgoing && outgoing.map((request) => {
-                return <Request request={request} incoming={false}/>
-            })}
-
+            <h3>Ontvangen</h3>
+            <ul>
+                {incoming && incoming.map((request) => {
+                    return <Request request={request} incoming={true}/>
+                })}
+            </ul>
+            <h3>Verstuurd</h3>
+            <ul>
+                {outgoing && outgoing.map((request) => {
+                    return <Request request={request} incoming={false}/>
+                })}
+            </ul>
         </>
     );
 }

@@ -9,9 +9,10 @@ import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
 import RequestSection from "../../components/RequestSection/RequestSection";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
+import NewRequest from "../../components/newRequest/NewRequest";
 
 function Profile() {
-    const token = localStorage.getItem('token');
+    const {username} = useParams();
     const {user} = useContext(AuthContext);
     const [profileEdit, toggleProfileEdit] = useState(false);
     const [userEdit, toggleUserEdit] = useState(false);
@@ -19,54 +20,73 @@ function Profile() {
     const [newRequest, toggleNewRequest] = useState(false);
     const [profile, setProfile] = useState({});
 
+    async function fetchProfile(controller) {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }, signal: controller.signal
+            });
+            console.log(response);
+            setProfile(response.data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     useEffect(() => {
         const controller = new AbortController;
-
-        async function fetchProfile() {
-            try {
-                const response = await axios.get(`http://localhost:8080/profiles/${user.username}`, {
-                    headers: {
-                        "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }, signal: controller.signal
-                });
-                console.log(response);
-                setProfile(response.data);
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        fetchProfile();
+        fetchProfile(controller);
         return function cleanup() {
             controller.abort();
         }
     }, []);
 
+    useEffect(() => {
+        const controller = new AbortController;
+        fetchProfile(controller);
+        return function cleanup() {
+            controller.abort();
+        }
+    }, [username]);
 
     return (
         <>
-            {profileEdit && <ProfileEdit profileData={profile}/>}
-            {fileUpload && <PhotoEdit/>}
-            {userEdit && <UserEdit/>}
-            {profile && <section>
-                <div>
-                    { profile.username === user.username &&
-                    <h2>Hallo, {user.username}!</h2> }
-                    <p>Naam: {profile.firstName} {profile.lastName}</p>
-                    <p>Leeftijd: {profile.age}</p>
-                    <p>Profielinformatie blablabla</p>
-                </div>
-                <div>
+            {username === user.username ?
+                <span>
+                    {profileEdit && <ProfileEdit profileData={profile}/>}
+                    {fileUpload && <PhotoEdit/>}
+                    {userEdit && <UserEdit/>}
+                </span>
+                :
+                <span>
+                    {newRequest && <NewRequest/>}
+                </span>}
+            {profile &&
+                <section>
+                    <div>
+                        { username === user.username ?
+                            <h2>Hallo, {username}!</h2> : <h2>Hallo, ik ben {username}</h2> }
+
+                        <p>Naam: {profile.firstName} {profile.lastName}</p>
+                        <p>Leeftijd: {profile.age}</p>
+                        <p>Profielinformatie blablabla</p>
+                    </div>
+                    <div>
+                        {username === user.username ?
+                            <span>
                     <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
                     <FaRegEdit onClick={() => toggleProfileEdit(!profileEdit)}/>
                     <FaPhotoVideo onClick={() => toggleFileUpload(!fileUpload)}/>
-                    {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
-                    {profile.username !== user.username &&
-                        <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/> }
-                </div>
-            </section>}
+                                {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
+                            </span> : <span>
+                        <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/>
+                            </span>}
+                    </div>
+                </section>
+            }
             <RequestSection/>
         </>
     );
