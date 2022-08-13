@@ -8,7 +8,7 @@ import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
 
 function Messageboard() {
-    const {isAuth} = useContext(AuthContext);
+    const {user: {authorities}, isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
@@ -63,14 +63,9 @@ function Messageboard() {
                 {console.log(messages)}
                 {console.log(visibleMessages)}
                 <span className="buttons">
-                    {isAuth &&
-                        <button
-                            type="button"
-                            onClick={() => {
-                                toggleNewMessage(!newMessage)
-                            }}>
-                            <FaPlusCircle/>
-                        </button>}
+                    {isAuth && <FaPlusCircle onClick={() => {
+                        toggleNewMessage(!newMessage)
+                    }}/>}
                     <Button type="button"
                             title="Alles"
                             onClick={() => {
@@ -93,7 +88,7 @@ function Messageboard() {
                             }}/>
                 </span>
 
-            { newMessage && <NewMessage/> }
+                { isAuth && newMessage && <NewMessage/> }
 
                 {visibleMessages && visibleMessages.map((message) => {
                     return (

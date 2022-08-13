@@ -1,5 +1,5 @@
 import './Profile.css'
-import {FaRegEdit, FaPhotoVideo, FaUserEdit} from "react-icons/fa";
+import {FaRegEdit, FaPhotoVideo, FaUserEdit, FaRegEnvelope} from "react-icons/fa";
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
@@ -16,6 +16,7 @@ function Profile() {
     const [profileEdit, toggleProfileEdit] = useState(false);
     const [userEdit, toggleUserEdit] = useState(false);
     const [fileUpload, toggleFileUpload] = useState(false);
+    const [newRequest, toggleNewRequest] = useState(false);
     const [profile, setProfile] = useState({});
 
 
@@ -51,15 +52,19 @@ function Profile() {
             {userEdit && <UserEdit/>}
             {profile && <section>
                 <div>
-                    <h2>Hallo, {user.username}!</h2>
+                    { profile.username === user.username &&
+                    <h2>Hallo, {user.username}!</h2> }
                     <p>Naam: {profile.firstName} {profile.lastName}</p>
+                    <p>Leeftijd: {profile.age}</p>
                     <p>Profielinformatie blablabla</p>
                 </div>
                 <div>
-                    <button type="button" onClick={() => toggleUserEdit(!userEdit)}><FaUserEdit/></button>
-                    <button type="button" onClick={() => toggleProfileEdit(!profileEdit)}><FaRegEdit/></button>
-                    <button type="button" onClick={() => toggleFileUpload(!fileUpload)}><FaPhotoVideo/></button>
+                    <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
+                    <FaRegEdit onClick={() => toggleProfileEdit(!profileEdit)}/>
+                    <FaPhotoVideo onClick={() => toggleFileUpload(!fileUpload)}/>
                     {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
+                    {profile.username !== user.username &&
+                        <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/> }
                 </div>
             </section>}
             <RequestSection/>
