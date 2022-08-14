@@ -1,21 +1,32 @@
 import './Request.css'
 import {FaExclamationTriangle, FaThumbsDown, FaThumbsUp} from "react-icons/fa";
-import React from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
-function Request({request, incoming}) {
+function Request({request, incoming, removeRequest}) {
+    const [requestStatus, setRequestStatus] = useState("pending");
 
-    function handleAccept() {
-        console.log("accept");
+    async function handleStatus( status) {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.put(`http://localhost:8080/requests/${request.id}`,
+                { status: status}, {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+            setRequestStatus(response.data.status);
+            {
+                status === "declined" || status === "cancelled" && removeRequest(request.id)
+            }
+        } catch(e) {
+            console.error(e);
+        }
     }
 
-    function handleDecline() {
-        console.log("decline");
-    }
-
-    function handleCancel() {
-        console.log("cancel");
-    }
 
     return (
         <li className="request" key={request.id}>
@@ -25,8 +36,8 @@ function Request({request, incoming}) {
                         {request.sender.username}
                     </Link>
                     <span>
-                        <FaThumbsUp onClick={handleAccept}/>
-                        <FaThumbsDown onClick={handleDecline}/>
+                        <FaThumbsUp onClick={() => handleStatus("accepted")}/>
+                        <FaThumbsDown onClick={() => handleStatus("declined")}/>
                     </span>
                 </div>
                 :
@@ -35,7 +46,7 @@ function Request({request, incoming}) {
                         {request.receiver.username}
                     </Link>
                     <span>
-                        <FaExclamationTriangle onClick={handleCancel}/>
+                        <FaExclamationTriangle onClick={() => handleStatus("cancelled")}/>
                     </span>
                 </div>
             }

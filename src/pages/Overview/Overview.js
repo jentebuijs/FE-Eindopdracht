@@ -34,7 +34,7 @@ function Overview() {
             <h1>Profielenoverzicht</h1>
             {console.log(profiles)}
             {profiles && profiles.map((profile) => {
-                return (<ProfileCard profile={profile}/>);
+                return (<ProfileCard key={profile.username} profile={profile}/>);
             })}
         </>
     );

@@ -57,19 +57,21 @@ function RequestSection() {
         }
     })
 
+    const removeRequest = (id) => {(requests.filter((request) => id !== request.id))};
+
     return (<>
 
             {requests && console.log(requests)}
             <h3>Ontvangen</h3>
             <ul>
                 {incoming && incoming.map((request) => {
-                    return <Request key={request.id} request={request} incoming={true}/>
+                    return <Request key={request.id} request={request} incoming={true} removeRequest={removeRequest}/>
                 })}
             </ul>
             <h3>Verstuurd</h3>
             <ul>
                 {outgoing && outgoing.map((request) => {
-                    return <Request key={request.id} request={request} incoming={false}/>
+                    return <Request key={request.id} request={request} incoming={false} removeRequest={removeRequest}/>
                 })}
             </ul>
         </>

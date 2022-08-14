@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
+import AdminSection from "../../components/AdminSection/AdminSection";
 
 function Messageboard() {
     const {user: {authorities}, isAuth} = useContext(AuthContext);
@@ -60,6 +61,8 @@ function Messageboard() {
 
     return (
         <>
+            {/*ternary operator of functie*/}
+            <AdminSection />
                 {console.log(messages)}
                 {console.log(visibleMessages)}
                 <span className="buttons">

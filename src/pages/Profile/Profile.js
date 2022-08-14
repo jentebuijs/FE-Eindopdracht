@@ -21,7 +21,7 @@ function Profile() {
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
-        const controller = new AbortController;
+        const controller = new AbortController();
         fetchProfile(controller);
         return function cleanup() {
             controller.abort();
@@ -29,7 +29,7 @@ function Profile() {
     }, []);
 
     useEffect(() => {
-        const controller = new AbortController;
+        const controller = new AbortController();
         fetchProfile(controller);
         return function cleanup() {
             controller.abort();
@@ -70,23 +70,23 @@ function Profile() {
             {profile &&
                 <section>
                     <div>
-                        { username === user.username ?
-                            <h2>Hallo, {username}!</h2> : <h2>Hallo, ik ben {username}</h2> }
+                        {username === user.username ?
+                            <h2>Hallo, {username}!</h2> : <h2>Hallo, ik ben {username}</h2>}
 
                         <p>Naam: {profile.firstName} {profile.lastName}</p>
                         <p>Leeftijd: {profile.age}</p>
                         <p>Profielinformatie blablabla</p>
                     </div>
                     <div>
-                        {username === user.username ?
+                        {profile && username === user.username ?
                             <span>
                     <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
                     <FaRegEdit onClick={() => toggleProfileEdit(!profileEdit)}/>
                     <FaPhotoVideo onClick={() => toggleFileUpload(!fileUpload)}/>
-                                {/*<img src={profile.fileUploadResponse.url} alt="profielfoto" />*/}
                             </span> : <span>
                         <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/>
                             </span>}
+                        { profile.photo && <img src={profile.photo.url} alt="profielfoto"/> }
                     </div>
                 </section>
             }
