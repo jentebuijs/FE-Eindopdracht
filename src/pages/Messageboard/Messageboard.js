@@ -1,97 +1,105 @@
 import './Messageboard.css'
-import React, {useEffect, useState} from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import axios from "axios";
+import {FaPlusCircle} from "react-icons/fa";
+import React, {useContext, useEffect, useState} from "react";
 import Message from "../../components/Message/Message";
 import Button from "../../components/Button/Button";
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
+import NewMessage from "../../components/NewMessage/NewMessage";
+import AdminSection from "../../components/AdminSection/AdminSection";
 
 function Messageboard() {
+    const {user: {authorities}, isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
+    const [visibleMessages, setVisibleMessages] = useState([]);
+    const [newMessage, toggleNewMessage] = useState(false);
 
     useEffect(() => {
         const fetchController = new AbortController;
         const {signal} = fetchController;
-        async function fetchMessages() {
+        // const CancelToken = axios.CancelToken;
+        // const source = CancelToken.source();
+        async function fetchData() {
+            // e.preventDefault();
             try {
-                const response = await axios.get("http://localhost:8080/messages", {signal});
-                setMessages(response.data);
+                const result = await axios.get("http://localhost:8080/messages", {signal})
+                // {cancelToken: source.token})
+                setMessages(result.data);
+                setVisibleMessages(result.data);
             } catch (e) {
                 console.error(e);
             }
         }
-        fetchMessages();
+
+        fetchData();
         return function cleanup() {
-            console.log("abort");
+            // source.cancel();
             fetchController.abort();
         }
-    }, [])
+    }, []);
 
-
-
-    async function filterForBuddies() {
-        try {
-            const response = await axios.get("http://localhost:8080/messages/buddies");
-            setMessages(response.data);
-        } catch (e) {
-            console.error(e);
+    function filterMessages(messageType) {
+        if (messageType === "forBuddies") {
+            setVisibleMessages(messages.filter((message) => {
+                return (message.forBuddy === true && message.forStudent === false);
+            }));
         }
-    }
-
-    async function filterForBoth() {
-        try {
-            const response = await axios.get("http://localhost:8080/messages/both");
-            setMessages(response.data);
-        } catch (e) {
-            console.error(e);
+        if (messageType === "forStudents") {
+            setVisibleMessages(messages.filter((message) => {
+                return (message.forBuddy === false && message.forStudent === true);
+            }));
         }
-    }
-
-    async function filterForStudents() {
-        try {
-            const response = await axios.get("http://localhost:8080/messages/students");
-            setMessages(response.data);
-        } catch (e) {
-            console.error(e);
+        if (messageType === "forBoth") {
+            setVisibleMessages(messages.filter((message) => {
+                return (message.forBuddy === true && message.forStudent === true);
+            }));
+        }
+        if (messageType === "all") {
+            setVisibleMessages(messages);
         }
     }
 
     return (
         <>
-            <Header/>
-            <main>
-                <div className="buttons">
-                    <Button type="button"
-                            title="+"/>
+            {/*ternary operator of functie*/}
+            <AdminSection />
+                {console.log(messages)}
+                {console.log(visibleMessages)}
+                <span className="buttons">
+                    {isAuth && <FaPlusCircle onClick={() => {
+                        toggleNewMessage(!newMessage)
+                    }}/>}
                     <Button type="button"
                             title="Alles"
-                            />
+                            onClick={() => {
+                                filterMessages("all")
+                            }}/>
                     <Button type="button"
                             title="Buddies"
-                            onClick={filterForBuddies}/>
+                            onClick={() => {
+                                filterMessages("forBuddies")
+                            }}/>
                     <Button type="button"
                             title="Allebei"
-                            onClick={filterForBoth}/>
+                            onClick={() => {
+                                filterMessages("forBoth")
+                            }}/>
                     <Button type="button"
                             title="Studenten"
-                            onClick={filterForStudents}/>
-                </div>
-                }
+                            onClick={() => {
+                                filterMessages("forStudents")
+                            }}/>
+                </span>
 
-                {
-                    messages && messages.map((message) => {
-                        return (
-                            <Message key={message.id}
-                                     title={message.title}
-                                     content={message.content}/>
-                        );
-                    })
-                }
-            </main>
-            <Footer/>
+                { isAuth && newMessage && <NewMessage/> }
+
+                {visibleMessages && visibleMessages.map((message) => {
+                    return (
+                        <Message key={message.id} message={message}/>
+                    );
+                })}
         </>
-    )
-        ;
+    );
 }
 
 export default Messageboard;

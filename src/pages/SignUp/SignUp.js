@@ -1,65 +1,187 @@
 import './SignUp.css'
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
-import Button from "../../components/Button/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useForm} from 'react-hook-form';
 import axios from "axios";
+import {Link, useHistory} from "react-router-dom";
 
 function SignUp() {
-    const [ username, setUsername ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ isStudent, toggleIsStudent ] = useState(false);
+    const {register, watch, handleSubmit, formState: {errors}} = useForm();
+    const [success, toggleSuccess] = useState(false);
+    const authority = register("authority");
+    const role = watch("authority");
+    const history = useHistory();
 
-
-    async function addNewUser(e){
-        e.preventDefault();
-        console.log(username, email, password, isStudent);
-        try {
-            const response = await axios.post('http://localhost:8080/users/signup', {
-                username: username,
-                email: email,
-                password: password,
-                isStudent : isStudent
-            })
-            console.log(response);
-        } catch(e) {
-            console.error(e);
-        }
-    }
-
-    function handleCheck(e) {
-        if(e.target.value === "Buddy") {
-            toggleIsStudent(false);
-        } else {
-            toggleIsStudent(true);
-        }
+    async function onSubmit(data) {
+      try {
+          const response = await axios.post('http://localhost:8080/users/signup', data, {
+                          headers: {
+                              'Content-Type': 'application/json',
+                          }
+                      });
+          {response && toggleSuccess(true)}
+      } catch(e) {
+                  toggleSuccess(false);
+                  console.error(e);
+      }
     }
 
     return (
         <>
-            <Header/>
-            <main>
-                <form className="sign-up-form" onSubmit={addNewUser}>
-                    <label htmlFor="username">Gebruikersnaam:</label>
-                    <input type="text" id="username" onChange={(e) => setUsername(e.target.value)}/>
-                    <label htmlFor="email">E-mail:</label>
-                    <input type="text" id="email" onChange={(e) => setEmail(e.target.value)}/>
-                    <label htmlFor="password">Wachtwoord:</label>
-                    <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-                    <div>
-                        <p>Ik wil mij aanmelden als:</p>
-                        <input type="radio" name="userrole" value="Buddy" id="userrole1" defaultChecked onClick={handleCheck}/>
-                        <label htmlFor="userrole1">Buddy</label>
-                        <input type="radio" name="userrole" value="Student" id="userrole2" onClick={handleCheck}/>
-                        <label htmlFor="userrole2">Student</label>
-                    </div>
-                    <Button type="submit" title="Registreren"/>
+            {!success ?
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <fieldset>
+                        <legend>Gebruiker</legend>
+                        <label htmlFor="username">Gebruikersnaam:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            {...register("username", {
+                                required: 'Dit veld is verplicht',
+                                minLength: {
+                                    value: 2,
+                                    message: "Voer een gebruikersnaam in van minstens 2 tekens"
+                                },
+                                maxLength: {
+                                    value: 20,
+                                    message: "Voer een gebruikersnaam in van maximaal 20 tekens"
+                                }
+                            })} />
+                        <br/>
+                        {errors.username && errors.username.message}
+                        <br/>
+                        <label htmlFor="email">Emailadres:</label>
+                        <input
+                            type="text"
+                            id="email"
+                            {...register("email", {
+                                required: 'Dit veld is verplicht',
+                                pattern: {
+                                    value: /^\S+@\S+$/i,
+                                    message: "Dit is geen juist emailadres",
+                                }
+                            })}
+                        />
+                        <br/>
+                        {errors.email && errors.email.message}
+                        <br/>
+                        <label htmlFor="password">Wachtwoord:</label>
+                        <input type="password" id="password" {...register("password", {
+                            required: 'Dit veld is verplicht',
+                            minLength: {
+                                value: 8,
+                                message: "Het wachtwoord moet minstens 8 tekens lang zijn"
+                            },
+                            maxLength: {
+                                value: 20,
+                                message: "Het wachtwoord mag maximaal 20 tekens lang zijn"
+                            }
+                        })} />
+                        <br/>
+                        {errors.password && errors.password.message}
+                        <br/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Profiel</legend>
+                        <label htmlFor="firstName">Voornaam:</label>
+                        <input type="text" id="firstName" {...register("firstName", {
+                            required: 'Dit veld is verplicht',
+                            minLength: {
+                                value: 2,
+                                message: "Voer de volledige voornaam in"
+                            },
+                            maxLength: {
+                                value: 20,
+                                message: "De voornaam mag maximaal 20 tekens lang zijn"
+                            }
+                        })} />
+                        <br/>
+                        {errors.firstName && errors.firstName.message}
+                        <br/>
+                        <label htmlFor="lastName">Achternaam:</label>
+                        <input type="text" id="lastName" {...register("lastName", {
+                            required: 'Dit veld is verplicht',
+                            minLength: {
+                                value: 3,
+                                message: "Voer de volledige achternaam in"
+                            },
+                            maxLength: {
+                                value: 20,
+                                message: "De achternaam mag maximaal 20 tekens lang zijn"
+                            }
+                        })} />
+                        <br/>
+                        {errors.lastName && errors.lastName.message}
+                        <br/>
+                        <label htmlFor="dob">Geboortedatum:</label>
+                        <input type="datetime" id="dob" {...register("dob", {
+                            required: 'Dit veld is verplicht'
+                        })} />
+                        <label htmlFor="aboutMe">Over mij:</label>
+                        <textarea id="aboutMe" {...register("aboutMe", {
+                            required: 'Dit veld is verplicht',
+                            minLength: {
+                                value: 20,
+                                message: "Vertel iets over jezelf"
+                            },
+                            maxLength: {
+                                value: 255,
+                                message: "Maximaal 255 tekens"
+                            }
+                        })} />
+                        <br/>
+                        {errors.dob && errors.dob.message}
+                        <br/>
+                        <label htmlFor="authority">Ik wil mij aanmelden als:</label>
+                        <select
+                            defaultValue="none"
+                            id="authority"
+                            {...register("authority", {required: true})}
+                            onChange={(e) => {
+                                authority.onChange(e);
+                                console.log(e);
+                            }}
+                        >
+                            <option value="none" disabled hidden>Kies een optie:</option>
+                            <option value="Buddy">Buddy</option>
+                            <option value="Student"> Student</option>
+                        </select>
+                        {errors.authority && errors.authority.message}
+                        {role === "Student" &&
+                            <label htmlFor="level">Nederlands Niveau:
+                                <select defaultValue="none" id="level" {...register("Level")}>
+                                    <option value="none" disabled hidden>Kies een optie:</option>
+                                    <option value="BEGINNER">Beginner (A1)</option>
+                                    <option value="ELEMENTARY"> Beginner (A2)</option>
+                                    <option value="INTERMEDIATE"> Gevorderd (B1)</option>
+                                    <option value="UPPER_INTERMEDIATE"> Gevorderd (B2)</option>
+                                    <option value="ADVANCED"> Vergevorderd (C1)</option>
+                                    <option value="PROFICIENT"> Vergevorderd (C2)</option>
+                                </select>
+                            </label>}
+                        {errors.level && errors.level.message}
+                        <label htmlFor="frequency">Contact:</label>
+                        <select defaultValue="none" id="frequency" {...register("frequency", {
+                            required: 'Dit veld is verplicht',
+                        })}>
+                            <option value="none" disabled hidden>Kies een optie:</option>
+                            <option value="EVERY_DAY">Elke dag</option>
+                            <option value="FEW_TIMES_A_WEEK"> Paar keer per week</option>
+                            <option value="ONCE_A_WEEK"> Een keer per week</option>
+                            <option value="FEW_TIMES_A_MONTH"> Paar keer per maand</option>
+                            <option value="ONCE_A_MONTH"> Een keer per maand</option>
+                        </select>
+                        <br/>
+                        {errors.frequency && errors.frequency.message}
+                        <br/>
+                    </fieldset>
+                    <button type="submit">Registreren</button>
+                    {/*<input type="submit"/>*/}
+                    {/*<Button*/}
+                    {/*    title="Registreren"*/}
+                    {/*    type="submit"/>*/}
                 </form>
-            </main>
-            <Footer/>
-        </>
-    );
+                : <p>Gebruiker is geregistreerd. <Link to="/inloggen">Ga naar de inlogpagina</Link></p>}
+        </>);
 }
 
 export default SignUp;

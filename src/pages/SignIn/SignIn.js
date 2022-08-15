@@ -1,11 +1,10 @@
 import './SignIn.css'
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import {Link} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 function SignIn() {
     const { login } = useContext(AuthContext);
@@ -29,8 +28,6 @@ function SignIn() {
 
     return (
         <>
-            <Header/>
-            <main>
                 <form className="sign-in-form" onSubmit={makeLoginRequest}>
                     <input
                         type="text"
@@ -51,11 +48,8 @@ function SignIn() {
                 </form>
                 <p>Nog geen account?</p>
                 <Link to="/registreren">Klik hier om je te registreren!</Link>
-            </main>
-            <Footer/>
         </>
     );
 }
-
 
 export default SignIn;

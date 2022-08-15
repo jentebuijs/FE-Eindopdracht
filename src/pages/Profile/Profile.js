@@ -1,41 +1,103 @@
 import './Profile.css'
+import {FaRegEdit, FaPhotoVideo, FaUserEdit, FaRegEnvelope} from "react-icons/fa";
 import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import Button from "../../components/Button/Button";
+import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
+import RequestOverview from "../../components/RequestOverview/RequestOverview";
+import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
+import UserEdit from "../../components/UserEdit/UserEdit";
+import NewRequest from "../../components/newRequest/NewRequest";
 
 function Profile() {
-    const token = localStorage.getItem('token');
-    const {user: { id, username }} = useContext(AuthContext);
-    const [ profile, setProfile ] = useState({});
+    const {username} = useParams();
+    const {user} = useContext(AuthContext);
+    const [buttons, toggleButtons] = useState({});
+    const [profileEdit, toggleProfileEdit] = useState(false);
+    const [userEdit, toggleUserEdit] = useState(false);
+    const [fileUpload, toggleFileUpload] = useState(false);
+    const [newRequest, toggleNewRequest] = useState(false);
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
-        async function fetchProfile() {
-            try {
-                const response = await axios.get(`http://localhost:8080/profiles/${id}`, {
-                    headers: {
-                        "Content-type" : "application/json",
-                        Authorization : `Bearer ${token}`
-                    }
-                });
-                console.log(response);
-            } catch(e) {
-                console.error(e);
-            }
+        const controller = new AbortController();
+        fetchProfile(controller);
+        return function cleanup() {
+            controller.abort();
         }
-        fetchProfile();
     }, []);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        fetchProfile(controller);
+        toggleProfileEdit(false);
+        toggleUserEdit(false);
+        toggleFileUpload(false);
+        toggleNewRequest(false);
+        return function cleanup() {
+            controller.abort();
+        }
+    }, [username]);
+
+    async function fetchProfile(controller) {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`http://localhost:8080/profiles?username=${username}`, {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }, signal: controller.signal
+            });
+            console.log(response);
+            setProfile(response.data);
+        } catch (e) {
+            console.error(e);
+        }
+        return function cleanup() {
+            controller.abort();
+        }
+    }
 
     return (
         <>
-            <Header/>
-            <main>
-                <h2>Profiel met id {id}</h2>
-                <Link to={`${username}/bewerken`}>Profiel bewerken</Link>
-            </main>
-            <Footer/>
+            {username === user.username ?
+                <span>
+                    {profileEdit && <ProfileEdit profileData={profile}/>}
+                    {fileUpload && <PhotoEdit/>}
+                    {userEdit && <UserEdit/>}
+                </span>
+                :
+                <span>
+                    {newRequest && <NewRequest key={username} receiver={username} sender={user.username}/>}
+                </span>}
+            {profile &&
+                <section>
+                    <div>
+                        {username === user.username ?
+                            <h2>Hallo, {username}!</h2> : <h2>Hallo, ik ben {username}</h2>}
+
+                        <p>Naam: {profile.firstName} {profile.lastName}</p>
+                        <p>Leeftijd: {profile.age}</p>
+                        <p>Profielinformatie blablabla</p>
+                    </div>
+                    <div>
+                        {profile && username === user.username ?
+                            <span>
+                    <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
+                    <FaRegEdit onClick={() => toggleProfileEdit(!profileEdit)}/>
+                    <FaPhotoVideo onClick={() => toggleFileUpload(!fileUpload)}/>
+                            </span> : <span>
+                        <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/>
+                            </span>}
+                        {profile.photo && <img src={profile.photo.url} alt="profielfoto"/>}
+                    </div>
+                </section>
+            }
+            {username === user.username &&
+                <RequestOverview/>
+            }
         </>
     );
 }
