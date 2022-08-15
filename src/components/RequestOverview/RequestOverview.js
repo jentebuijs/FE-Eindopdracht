@@ -8,7 +8,6 @@ function RequestOverview() {
     const [requests, setRequests] = useState({});
     const [success, toggleSuccess] = useState(false);
 
-
     useEffect(() => {
         const token = localStorage.getItem('token');
         const controller = new AbortController();
@@ -21,12 +20,9 @@ function RequestOverview() {
                         Authorization: `Bearer ${token}`
                     }, signal: controller.signal
                 });
-                console.log(response.data);
                 setRequests(response.data);
-
-
                 toggleSuccess(true);
-                console.log(success);
+
             } catch (e) {
                 toggleSuccess(false);
                 console.error(e);
@@ -50,44 +46,6 @@ function RequestOverview() {
             }
         );
     }
-
-
-    //     switch (status) {
-    //         case "accepted" : {
-    //             setRequests({
-    //                     ...requests,
-    //                     [status]: [...requests[status], {...request, status : status.toUpperCase()}],
-    //                     pending: requests.pending.filter(pending => {
-    //                         return pending.id !== request.id;
-    //                     })
-    //                 }
-    //             );
-    //             break;
-    //         }
-    //         case "declined" : {
-    //             setRequests({
-    //                     ...requests,
-    //                     declined: [...requests.declined, {...request, status : status.toUpperCase()}],
-    //                     pending: requests.pending.filter(pending => {
-    //                         return pending.id !== request.id;
-    //                     })
-    //                 }
-    //             );
-    //             break;
-    //         }
-    //         case "cancelled" : {
-    //             setRequests({
-    //                     ...requests,
-    //                     cancelled: [...requests.cancelled, {...request, status : status.toUpperCase()}],
-    //                     pending: requests.pending.filter(pending => {
-    //                         return pending.id !== request.id;
-    //                     })
-    //                 }
-    //             );
-    //             break;
-    //         }
-    //     }
-    // }
 
     return (
         <>

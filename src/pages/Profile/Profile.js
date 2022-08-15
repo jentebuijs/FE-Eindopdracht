@@ -14,6 +14,7 @@ import NewRequest from "../../components/newRequest/NewRequest";
 function Profile() {
     const {username} = useParams();
     const {user} = useContext(AuthContext);
+    const [buttons, toggleButtons] = useState({});
     const [profileEdit, toggleProfileEdit] = useState(false);
     const [userEdit, toggleUserEdit] = useState(false);
     const [fileUpload, toggleFileUpload] = useState(false);
@@ -43,7 +44,7 @@ function Profile() {
     async function fetchProfile(controller) {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get(`http://localhost:8080/profiles/${username}`, {
+            const response = await axios.get(`http://localhost:8080/profiles?username=${username}`, {
                 headers: {
                     "Content-type": "application/json",
                     Authorization: `Bearer ${token}`
