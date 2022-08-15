@@ -5,19 +5,20 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 
-function Request({request, accepted, declined, cancelled}) {
+function Request({request, judgement}) {
     const {user} = useContext(AuthContext);
 
     async function handleStatus(status) {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`, {
-                headers: {
-                    "Content-type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
+            const response = await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`,
+                {
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            judgement(status, request);
         } catch (e) {
             console.error(e);
         }
@@ -33,11 +34,9 @@ function Request({request, accepted, declined, cancelled}) {
                 {request.status === "PENDING" && request.receiver.username === user.username &&
                     <span>
                         <FaThumbsUp onClick={() => {
-                            accepted(request)
                             handleStatus("accepted")
                         }}/>
                         <FaThumbsDown onClick={() => {
-                            declined(request)
                             handleStatus("declined")
                         }}/>
                     </span>}
@@ -50,7 +49,6 @@ function Request({request, accepted, declined, cancelled}) {
                 {request.status === "PENDING" && request.sender.username === user.username &&
                     <span>
                         <FaExclamationTriangle onClick={() => {
-                            cancelled(request)
                             handleStatus("cancelled")
                         }}/>
                     </span>}

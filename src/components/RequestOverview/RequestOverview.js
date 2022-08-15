@@ -5,10 +5,7 @@ import Request from "../Request/Request";
 
 function RequestOverview() {
     const {user} = useContext(AuthContext);
-    const [pending, setPending] = useState([]);
-    const [accepted, setAccepted] = useState([]);
-    const [declined, setDeclined] = useState([]);
-    const [cancelled, setCancelled] = useState([]);
+    const [requests, setRequests] = useState({});
     const [success, toggleSuccess] = useState(false);
 
 
@@ -25,10 +22,9 @@ function RequestOverview() {
                     }, signal: controller.signal
                 });
                 console.log(response.data);
-                setPending(response.data.pending);
-                setAccepted(response.data.accepted);
-                setDeclined(response.data.declined);
-                setCancelled(response.data.cancelled);
+                setRequests(response.data);
+
+
                 toggleSuccess(true);
                 console.log(success);
             } catch (e) {
@@ -44,58 +40,82 @@ function RequestOverview() {
         }
     }, []);
 
-    function handleAccept(request) {
-        request.status = "ACCEPTED";
-        accepted.push(request);
-        setPending(current => current.filter(pending => {
-            return pending.id !== request.id;
-        }));
+    function judgement(status, request) {
+        setRequests({
+                ...requests,
+                [status]: [...requests[status], {...request, status: status.toUpperCase()}],
+                pending: requests.pending.filter(pending => {
+                    return pending.id !== request.id;
+                })
+            }
+        );
     }
 
-    function handleDecline(request) {
-        request.status = "DECLINED";
-        declined.push(request);
-        setPending(current => current.filter(pending => {
-            return pending.id !== request.id;
-        }));
-    }
 
-    function handleCancel(request) {
-        request.status = "CANCELLED";
-        cancelled.push(request);
-        setPending(current => current.filter(pending => {
-            return pending.id !== request.id;
-        }));
-    }
-
+    //     switch (status) {
+    //         case "accepted" : {
+    //             setRequests({
+    //                     ...requests,
+    //                     [status]: [...requests[status], {...request, status : status.toUpperCase()}],
+    //                     pending: requests.pending.filter(pending => {
+    //                         return pending.id !== request.id;
+    //                     })
+    //                 }
+    //             );
+    //             break;
+    //         }
+    //         case "declined" : {
+    //             setRequests({
+    //                     ...requests,
+    //                     declined: [...requests.declined, {...request, status : status.toUpperCase()}],
+    //                     pending: requests.pending.filter(pending => {
+    //                         return pending.id !== request.id;
+    //                     })
+    //                 }
+    //             );
+    //             break;
+    //         }
+    //         case "cancelled" : {
+    //             setRequests({
+    //                     ...requests,
+    //                     cancelled: [...requests.cancelled, {...request, status : status.toUpperCase()}],
+    //                     pending: requests.pending.filter(pending => {
+    //                         return pending.id !== request.id;
+    //                     })
+    //                 }
+    //             );
+    //             break;
+    //         }
+    //     }
+    // }
 
     return (
         <>
             {success && <div>
 
                 <h3>Pending</h3>
-                {pending.map((request) => {
-                    return <Request key={request.id} request={request} accepted={handleAccept} declined={handleDecline} cancelled={handleCancel} />
+                {requests.pending.map((request) => {
+                    return <Request key={request.id} request={request} judgement={judgement}/>
                 })}
 
                 <h3>Accepted</h3>
-                {accepted.map((request) => {
-                    return <Request key={request.id} request={request} />
+                {requests.accepted.map((request) => {
+                    return <Request key={request.id} request={request}/>
                 })}
 
                 <h3>Declined</h3>
-                {declined.map((request) => {
-                    return <Request key={request.id} request={request} />
+                {requests.declined.map((request) => {
+                    return <Request key={request.id} request={request}/>
                 })}
 
                 <h3>Cancelled</h3>
-                {cancelled.map((request) => {
-                    return <Request key={request.id} request={request} />
+                {requests.cancelled.map((request) => {
+                    return <Request key={request.id} request={request}/>
                 })}
 
             </div>}
         </>
-    )
+    );
 
 }
 
