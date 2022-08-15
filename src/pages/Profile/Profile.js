@@ -6,7 +6,7 @@ import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import Button from "../../components/Button/Button";
 import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
-import RequestSection from "../../components/RequestSection/RequestSection";
+import RequestOverview from "../../components/RequestOverview/RequestOverview";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
@@ -31,6 +31,10 @@ function Profile() {
     useEffect(() => {
         const controller = new AbortController();
         fetchProfile(controller);
+        toggleProfileEdit(false);
+        toggleUserEdit(false);
+        toggleFileUpload(false);
+        toggleNewRequest(false);
         return function cleanup() {
             controller.abort();
         }
@@ -86,11 +90,13 @@ function Profile() {
                             </span> : <span>
                         <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/>
                             </span>}
-                        { profile.photo && <img src={profile.photo.url} alt="profielfoto"/> }
+                        {profile.photo && <img src={profile.photo.url} alt="profielfoto"/>}
                     </div>
                 </section>
             }
-            <RequestSection/>
+            {username === user.username &&
+                <RequestOverview/>
+            }
         </>
     );
 }

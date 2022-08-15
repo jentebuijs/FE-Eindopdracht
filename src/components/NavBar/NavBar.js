@@ -2,6 +2,7 @@ import './NavBar.css'
 import {NavLink} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
+import {FaUserCircle} from "react-icons/fa";
 
 function NavBar() {
     const {user, isAuth, logout} = useContext(AuthContext);
@@ -23,7 +24,7 @@ function NavBar() {
                     <li><NavLink to="/" activeClassName="active-navlink" onClick={logout} >Uitloggen</NavLink></li></> }
             </ul>
             <ul>
-                { user && <li><NavLink to={`/profiel/${user.username}`} activeClassName="active-navlink">Hallo, {user.username}!</NavLink></li>}
+                { user && <li><NavLink to={`/profiel/${user.username}`} activeClassName="active-navlink"><FaUserCircle />Hallo, {user.username}!</NavLink></li>}
             </ul>
         </nav>
     );

@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import axios from "axios";
 
 function NewRequest({sender, receiver}) {
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('Hallo! Wil je met mij mailen?');
     const [success, toggleSuccess] = useState(false);
 
     async function sendRequest(e) {
@@ -39,6 +39,7 @@ function NewRequest({sender, receiver}) {
                 <form onSubmit={sendRequest}>
                     <label htmlFor="message">Uw bericht:</label>
                     <textarea id="message"
+                              placeholder="Hallo! Wil je met mij mailen?"
                               onChange={(e) => setMessage(e.target.value)}/>
                     <Button type="submit" title="Verstuur"/>
                 </form>

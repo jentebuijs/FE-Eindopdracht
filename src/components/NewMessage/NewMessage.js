@@ -43,6 +43,10 @@ function NewMessage() {
                     <label htmlFor="content">Inhoud:</label>
                     <textarea id="content"
                               onChange={(e) => setContent(e.target.value)}/>
+                    <input type="checkbox" id="buddy" name="buddy" value="buddy" />
+                    <label htmlFor="buddy">Voor buddies</label>
+                    <input type="checkbox" id="student" name="student" value="student" />
+                    <label htmlFor="student">Voor studenten</label>
                     <Button type="submit" title="Verstuur"/>
                 </form>
                 :

@@ -1,28 +1,24 @@
 import './Request.css'
 import {FaExclamationTriangle, FaThumbsDown, FaThumbsUp} from "react-icons/fa";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
 
-function Request({request, incoming, removeRequest}) {
-    const [requestStatus, setRequestStatus] = useState("pending");
+function Request({request, accepted, declined, cancelled}) {
+    const {user} = useContext(AuthContext);
 
-    async function handleStatus( status) {
+    async function handleStatus(status) {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.put(`http://localhost:8080/requests/${request.id}`,
-                { status: status}, {
+            await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`, {
                 headers: {
                     "Content-type": "application/json",
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
-            setRequestStatus(response.data.status);
-            {
-                status === "declined" || status === "cancelled" && removeRequest(request.id)
-            }
-        } catch(e) {
+
+        } catch (e) {
             console.error(e);
         }
     }
@@ -30,26 +26,36 @@ function Request({request, incoming, removeRequest}) {
 
     return (
         <li className="request" key={request.id}>
-            { incoming ?
-                <div>
-                    <Link to={`/profiel/${request.sender.username}`}>
-                        {request.sender.username}
-                    </Link>
+            <div>
+                <Link to={`/profile/${request.sender.username}`}>
+                    {request.sender.username}
+                </Link>
+                {request.status === "PENDING" && request.receiver.username === user.username &&
                     <span>
-                        <FaThumbsUp onClick={() => handleStatus("accepted")}/>
-                        <FaThumbsDown onClick={() => handleStatus("declined")}/>
-                    </span>
-                </div>
-                :
-                <div>
-                    <Link to={`/profiel/${request.receiver.username}`}>
-                        {request.receiver.username}
-                    </Link>
+                        <FaThumbsUp onClick={() => {
+                            accepted(request)
+                            handleStatus("accepted")
+                        }}/>
+                        <FaThumbsDown onClick={() => {
+                            declined(request)
+                            handleStatus("declined")
+                        }}/>
+                    </span>}
+            </div>
+
+            <div>
+                <Link to={`/profile/${request.receiver.username}`}>
+                    {request.receiver.username}
+                </Link>
+                {request.status === "PENDING" && request.sender.username === user.username &&
                     <span>
-                        <FaExclamationTriangle onClick={() => handleStatus("cancelled")}/>
-                    </span>
-                </div>
-            }
+                        <FaExclamationTriangle onClick={() => {
+                            cancelled(request)
+                            handleStatus("cancelled")
+                        }}/>
+                    </span>}
+            </div>
+
         </li>
     );
 
