@@ -22,7 +22,8 @@ function Messageboard() {
         async function fetchData() {
             // e.preventDefault();
             try {
-                const result = await axios.get("http://localhost:8080/messages", {signal})
+                const result = await axios.get("http://localhost:8080/messages",
+                    {signal})
                 // {cancelToken: source.token})
                 setMessages(result.data);
                 setVisibleMessages(result.data);

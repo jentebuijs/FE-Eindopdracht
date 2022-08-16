@@ -11,6 +11,8 @@ import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import AdminSection from "./components/AdminSection/AdminSection";
+import NavBar from "./components/NavBar/NavBar";
 
 function PrivateRoute({children, isAuth, ...rest}) {
     return (
@@ -25,7 +27,10 @@ function App() {
 
     return (
         <>
-            <Header/>
+            <div>
+                <NavBar/>
+            </div>
+            <div>
             <Switch>
                 <Route exact path="/">
                     <Home/>
@@ -33,6 +38,9 @@ function App() {
                 <Route path="/prikbord">
                     <Messageboard/>
                 </Route>
+                <PrivateRoute isAuth={isAuth} path="/prikbord/admin">
+                    <AdminSection/>
+                </PrivateRoute>
                 <Route path="/inloggen">
                     <SignIn/>
                 </Route>
@@ -46,7 +54,8 @@ function App() {
                     <Profile/>
                 </PrivateRoute>
             </Switch>
-            <Footer />
+            </div>
+            <Footer/>
         </>
     );
 }
