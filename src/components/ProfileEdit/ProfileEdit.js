@@ -5,7 +5,7 @@ import {useForm} from "react-hook-form";
 import axios from "axios";
 
 function ProfileEdit({profileData}) {
-    const [profileDataData, setProfileDataData] = useState({...profileData});\ m,,m,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,\\\\\\\\\\\\\
+    const [profileDataData, setProfileDataData] = useState({...profileData});
     const {user: {username}} = useContext(AuthContext);
     const token = localStorage.getItem('token');
     const [success, toggleSuccess] = useState(false);
@@ -38,12 +38,15 @@ function ProfileEdit({profileData}) {
 
     async function handleClick(active) {
         try {
-            const response = await axios.put(`http://localhost:8080/profiles/${username}?active=${active}`, {
+            const response = await axios.put(`http://localhost:8080/profiles/${username}`,
+                { active: active },
+                {
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 Authorization: `Bearer ${token}`
             });
+            setProfileDataData({...profileDataData, active: active});
             console.log(response)
         } catch (e) {
             console.error(e);
@@ -52,16 +55,14 @@ function ProfileEdit({profileData}) {
 
     return (
         <>
-            {profileData.active ?
+            {profileDataData.active ?
                 <button type="button"
-                        value="false"
-                        onClick={(e) => handleClick(e.target.value)}>
+                        onClick={() => handleClick(!profileDataData.active)}>
                     Deactiveer
                 </button>
                 :
                 <button type="button"
-                        value="true"
-                        onClick={(e) => handleClick(e.target.value)}>
+                        onClick={() => handleClick(!profileDataData.active)}>
                     Activeer
                 </button>
             }
@@ -72,7 +73,7 @@ function ProfileEdit({profileData}) {
                     <label htmlFor="firstName">Voornaam:</label>
                     <input type="text"
                            id="firstName"
-                           value={profileDataData.firstName}
+                           defaultValue={profileDataData.firstName}
                            onChange={handleInput} {...register("firstName", {
                         minLength: {
                             value: 2,
@@ -89,7 +90,7 @@ function ProfileEdit({profileData}) {
                     <label htmlFor="lastName">Achternaam:</label>
                     <input type="text"
                            id="lastName"
-                           placeholder={profileDataData.lastName}
+                           defaultValue={profileDataData.lastName}
                            onChange={handleInput} {...register("lastName", {
                         minLength: {
                             value: 3,
@@ -104,7 +105,7 @@ function ProfileEdit({profileData}) {
                     {errors.lastName && errors.lastName.message}
                     <br/>
                     <label htmlFor="aboutMe">Over mij:</label>
-                    <textarea id="aboutMe" onChange={handleInput} {...register("aboutMe", {
+                    <textarea id="aboutMe" defaultValue={profileDataData.aboutMe} onChange={handleInput} {...register("aboutMe", {
                         minLength: {
                             value: 20,
                             message: "Vertel iets over jezelf"
