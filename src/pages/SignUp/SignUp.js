@@ -11,6 +11,10 @@ function SignUp() {
     const role = watch("authority");
     const history = useHistory();
 
+    useEffect(() => {
+        document.title = "DIGITAALBUDDY | Registreren"
+    }, [])
+
     async function onSubmit(data) {
       try {
           const response = await axios.post('http://localhost:8080/users/signup', data, {
@@ -113,7 +117,7 @@ function SignUp() {
                         {errors.lastName && errors.lastName.message}
                         <br/>
                         <label htmlFor="dob">Geboortedatum:</label>
-                        <input type="datetime" id="dob" {...register("dob", {
+                        <input type="Date" id="dob" {...register("dob", {
                             required: 'Dit veld is verplicht'
                         })} />
                         <label htmlFor="aboutMe">Over mij:</label>

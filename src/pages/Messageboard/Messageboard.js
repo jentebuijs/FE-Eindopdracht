@@ -6,7 +6,6 @@ import Button from "../../components/Button/Button";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
-import AdminSection from "../../components/AdminSection/AdminSection";
 
 function Messageboard() {
     const {user: {authorities}, isAuth} = useContext(AuthContext);
@@ -15,6 +14,7 @@ function Messageboard() {
     const [newMessage, toggleNewMessage] = useState(false);
 
     useEffect(() => {
+        document.title = "DIGITAALBUDDY | Prikbord"
         const fetchController = new AbortController;
         const {signal} = fetchController;
         // const CancelToken = axios.CancelToken;
@@ -63,7 +63,6 @@ function Messageboard() {
     return (
         <>
             {/*ternary operator of functie*/}
-            <AdminSection />
                 {console.log(messages)}
                 {console.log(visibleMessages)}
                 <span className="buttons">
@@ -96,7 +95,7 @@ function Messageboard() {
 
                 {visibleMessages && visibleMessages.map((message) => {
                     return (
-                        <Message key={message.id} message={message}/>
+                        <Message key={message.id} message={message} />
                     );
                 })}
         </>

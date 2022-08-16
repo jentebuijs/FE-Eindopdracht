@@ -1,12 +1,11 @@
 import {createContext, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import isTokenValid from "../components/helpers/isTokenValid";
+import isTokenValid from "../components/Helpers/isTokenValid";
 
 export const AuthContext = createContext({});
 
 function AuthContextProvider({children}) {
-    const [userRole, setUserRole] = useState([]);
     const history = useHistory();
     const [auth, setAuth] = useState({
         isAuth: false,
@@ -21,9 +20,6 @@ function AuthContextProvider({children}) {
         const token = localStorage.getItem('token');
         if (token && isTokenValid(token)) {
             const decodedToken = jwt_decode(token);
-            setUserRole(Object.values(decodedToken.authorities).map((value) => {
-                userRole.push(value.authority);
-            }));
             setAuth({
                 isAuth: true,
                 user: {
@@ -37,7 +33,6 @@ function AuthContextProvider({children}) {
 
             console.log(auth.user.authorities);
             console.log(decodedToken.authorities[0].authority);
-            console.log(userRole);
         } else {
             setAuth({
                 isAuth: false,
@@ -55,7 +50,9 @@ function AuthContextProvider({children}) {
             isAuth: true,
             user: {
                 username: decodedToken.sub,
-                authorities: decodedToken.authorities[0].authority
+                authorities: Object.values(decodedToken.authorities).map((value) => {
+                    return value.authority;
+                })
             },
             status: 'done',
         });

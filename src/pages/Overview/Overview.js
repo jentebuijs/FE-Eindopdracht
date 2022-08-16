@@ -9,6 +9,7 @@ function Overview() {
     const [profiles, setProfiles] = useState(null);
 
     useEffect(() => {
+        document.title = "DIGITAALBUDDY | Profielenoverzicht"
         async function fetchProfiles() {
             const token = localStorage.getItem('token');
             try {

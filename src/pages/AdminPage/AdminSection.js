@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {set} from "react-hook-form";
-import Message from "../Message/Message";
+import Message from "../../components/Message/Message";
 
 
 function AdminSection() {
-    const [messages, setMessages] = useState([]);
+    document.title = "DIGITAALBUDDY | Adminpagina"
+    const [adminMessages, setAdminMessages] = useState([]);
 
     useEffect(() => {
         async function fetchAdminMessages() {
@@ -18,7 +19,7 @@ function AdminSection() {
                     }
                 });
                 console.log(response);
-                setMessages(response.data);
+                setAdminMessages(response.data);
             } catch (e) {
                 console.error(e);
             }
@@ -27,13 +28,22 @@ function AdminSection() {
         fetchAdminMessages();
     }, []);
 
+    function judgement(message) {
+        setAdminMessages(
+            adminMessages.filter(adminMessage => {
+                return adminMessage.id !== message.id;
+            })
+        )
+    }
+
+
     return (
         <>
-            { messages && messages.map((message) => {
+            {adminMessages && adminMessages.map((message) => {
                 return (
-                    <Message key={message.id} message={message}/>
+                    <Message key={message.id} message={message} judgement={judgement} />
                 );
-            }) }
+            })}
         </>
     );
 }

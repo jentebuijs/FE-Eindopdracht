@@ -3,11 +3,9 @@ import {useContext, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 
-function PhotoEdit() {
+function PhotoEdit({file, setFile, toggleFileUpload}) {
     const {user: {username}} = useContext(AuthContext);
     const token = localStorage.getItem('token');
-    const [file, setFile] = useState([]);
-    const [success, toggleSuccess] = useState(false);
     const [previewUrl, setPreviewUrl] = useState('');
 
     function handleImageChange(e) {
@@ -23,7 +21,7 @@ function PhotoEdit() {
         formData.append("file", file);
 
         try {
-            const result = await axios.post(`http://localhost:8080/profiles/${username}/photo`, formData,
+            const result = await axios.post(`http://localhost:8080/photos/upload/${username}`, formData,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data"
@@ -31,11 +29,10 @@ function PhotoEdit() {
                     Authorization: `Bearer ${token}`
                 })
             console.log(result.data);
-            toggleSuccess(true);
+            toggleFileUpload(false);
             setFile([]);
             setPreviewUrl('');
         } catch (e) {
-            toggleSuccess(false);
             console.error(e)
         }
     }
@@ -43,7 +40,6 @@ function PhotoEdit() {
     return (
         <div className="page-container">
             <h1>Afbeelding uploaden en preview bekijken</h1>
-            {success && <p>Uw profielfoto is aangepast</p> }
             <form onSubmit={sendImage}>
                 <label htmlFor="user-image">
                     Kies afbeelding:

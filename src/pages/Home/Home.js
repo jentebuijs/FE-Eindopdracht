@@ -1,13 +1,15 @@
 import './Home.css'
 import React from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 
 function Home() {
+    document.title = "DIGITAALBUDDY | Home"
+
     return (
         <>
                 <h1>Welkom!</h1>
-                <p>Blablabla</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi distinctio, eaque in iure iusto
+                    minima, nemo neque nihil nulla perspiciatis placeat possimus praesentium qui quia quidem quisquam
+                    quo, ullam vero?</p>
         </>
     );
 }

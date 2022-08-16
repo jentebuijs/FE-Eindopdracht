@@ -8,7 +8,7 @@ function Header() {
 
     return (
         <header>
-            { isAuth && <NavBar /> }
+            <NavBar />
             <p>Header</p>
         </header>
     );

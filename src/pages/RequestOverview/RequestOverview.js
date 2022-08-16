@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import Request from "../Request/Request";
+import Request from "../../components/Request/Request";
 
 function RequestOverview() {
     const {user} = useContext(AuthContext);

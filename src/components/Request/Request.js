@@ -11,7 +11,7 @@ function Request({request, judgement}) {
     async function handleStatus(status) {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`,
+            await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`,
                 {
                     headers: {
                         "Content-type": "application/json",

@@ -6,7 +6,7 @@ import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import Button from "../../components/Button/Button";
 import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
-import RequestOverview from "../../components/RequestOverview/RequestOverview";
+import RequestOverview from "../RequestOverview/RequestOverview";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
@@ -14,7 +14,7 @@ import NewRequest from "../../components/newRequest/NewRequest";
 function Profile() {
     const {username} = useParams();
     const {user} = useContext(AuthContext);
-    const [buttons, toggleButtons] = useState({});
+    const [file, setFile] = useState();
     const [profileEdit, toggleProfileEdit] = useState(false);
     const [userEdit, toggleUserEdit] = useState(false);
     const [fileUpload, toggleFileUpload] = useState(false);
@@ -22,6 +22,7 @@ function Profile() {
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
+        document.title = `DIGITAALBUDDY | Profiel van ${user.username}`
         const controller = new AbortController();
         fetchProfile(controller);
         return function cleanup() {
@@ -65,7 +66,7 @@ function Profile() {
             {username === user.username ?
                 <span>
                     {profileEdit && <ProfileEdit profileData={profile}/>}
-                    {fileUpload && <PhotoEdit/>}
+                    {fileUpload && <PhotoEdit file={file} setFile={setFile} toggleFileUpload={toggleFileUpload}/>}
                     {userEdit && <UserEdit/>}
                 </span>
                 :
