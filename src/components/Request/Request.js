@@ -28,7 +28,7 @@ function Request({request, judgement}) {
     return (
         <li className="request" key={request.id}>
             <div>
-                <Link to={`/profile/${request.sender.username}`}>
+                <Link to={`/profiel/${request.sender.username}`}>
                     {request.sender.username}
                 </Link>
                 {request.status === "PENDING" && request.receiver.username === user.username &&
@@ -43,7 +43,7 @@ function Request({request, judgement}) {
             </div>
 
             <div>
-                <Link to={`/profile/${request.receiver.username}`}>
+                <Link to={`/profiel/${request.receiver.username}`}>
                     {request.receiver.username}
                 </Link>
                 {request.status === "PENDING" && request.sender.username === user.username &&

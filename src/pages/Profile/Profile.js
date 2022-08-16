@@ -10,6 +10,7 @@ import RequestOverview from "../RequestOverview/RequestOverview";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
+import {set} from "react-hook-form";
 
 function Profile() {
     const {username} = useParams();
@@ -25,6 +26,7 @@ function Profile() {
         document.title = `DIGITAALBUDDY | Profiel van ${user.username}`
         const controller = new AbortController();
         fetchProfile(controller);
+        console.log(profile);
         return function cleanup() {
             controller.abort();
         }
@@ -35,12 +37,12 @@ function Profile() {
         fetchProfile(controller);
         toggleProfileEdit(false);
         toggleUserEdit(false);
-        toggleFileUpload(false);
         toggleNewRequest(false);
         return function cleanup() {
             controller.abort();
         }
-    }, [username]);
+    }, [fileUpload, username]);
+
 
     async function fetchProfile(controller) {
         const token = localStorage.getItem('token');
@@ -65,7 +67,7 @@ function Profile() {
         <>
             {username === user.username ?
                 <span>
-                    {profileEdit && <ProfileEdit profileData={profile}/>}
+                    {profileEdit && <ProfileEdit profileData={profile} setProfileData={setProfile}/>}
                     {fileUpload && <PhotoEdit file={file} setFile={setFile} toggleFileUpload={toggleFileUpload}/>}
                     {userEdit && <UserEdit/>}
                 </span>
