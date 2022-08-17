@@ -1,13 +1,14 @@
 import './ProfileCard.css'
+import {Link} from "react-router-dom";
 
-function ProfileCard({profile: {firstName, age, aboutMe, level, frequency, fileUploadResponse}}) {
+function ProfileCard({profile}) {
     return (
         <>
-            <h3>{firstName}</h3>
-            {fileUploadResponse && <img src={fileUploadResponse.url} alt="profielfoto" />}
-            <p>Leeftijd: {age}</p>
-            <p>Over mij: {aboutMe}</p>
-            { level && <p>Nederlands niveau: {level}</p>}
+            <Link to={`/profiel/${profile.username}`}>{profile.firstName} {profile.lastName}</Link>
+            {profile.photo && <img src={profile.photo.url} alt="profielfoto" />}
+            <p>Leeftijd: {profile.age}</p>
+            <p>Over mij: {profile.aboutMe}</p>
+            { profile.level && <p>Nederlands niveau: {profile.level.value}</p>}
 
         </>
     );

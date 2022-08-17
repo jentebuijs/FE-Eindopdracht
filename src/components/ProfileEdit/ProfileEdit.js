@@ -3,6 +3,8 @@ import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import {set, useForm} from "react-hook-form";
 import axios from "axios";
+import Notification from "../Notification/Notification";
+import createNotification from "../Notification/Notification";
 
 function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdit}) {
     const [profileDataData, setProfileDataData] = useState({...profileData});
@@ -28,6 +30,7 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                 const data = response.data;
                 console.log(data);
                 setProfileData({...profileData,...data})
+                createNotification('success');
                 toggleProfileEdit(false);
             });
         } catch (e) {
@@ -37,6 +40,7 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
 
     return (
         <>
+            <Notification type={profileEdit} />
             {console.log(profileData.activated)}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input {...register("activated", {required: true})}
