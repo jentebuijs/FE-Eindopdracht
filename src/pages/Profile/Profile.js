@@ -65,7 +65,7 @@ function Profile() {
         <>
             {username === user.username ?
                 <span>
-                    {profileEdit && <ProfileEdit profileData={profile} setProfileData={setProfile}/>}
+                    {profileEdit && <ProfileEdit profileData={profile} setProfileData={setProfile} profileEdit={profileEdit} toggleProfileEdit={toggleProfileEdit}/>}
                     {fileUpload && <PhotoEdit file={file} setFile={setFile} toggleFileUpload={toggleFileUpload}/>}
                     {userEdit && <UserEdit/>}
                 </span>

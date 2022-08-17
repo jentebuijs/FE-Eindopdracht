@@ -4,7 +4,7 @@ import {AuthContext} from "../../context/AuthContext";
 import {set, useForm} from "react-hook-form";
 import axios from "axios";
 
-function ProfileEdit({profileData, setProfileData}) {
+function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdit}) {
     const [profileDataData, setProfileDataData] = useState({...profileData});
     const {user: {username}} = useContext(AuthContext);
     const token = localStorage.getItem('token');
@@ -12,9 +12,7 @@ function ProfileEdit({profileData, setProfileData}) {
     const {register, handleSubmit, formState: {errors}} = useForm();
 
     const handleInput = (e) => {
-        console.log(e.target.name, " : ", e.target.value);
-        setProfileDataData({ ...profileDataData, [e.target.name]: e.target.value });
-        setProfileData({ ...profileData, [e.target.name]: e.target.value });
+        setProfileDataData({...profileDataData, [e.target.name]: e.target.value});
     };
 
     async function onSubmit(data) {
@@ -27,31 +25,30 @@ function ProfileEdit({profileData, setProfileData}) {
                 },
                 Authorization: `Bearer ${token}`
             }).then((response) => {
-                setProfileDataData({response})
-                setProfileData({response})
-                toggleSuccess(true);
-            })
+                const data = response.data;
+                console.log(data);
+                setProfileData({...profileData,...data})
+                toggleProfileEdit(false);
+            });
         } catch (e) {
-            toggleSuccess(false);
             console.error(e);
         }
     }
 
     return (
         <>
-            {console.log(profileDataData)}
+            {console.log(profileData.activated)}
             <form onSubmit={handleSubmit(onSubmit)}>
-
-                <input {...register("isActivated", { required: true })}
+                <input {...register("activated", {required: true})}
                        type="radio"
                        value="true"
-                       defaultChecked={profileDataData.isActivated === true }
+                       defaultChecked={profileData.activated === true}
                        id="true"/>
                 <label htmlFor="true">Actief</label>
-                <input {...register("isActivated", { required: true })}
+                <input {...register("activated", {required: true})}
                        type="radio"
                        value=" false"
-                       defaultChecked={profileDataData.isActivated === false}
+                       defaultChecked={profileData.activated === false}
                        id="false"/>
                 <label htmlFor="false">Inactief</label>
                 <fieldset>
@@ -92,7 +89,8 @@ function ProfileEdit({profileData, setProfileData}) {
                     {errors.lastName && errors.lastName.message}
                     <br/>
                     <label htmlFor="aboutMe">Over mij:</label>
-                    <textarea id="aboutMe" defaultValue={profileDataData.aboutMe} onChange={handleInput} {...register("aboutMe", {
+                    <textarea id="aboutMe" defaultValue={profileDataData.aboutMe}
+                              onChange={handleInput} {...register("aboutMe", {
                         minLength: {
                             value: 20,
                             message: "Vertel iets over jezelf"
@@ -105,7 +103,8 @@ function ProfileEdit({profileData, setProfileData}) {
                     <br/>
                     {profileData.role === "Student" &&
                         <label htmlFor="level">Nederlands Niveau:
-                            <select defaultValue={profileDataData.level.key} id="level" onChange={handleInput} {...register("level")}>
+                            <select defaultValue={profileDataData.level.key} id="level"
+                                    onChange={handleInput} {...register("level")}>
                                 <option value="BEGINNER">Beginner (A1)</option>
                                 <option value="ELEMENTARY">Beginner (A2)</option>
                                 <option value="INTERMEDIATE">Gevorderd (B1)</option>
@@ -116,7 +115,8 @@ function ProfileEdit({profileData, setProfileData}) {
                         </label>}
                     {errors.level && errors.level.message}
                     <label htmlFor="frequency">Contact:</label>
-                    <select defaultValue={profileDataData.frequency.key} id="frequency" onChange={handleInput} {...register("frequency")}>
+                    <select defaultValue={profileDataData.frequency.key} id="frequency"
+                            onChange={handleInput} {...register("frequency")}>
                         <option value="EVERY_DAY">Elke dag</option>
                         <option value="FEW_TIMES_A_WEEK">Een paar keer per week</option>
                         <option value="ONCE_A_WEEK">Een keer per week</option>
