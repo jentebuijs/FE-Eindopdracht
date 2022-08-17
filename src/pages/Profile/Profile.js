@@ -4,13 +4,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import Button from "../../components/Button/Button";
 import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
 import RequestOverview from "../RequestOverview/RequestOverview";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
-import {set} from "react-hook-form";
 
 function Profile() {
     const {username} = useParams();
@@ -83,6 +81,9 @@ function Profile() {
 
                         <p>Naam: {profile.firstName} {profile.lastName}</p>
                         <p>Leeftijd: {profile.age}</p>
+                        <p>Over mij: {profile.aboutMe}</p>
+                        {/*<p>Contactvoorkeur: {profile.frequency.value}</p>*/}
+                        { profile.level && <p>Nederlands Niveau: {profile.level.value}</p> }
                         <p>Profielinformatie blablabla</p>
                     </div>
                     <div>

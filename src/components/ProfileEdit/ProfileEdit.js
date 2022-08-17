@@ -1,10 +1,10 @@
 import './ProfileEdit.css'
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
-import {useForm} from "react-hook-form";
+import {set, useForm} from "react-hook-form";
 import axios from "axios";
 
-function ProfileEdit({profileData}) {
+function ProfileEdit({profileData, setProfileData}) {
     const [profileDataData, setProfileDataData] = useState({...profileData});
     const {user: {username}} = useContext(AuthContext);
     const token = localStorage.getItem('token');
@@ -14,59 +14,46 @@ function ProfileEdit({profileData}) {
     const handleInput = (e) => {
         console.log(e.target.name, " : ", e.target.value);
         setProfileDataData({ ...profileDataData, [e.target.name]: e.target.value });
+        setProfileData({ ...profileData, [e.target.name]: e.target.value });
     };
-
-
 
     async function onSubmit(data) {
         console.log(data);
         console.log(profileData);
         try {
-            const response = await axios.put(`http://localhost:8080/profiles/${username}`, data, {
+            axios.put(`http://localhost:8080/profiles/${username}`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 Authorization: `Bearer ${token}`
-            });
-            console.log(response);
-            toggleSuccess(true);
+            }).then((response) => {
+                setProfileDataData({response})
+                setProfileData({response})
+                toggleSuccess(true);
+            })
         } catch (e) {
             toggleSuccess(false);
             console.error(e);
         }
     }
 
-    async function handleClick(active) {
-        try {
-            const response = await axios.put(`http://localhost:8080/profiles/${username}`,
-                { active: active },
-                {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                Authorization: `Bearer ${token}`
-            });
-            setProfileDataData({...profileDataData, active: active});
-            console.log(response)
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
     return (
         <>
-            {profileDataData.active ?
-                <button type="button"
-                        onClick={() => handleClick(!profileDataData.active)}>
-                    Deactiveer
-                </button>
-                :
-                <button type="button"
-                        onClick={() => handleClick(!profileDataData.active)}>
-                    Activeer
-                </button>
-            }
+            {console.log(profileDataData)}
             <form onSubmit={handleSubmit(onSubmit)}>
+
+                <input {...register("isActivated", { required: true })}
+                       type="radio"
+                       value="true"
+                       defaultChecked={profileDataData.isActivated === true }
+                       id="true"/>
+                <label htmlFor="true">Actief</label>
+                <input {...register("isActivated", { required: true })}
+                       type="radio"
+                       value=" false"
+                       defaultChecked={profileDataData.isActivated === false}
+                       id="false"/>
+                <label htmlFor="false">Inactief</label>
                 <fieldset>
                     <legend>Profiel</legend>
                     {success && <p>Uw profiel is aangepast</p>}
