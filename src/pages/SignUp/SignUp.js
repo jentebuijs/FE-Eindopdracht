@@ -179,10 +179,6 @@ function SignUp() {
                         <br/>
                     </fieldset>
                     <button type="submit">Registreren</button>
-                    {/*<input type="submit"/>*/}
-                    {/*<Button*/}
-                    {/*    title="Registreren"*/}
-                    {/*    type="submit"/>*/}
                 </form>
                 : <p>Gebruiker is geregistreerd. <Link to="/inloggen">Ga naar de inlogpagina</Link></p>}
         </>);

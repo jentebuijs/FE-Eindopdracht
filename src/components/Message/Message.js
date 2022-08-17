@@ -4,7 +4,7 @@ import {FaThumbsDown, FaThumbsUp} from "react-icons/fa";
 import axios from "axios";
 
 function Message({message, judgement}) {
-    const {user: {authorities}, isAuth} = useContext(AuthContext);
+    const {user, isAuth} = useContext(AuthContext);
 
     async function handleStatus(status) {
         const token = localStorage.getItem('token');
@@ -25,7 +25,7 @@ function Message({message, judgement}) {
         <>
             <h2>{message.title}</h2>
             <p>{message.content}</p>
-            {isAuth && authorities.includes("ROLE_ADMIN") && message.approved === false &&
+            {isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
                 <span>
                 <FaThumbsUp onClick={() => {
                     handleStatus("accepted")

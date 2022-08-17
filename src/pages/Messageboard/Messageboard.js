@@ -8,7 +8,7 @@ import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
 
 function Messageboard() {
-    const {user: {authorities}, isAuth} = useContext(AuthContext);
+    const {isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
