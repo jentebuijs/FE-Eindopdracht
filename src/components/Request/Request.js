@@ -9,21 +9,21 @@ function Request({request, judgement}) {
     const {user} = useContext(AuthContext);
 
     async function handleStatus(status) {
-        const token = localStorage.getItem('token');
         try {
             await axios.put(`http://localhost:8080/requests/${request.id}?status=${status}`,
                 {
                     headers: {
                         "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
+
             judgement(status, request);
+
         } catch (e) {
             console.error(e);
         }
     }
-
 
     return (
         <li className="request" key={request.id}>
@@ -56,8 +56,6 @@ function Request({request, judgement}) {
 
         </li>
     );
-
-
 }
 
 export default Request;

@@ -18,6 +18,7 @@ function AuthContextProvider({children}) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+
         if (token && isTokenValid(token)) {
             const decodedToken = jwt_decode(token);
             setAuth({
@@ -31,8 +32,6 @@ function AuthContextProvider({children}) {
                 status: 'done',
             });
 
-            console.log(auth.user.authorities);
-            console.log(decodedToken.authorities[0].authority);
         } else {
             setAuth({
                 isAuth: false,
@@ -43,7 +42,6 @@ function AuthContextProvider({children}) {
     }, [])
 
     function login(token) {
-        console.log(token);
         localStorage.setItem('token', token);
         const decodedToken = jwt_decode(token);
         setAuth({

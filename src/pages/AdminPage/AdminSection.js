@@ -1,31 +1,36 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {set} from "react-hook-form";
 import Message from "../../components/Message/Message";
-
+import {NotificationManager} from "react-notifications";
 
 function AdminSection() {
     document.title = "DIGITAALBUDDY | Adminpagina"
     const [adminMessages, setAdminMessages] = useState([]);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         async function fetchAdminMessages() {
-            const token = localStorage.getItem('token');
             try {
                 const response = await axios.get("http://localhost:8080/messages?type=admin", {
                     headers: {
                         "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }, signal: controller.signal
                 });
-                console.log(response);
+
                 setAdminMessages(response.data);
+
             } catch (e) {
                 console.error(e);
+                NotificationManager.warning('Probeer het opnieuw', 'Er ging wat mis!', 1500);
             }
         }
+            fetchAdminMessages();
 
-        fetchAdminMessages();
+            return function cleanup() {
+                controller.abort();
+            }
     }, []);
 
     function judgement(message) {
@@ -35,7 +40,6 @@ function AdminSection() {
             })
         )
     }
-
 
     return (
         <>

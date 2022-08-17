@@ -25,15 +25,17 @@ function Message({message, judgement}) {
         <>
             <h2>{message.title}</h2>
             <p>{message.content}</p>
+
             {isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
                 <span>
-                <FaThumbsUp onClick={() => {
-                    handleStatus("accepted")
-                }}/>
-                <FaThumbsDown onClick={() => {
-                    handleStatus("declined")
-                }}/>
-                    </span>
+                    <FaThumbsUp onClick={() => {
+                        handleStatus("accepted")
+                    }}/>
+
+                    <FaThumbsDown onClick={() => {
+                        handleStatus("declined")
+                    }}/>
+                </span>
             }
         </>
     );

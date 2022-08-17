@@ -1,4 +1,5 @@
 import './App.css';
+import 'react-notifications/lib/notifications.css';
 import {NotificationContainer} from 'react-notifications';
 import {Redirect, Route, Switch} from "react-router-dom";
 import Home from "./pages/Home/Home";
@@ -13,19 +14,12 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AdminSection from "./pages/AdminPage/AdminSection";
 
-function PrivateRoute({children, isAuth, ...rest}) {
-    return (
-        <Route {...rest}>
-            {isAuth ? children : <Redirect to="/inloggen"/>}
-        </Route>
-    )
-}
-
 function App() {
     const {isAuth} = useContext(AuthContext);
 
     return (
         <>
+            <NotificationContainer />
             <Header/>
             <main>
                 <Switch>
@@ -53,9 +47,16 @@ function App() {
                 </Switch>
             </main>
             <Footer/>
-            <NotificationContainer />
         </>
     );
+}
+
+function PrivateRoute({children, isAuth, ...rest}) {
+    return (
+        <Route {...rest}>
+            {isAuth ? children : <Redirect to="/inloggen"/>}
+        </Route>
+    )
 }
 
 export default App;

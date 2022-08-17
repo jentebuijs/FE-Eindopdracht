@@ -2,32 +2,34 @@ import './NewRequest.css'
 import Button from "../Button/Button";
 import React, {useState} from "react";
 import axios from "axios";
+import {NotificationManager} from "react-notifications";
 
-function NewRequest({sender, receiver}) {
+function NewRequest({sender, receiver, toggleNewRequest}) {
     const [message, setMessage] = useState('Hallo! Wil je met mij mailen?');
-    const [success, toggleSuccess] = useState(false);
 
     async function sendRequest(e) {
         e.preventDefault()
-        const token = localStorage.getItem('token');
         const controller = new AbortController();
 
         try {
-            const response = await axios.post('http://localhost:8080/requests/new', {
+            await axios.post('http://localhost:8080/requests/new', {
                 sender: sender,
                 receiver: receiver,
                 message: message
             }, {
                 headers: {
                     "Content-type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }, signal: controller.signal
-            })
-            console.log(response);
-            { response && toggleSuccess(!success) }
+            }).then(() => {
+                NotificationManager.success('Je bericht is verstuurd', 'Sweet success!', 1500)
+                toggleNewRequest(false);
+            });
+
         } catch (e) {
             console.error(e);
         }
+
         return function cleanup() {
             controller.abort();
         }
@@ -35,20 +37,15 @@ function NewRequest({sender, receiver}) {
 
     return (
         <>
-            {!success ?
-                <form onSubmit={sendRequest}>
-                    <label htmlFor="message">Uw bericht:</label>
-                    <textarea id="message"
-                              placeholder="Hallo! Wil je met mij mailen?"
-                              onChange={(e) => setMessage(e.target.value)}/>
-                    <Button type="submit" title="Verstuur"/>
-                </form>
-                :
-                <p>Uw verzoek is verstuurd!</p>
-            }
+            <form onSubmit={sendRequest}>
+                <label htmlFor="message">Uw bericht:</label>
+                <textarea id="message"
+                          placeholder="Hallo! Wil je met mij mailen?"
+                          onChange={(e) => setMessage(e.target.value)}/>
+                <Button type="submit" title="Verstuur"/>
+            </form>
         </>
-    )
-        ;
+    );
 }
 
 export default NewRequest;

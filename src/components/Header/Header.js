@@ -1,15 +1,14 @@
 import './Header.css'
 import NavBar from "../NavBar/NavBar";
-import {AuthContext} from "../../context/AuthContext";
-import {useContext} from "react";
 
 function Header() {
-    const {isAuth} = useContext(AuthContext);
 
     return (
         <header>
-            <NavBar />
-            <p>Header</p>
+            <NavBar/>
+            <span>
+                <img src="../../assets/logo.JPG" alt="logo"/>
+            </span>
         </header>
     );
 }

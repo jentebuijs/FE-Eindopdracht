@@ -2,15 +2,14 @@ import "./PhotoEdit.css"
 import {useContext, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import {NotificationManager} from "react-notifications";
 
 function PhotoEdit({file, setFile, toggleFileUpload}) {
     const {user: {username}} = useContext(AuthContext);
-    const token = localStorage.getItem('token');
     const [previewUrl, setPreviewUrl] = useState('');
 
     function handleImageChange(e) {
         const uploadedFile = e.target.files[0];
-        console.log(uploadedFile);
         setFile(uploadedFile);
         setPreviewUrl(URL.createObjectURL(uploadedFile));
     }
@@ -21,17 +20,19 @@ function PhotoEdit({file, setFile, toggleFileUpload}) {
         formData.append("file", file);
 
         try {
-            const result = await axios.post(`http://localhost:8080/photos/upload/${username}`, formData,
+            await axios.post(`http://localhost:8080/photos/upload/${username}`, formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data"
-                    },
-                    Authorization: `Bearer ${token}`
-                })
-            console.log(result.data);
-            toggleFileUpload(false);
-            setFile([]);
-            setPreviewUrl('');
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            ).then(() => {
+                setPreviewUrl('');
+                NotificationManager.success('Je profielfoto is aangepast', 'Sweet success!', 1500);
+                toggleFileUpload(false);
+            });
+
         } catch (e) {
             console.error(e)
         }
@@ -48,7 +49,8 @@ function PhotoEdit({file, setFile, toggleFileUpload}) {
                 {previewUrl &&
                     <label>
                         Preview:
-                        <img src={previewUrl} alt="Voorbeeld van de afbeelding die zojuist gekozen is" className="image-preview"/>
+                        <img src={previewUrl} alt="Voorbeeld van de afbeelding die zojuist gekozen is"
+                             className="image-preview"/>
                     </label>
                 }
                 <button type="submit">Uploaden</button>

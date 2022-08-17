@@ -6,22 +6,23 @@ import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
 
 function SignIn() {
-    const { user, login } = useContext(AuthContext);
+    document.title = "DIGITAALBUDDY | Inloggen";
+    const { login } = useContext(AuthContext);
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 
-    useEffect(() => {
-        document.title = "DIGITAALBUDDY | Inloggen"
-    }, [])
-
     async function makeLoginRequest(e) {
         e.preventDefault();
+
         try {
             const response = await axios.post('http://localhost:8080/users/signin', {
                 username: username,
                 password: password
+            }, {
+                headers: {
+                    "Content-type": "application/json"
+                }
             });
-            console.log(response);
             const jwtToken = response.data;
             login(jwtToken);
         } catch(e) {

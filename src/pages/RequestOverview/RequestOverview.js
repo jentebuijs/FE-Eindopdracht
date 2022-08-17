@@ -16,7 +16,6 @@ function RequestOverview() {
     })
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const controller = new AbortController();
 
         async function fetchRequests() {
@@ -24,9 +23,10 @@ function RequestOverview() {
                 const response = await axios.get(`http://localhost:8080/requests/${user.username}`, {
                     headers: {
                         "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
                     }, signal: controller.signal
                 });
+
                 setRequests(response.data);
                 toggleSuccess(true);
 

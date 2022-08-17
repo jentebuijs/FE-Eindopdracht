@@ -5,21 +5,21 @@ import {AuthContext} from "../../context/AuthContext";
 import {useHistory} from "react-router-dom";
 
 function UserEdit() {
-    const history = useHistory();
     const {user: {username}, logout} = useContext(AuthContext);
-    const token = localStorage.getItem('token');
+    const history = useHistory();
 
     async function deleteUser() {
         try {
-            const response = await axios.delete(`http://localhost:8080/users/${username}`, {
+            await axios.delete(`http://localhost:8080/users/${username}`, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
-                },
-                Authorization: `Bearer ${token}`
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             });
-            console.log(response);
+
             logout();
             history.push("/");
+
         } catch (e) {
             console.error(e);
         }

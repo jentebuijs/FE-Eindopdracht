@@ -6,36 +6,41 @@ import Button from "../../components/Button/Button";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
+import {NotificationManager} from "react-notifications";
 
 function Messageboard() {
+    document.title = "DIGITAALBUDDY | Prikbord";
     const {isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
 
     useEffect(() => {
-        document.title = "DIGITAALBUDDY | Prikbord"
-        const fetchController = new AbortController;
-        const {signal} = fetchController;
-        // const CancelToken = axios.CancelToken;
-        // const source = CancelToken.source();
+        const controller = new AbortController();
+
         async function fetchData() {
-            // e.preventDefault();
             try {
-                const result = await axios.get("http://localhost:8080/messages",
-                    {signal})
-                // {cancelToken: source.token})
-                setMessages(result.data);
-                setVisibleMessages(result.data);
+                const response = await axios.get("http://localhost:8080/messages",
+                    {
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        signal: controller.signal
+                    });
+
+                setMessages(response.data);
+                setVisibleMessages(response.data);
+
             } catch (e) {
                 console.error(e);
+                NotificationManager.warning('Probeer het opnieuw', 'Er ging wat mis!', 1500);
             }
         }
 
         fetchData();
+
         return function cleanup() {
-            // source.cancel();
-            fetchController.abort();
+            controller.abort();
         }
     }, []);
 
@@ -62,18 +67,16 @@ function Messageboard() {
 
     return (
         <>
-            {/*ternary operator of functie*/}
-                {console.log(messages)}
-                {console.log(visibleMessages)}
-                <span className="buttons">
-                    {isAuth && <FaPlusCircle onClick={() => {
-                        toggleNewMessage(!newMessage)
-                    }}/>}
-                    <Button type="button"
-                            title="Alles"
-                            onClick={() => {
-                                filterMessages("all")
-                            }}/>
+            <span className="buttons">
+                    {isAuth &&
+                        <FaPlusCircle onClick={() => {
+                            toggleNewMessage(!newMessage)
+                        }}/> }
+                <Button type="button"
+                        title="Alles"
+                        onClick={() => {
+                            filterMessages("all")
+                        }}/>
                     <Button type="button"
                             title="Buddies"
                             onClick={() => {
@@ -91,13 +94,13 @@ function Messageboard() {
                             }}/>
                 </span>
 
-                { isAuth && newMessage && <NewMessage/> }
+            {isAuth && newMessage && <NewMessage/>}
 
-                {visibleMessages && visibleMessages.map((message) => {
-                    return (
-                        <Message key={message.id} message={message} />
-                    );
-                })}
+            {visibleMessages && visibleMessages.map((message) => {
+                return (
+                    <Message key={message.id} message={message}/>
+                );
+            })}
         </>
     );
 }

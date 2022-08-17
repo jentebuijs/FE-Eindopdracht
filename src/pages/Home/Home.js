@@ -2,7 +2,7 @@ import './Home.css'
 import React from "react";
 
 function Home() {
-    document.title = "DIGITAALBUDDY | Home"
+    document.title = "DIGITAALBUDDY | Home";
 
     return (
         <>

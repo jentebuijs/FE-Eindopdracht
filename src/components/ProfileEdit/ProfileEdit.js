@@ -1,47 +1,45 @@
 import './ProfileEdit.css'
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
-import {set, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import axios from "axios";
-import Notification from "../Notification/Notification";
-import createNotification from "../Notification/Notification";
+import {NotificationManager} from "react-notifications";
 
 function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdit}) {
-    const [profileDataData, setProfileDataData] = useState({...profileData});
     const {user: {username}} = useContext(AuthContext);
-    const token = localStorage.getItem('token');
-    const [success, toggleSuccess] = useState(false);
-    const {register, handleSubmit, formState: {errors}} = useForm();
+    const [profileDataData, setProfileDataData] = useState({...profileData});
+    const {register,
+        handleSubmit,
+        formState: {errors}} = useForm();
 
     const handleInput = (e) => {
         setProfileDataData({...profileDataData, [e.target.name]: e.target.value});
     };
 
     async function onSubmit(data) {
-        console.log(data);
-        console.log(profileData);
         try {
             axios.put(`http://localhost:8080/profiles/${username}`, data, {
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 },
-                Authorization: `Bearer ${token}`
             }).then((response) => {
-                const data = response.data;
-                console.log(data);
-                setProfileData({...profileData,...data})
-                createNotification('success');
+                setProfileData({...profileData,...response.data});
+                NotificationManager.success('Je profiel is aangepast', 'Sweet success!', 1500);
                 toggleProfileEdit(false);
             });
+
         } catch (e) {
             console.error(e);
+            // if(e.name !== "CanceledError") {
+            //     NotificationManager.warning('Probeer het opnieuw', 'Er ging iets mis!', 1500);
+            // }
+
         }
     }
 
     return (
         <>
-            <Notification type={profileEdit} />
-            {console.log(profileData.activated)}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input {...register("activated", {required: true})}
                        type="radio"
@@ -57,7 +55,6 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                 <label htmlFor="false">Inactief</label>
                 <fieldset>
                     <legend>Profiel</legend>
-                    {success && <p>Uw profiel is aangepast</p>}
                     <label htmlFor="firstName">Voornaam:</label>
                     <input type="text"
                            id="firstName"

@@ -5,13 +5,13 @@ import axios from "axios";
 import Button from "../Button/Button";
 
 function NewMessage() {
-    const token = localStorage.getItem('token');
     const [success, toggleSuccess] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
     async function addMessage(e) {
         e.preventDefault();
+
         try {
             const response = await axios.post('http://localhost:8080/messages/new', {
                 title: title,
@@ -21,11 +21,13 @@ function NewMessage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             })
+
             addMessage();
-            console.log(response);
+
             {response && toggleSuccess(true)}
+
         } catch (e) {
             toggleSuccess(false)
             console.error(e);
