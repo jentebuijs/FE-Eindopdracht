@@ -3,6 +3,7 @@ import React, {useContext, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import {useHistory} from "react-router-dom";
+import Button from "../Button/Button";
 
 function UserEdit() {
     const {user: {username}, logout} = useContext(AuthContext);
@@ -27,7 +28,7 @@ function UserEdit() {
 
     return (
         <>
-            <button type="button" onClick={deleteUser}>Delete mijn account</button>
+            <Button type="button" title="Delete mijn account" onClick={deleteUser} />
         </>
     );
 }

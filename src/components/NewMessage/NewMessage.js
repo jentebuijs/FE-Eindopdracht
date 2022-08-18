@@ -3,9 +3,9 @@ import React from "react";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import Button from "../Button/Button";
+import {NotificationManager} from "react-notifications";
 
-function NewMessage() {
-    const [success, toggleSuccess] = useState(false);
+function NewMessage({newMessage, toggleNewMessage}) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -13,46 +13,47 @@ function NewMessage() {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:8080/messages/new', {
+            await axios.post('http://localhost:8080/messages/new', {
                 title: title,
                 content: content,
                 approved: false,
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            })
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }).then(() => {
+                NotificationManager.success('Je bericht is verstuurd. Zodra de Admin hem goedkeurt, is hij te vinden ' +
+                    'op het prikbord.', 'Sweet success!', 1500);
+                toggleNewMessage(false);
+            });
 
             addMessage();
 
-            {response && toggleSuccess(true)}
-
         } catch (e) {
-            toggleSuccess(false)
             console.error(e);
         }
     }
 
     return (
         <>
-            {!success ?
-                <form onSubmit={addMessage}>
-                    <label htmlFor="title">Titel:</label>
+                <form onSubmit={addMessage} className="new-message-container">
                     <input type="text"
                            id="title"
+                           placeholder="Titel"
                            onChange={(e) => setTitle(e.target.value)}/>
-                    <label htmlFor="content">Inhoud:</label>
                     <textarea id="content"
+                              placeholder="Bericht"
                               onChange={(e) => setContent(e.target.value)}/>
-                    <input type="checkbox" id="buddy" name="buddy" value="buddy" />
-                    <label htmlFor="buddy">Voor buddies</label>
-                    <input type="checkbox" id="student" name="student" value="student" />
-                    <label htmlFor="student">Voor studenten</label>
+                    <div>
+                        <input type="checkbox" id="buddy" name="buddy" value="buddy"/>
+                        <label htmlFor="buddy">Voor buddies</label>
+                        <br />
+                        <input type="checkbox" id="student" name="student" value="student"/>
+                        <label htmlFor="student">Voor studenten</label>
+                    </div>
                     <Button type="submit" title="Verstuur"/>
                 </form>
-                :
-                <p>Uw bericht is verstuurd. Zodra onze Admin hem goedkeurt, kunt u hem terugvinden op het prikbord</p>}
         </>
     );
 }

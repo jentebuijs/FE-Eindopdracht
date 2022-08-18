@@ -8,4 +8,5 @@ footer {
 span {
     color: white;
     align-items: center;
+    gap: 5px;
 }

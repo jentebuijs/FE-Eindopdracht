@@ -4,3 +4,10 @@
     flex-wrap: wrap;
     margin-bottom: 50px;
 }
+
+.sortingbuttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 50px;
+}

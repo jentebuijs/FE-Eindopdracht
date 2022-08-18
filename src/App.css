@@ -2,3 +2,24 @@ main  {
     margin-left: 5%;
     margin-right: 5%;
 }
+
+#title {
+    color: black;
+    border-radius: 5px;
+    background-image: linear-gradient(to right, rgba(200,0,0,0.33), rgba(252,160,2,0.33), rgba(255,214,0,0.33));
+    -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+    box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+}
+
+textarea {
+    color: black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-image: linear-gradient(to right, rgba(200,0,0,0.33), rgba(252,160,2,0.33), rgba(255,214,0,0.33));
+    -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+    box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+}
+
+#icon {
+    color: black;
+}

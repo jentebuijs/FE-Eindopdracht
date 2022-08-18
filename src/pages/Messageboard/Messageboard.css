@@ -4,6 +4,7 @@
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
+    margin-bottom: 50px;
 }
 
 .options {
@@ -28,3 +29,7 @@
 .buddy-button {
     background-color: #FFD600;
 }
+
+.message-container {
+     margin: 50px 0;
+ }

@@ -1,0 +1,11 @@
+.message-bar {
+    width: 100%;
+    background-color: black;
+    border-radius: 15px;
+    -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+    box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
+}
+
+#message-title {
+    margin-left: 15px;
+}

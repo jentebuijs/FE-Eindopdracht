@@ -32,7 +32,7 @@ function Request({request, judgement}) {
                     {request.sender.username}
                 </Link>
                 {request.status === "PENDING" && request.receiver.username === user.username &&
-                    <span>
+                    <span className="icons">
                         <FaThumbsUp onClick={() => {
                             handleStatus("accepted")
                         }}/>

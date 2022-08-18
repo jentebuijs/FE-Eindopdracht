@@ -1,3 +1,4 @@
+import './RequestOverview.css'
 import React, {useContext, useEffect, useState} from 'react';
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
@@ -13,7 +14,7 @@ function RequestOverview() {
         openPending: false,
         openDeclined: false,
         openCancelled: false
-    })
+    });
 
     useEffect(() => {
         const controller = new AbortController();
@@ -56,26 +57,18 @@ function RequestOverview() {
 
     return (
         <>
-            {success && <div>
+            { success &&
+                <>
                 <section>
-                    <h3>
-                        <button type="button"
-                                onClick={() => {
-                                    toggleStatus({
-                                        ...status,
-                                        openAccepted : !status.openAccepted})
-                                }}>
-                            {status.openAccepted
-                                ?
-                                <FaAngleDoubleUp />
-                                :
-                                <FaAngleDoubleDown />
-                            }
-                        </button>
-                        Accepted
-                        {!status.openAccepted &&
-                        <p>{requests.accepted.length}</p>}
-                    </h3>
+                    <span className="box-title">
+                        <h4  onClick={() => {
+                            toggleStatus({
+                                ...status,
+                                openAccepted: !status.openAccepted
+                            })
+                        }}>Accepted</h4>
+                        {!status.openAccepted && <p>{requests.accepted.length} berichten</p>}
+                    </span>
                     <div>
                         {status.openAccepted && requests.accepted.map((request) => {
                             return <Request key={request.id} request={request}/>
@@ -84,25 +77,14 @@ function RequestOverview() {
                 </section>
 
                 <section>
-                    <h3>
-                        <button type="button"
-                                onClick={() => {
-                                    toggleStatus({
-                                        ...status,
-                                        openPending : !status.openPending})
-                                }}>
-                            {status.openPending
-                                ?
-                                <FaAngleDoubleUp />
-                                :
-                                <FaAngleDoubleDown />
-                            }
-                        </button>
-                        Pending
-                        {!status.openPending &&
-                            <p>{requests.pending.length}</p>}
-                    </h3>
-
+                    <span className="box-title">
+                        <h3 onClick={() => {
+                                toggleStatus({
+                                ...status,
+                                openPending : !status.openPending})
+                            }}>Pending</h3>
+                        {!status.openPending && <p>{requests.pending.length} berichten</p>}
+                    </span>
                     <div>
                         {status.openPending && requests.pending.map((request) => {
                             return <Request key={request.id} request={request} judgement={judgement}/>
@@ -111,25 +93,14 @@ function RequestOverview() {
                 </section>
 
                 <section>
-                    <h3>
-                        <button type="button"
-                                onClick={() => {
-                                    toggleStatus({
-                                        ...status,
-                                        openDeclined : !status.openDeclined})
-                                }}>
-                            {status.openDeclined
-                                ?
-                                <FaAngleDoubleUp />
-                                :
-                                <FaAngleDoubleDown />
-                            }
-                        </button>
-                        Declined
-                        {!status.openDeclined &&
-                            <p>{requests.declined.length}</p>}
-                    </h3>
-
+                    <span className="box-title">
+                        <h3 onClick={() => {
+                                toggleStatus({
+                                ...status,
+                                openDeclined : !status.openDeclined})
+                            }}>Declined</h3>
+                        {!status.openDeclined && <p>{requests.declined.length} berichten</p>}
+                    </span>
                     <div>
                         {status.openDeclined && requests.declined.map((request) => {
                             return <Request key={request.id} request={request} judgement={judgement}/>
@@ -138,36 +109,23 @@ function RequestOverview() {
                 </section>
 
                 <section>
-                    <h3>
-                        <button type="button"
-                                onClick={() => {
-                                    toggleStatus({
-                                        ...status,
-                                        openCancelled : !status.openCancelled})
-                                }}>
-                            {status.openCancelled
-                                ?
-                                <FaAngleDoubleUp />
-                                :
-                                <FaAngleDoubleDown />
-                            }
-                        </button>
-                        Cancelled
-                        {!status.openCancelled &&
-                            <p>{requests.cancelled.length}</p>}
-                    </h3>
-
+                    <span className="box-title">
+                        <h3 onClick={() => {
+                                toggleStatus({
+                                ...status,
+                                openCancelled : !status.openCancelled})
+                            }}>Cancelled</h3>
+                        {!status.openCancelled && <p>{requests.cancelled.length} berichten</p>}
+                    </span>
                     <div>
                         {status.openCancelled && requests.cancelled.map((request) => {
                             return <Request key={request.id} request={request} judgement={judgement}/>
                         })}
                     </div>
                 </section>
-
-            </div>}
+                </>}
         </>
     );
-
 }
 
 export default RequestOverview;

@@ -15,6 +15,7 @@ function Messageboard() {
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
+    const [titleColor, setTitleColor] = useState('');
 
     useEffect(() => {
         const controller = new AbortController();
@@ -72,7 +73,8 @@ function Messageboard() {
             <span className="buttons">
                     {isAuth &&
                         <FaPlusCircle
-                            size='30px'
+                            size='20px'
+                            color='black'
                             onClick={() => {
                                 toggleNewMessage(!newMessage)
                             }}/>}
@@ -103,13 +105,15 @@ function Messageboard() {
 
                 </span>
 
-            {isAuth && newMessage && <NewMessage/>}
+            {isAuth && newMessage && <NewMessage newMessage={newMessage} toggleNewMessage={toggleNewMessage}/>}
 
-            {visibleMessages && visibleMessages.map((message) => {
-                return (
-                    <Message key={message.id} message={message}/>
-                );
-            })}
+            <div className="message-container">
+                {visibleMessages && visibleMessages.map((message) => {
+                    return (
+                        <Message key={message.id} message={message}/>
+                    );
+                })}
+            </div>
         </>
     );
 }
