@@ -9,6 +9,7 @@ import RequestOverview from "../RequestOverview/RequestOverview";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
+import Header from "../../components/Header/Header";
 
 function Profile() {
     const {user} = useContext(AuthContext);
@@ -67,6 +68,7 @@ function Profile() {
 
     return (
         <>
+            <Header titel="Profiel" />
             {username === user.username ?
                 <span>
                     {profileEdit &&
@@ -92,7 +94,7 @@ function Profile() {
                         {profile.level && <p>Nederlands Niveau: {profile.level.value}</p>}
                         <p>Profielinformatie blablabla</p>
                     </div>
-                    <div>
+                    <div className="profile-edit">
                         {profile && username === user.username ?
                             <span>
                     <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
@@ -101,7 +103,7 @@ function Profile() {
                             </span> : <span>
                         <FaRegEnvelope onClick={() => {toggleNewRequest(!newRequest)}}/>
                             </span>}
-                        {profile.photo && <img src={profile.photo.url} alt="profielfoto"/>}
+                        {profile.photo && <img src={profile.photo.url} alt="profielfoto" />}
                     </div>
                 </section>
             }

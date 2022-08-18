@@ -13,6 +13,7 @@ import {AuthContext} from "./context/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AdminSection from "./pages/AdminPage/AdminSection";
+import NavBar from "./components/NavBar/NavBar";
 
 function App() {
     const {isAuth} = useContext(AuthContext);
@@ -20,7 +21,7 @@ function App() {
     return (
         <>
             <NotificationContainer />
-            <Header/>
+            <NavBar />
             <main>
                 <Switch>
                     <Route exact path="/">

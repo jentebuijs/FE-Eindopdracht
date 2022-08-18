@@ -3,6 +3,8 @@ import {useForm} from 'react-hook-form';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 import {NotificationManager} from "react-notifications";
+import Header from "../../components/Header/Header";
+import React from "react";
 
 function SignUp() {
     document.title = "DIGITAALBUDDY | Registreren";
@@ -36,6 +38,7 @@ function SignUp() {
 
     return (
         <>
+            <Header titel="Registreren" />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset>
                     <legend>Gebruiker</legend>

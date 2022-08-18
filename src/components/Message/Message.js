@@ -10,11 +10,11 @@ function Message({message, judgement}) {
         const token = localStorage.getItem('token');
         try {
             await axios.put(`http://localhost:8080/messages/${message.id}/update?status=${status}`, {
-                    headers: {
-                        "Content-type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
             judgement(message, status);
         } catch (e) {
             console.error(e);
@@ -23,10 +23,13 @@ function Message({message, judgement}) {
 
     return (
         <>
-            <h2>{message.title}</h2>
+            <div className="message-bar">
+                <h2>{message.title}</h2>
+            </div>
             <p>{message.content}</p>
 
-            {isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
+            {
+                isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
                 <span>
                     <FaThumbsUp onClick={() => {
                         handleStatus("accepted")
@@ -38,7 +41,8 @@ function Message({message, judgement}) {
                 </span>
             }
         </>
-    );
+    )
+        ;
 }
 
 export default Message;

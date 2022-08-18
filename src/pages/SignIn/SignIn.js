@@ -4,6 +4,8 @@ import Button from "../../components/Button/Button";
 import {useContext, useState, useEffect} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
+import Header from "../../components/Header/Header";
+import React from "react";
 
 function SignIn() {
     document.title = "DIGITAALBUDDY | Inloggen";
@@ -32,6 +34,7 @@ function SignIn() {
 
     return (
         <>
+            <Header titel="Inloggen" />
                 <form className="sign-in-form" onSubmit={makeLoginRequest}>
                     <input
                         type="text"

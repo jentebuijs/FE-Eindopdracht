@@ -7,6 +7,7 @@ import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import NewMessage from "../../components/NewMessage/NewMessage";
 import {NotificationManager} from "react-notifications";
+import Header from "../../components/Header/Header";
 
 function Messageboard() {
     document.title = "DIGITAALBUDDY | Prikbord";
@@ -67,31 +68,39 @@ function Messageboard() {
 
     return (
         <>
+            <Header titel="Prikbord"/>
             <span className="buttons">
                     {isAuth &&
-                        <FaPlusCircle onClick={() => {
-                            toggleNewMessage(!newMessage)
-                        }}/> }
+                        <FaPlusCircle
+                            size='30px'
+                            onClick={() => {
+                                toggleNewMessage(!newMessage)
+                            }}/>}
                 <Button type="button"
                         title="Alles"
+                        classname="all-button"
                         onClick={() => {
                             filterMessages("all")
                         }}/>
-                    <Button type="button"
-                            title="Buddies"
-                            onClick={() => {
-                                filterMessages("forBuddies")
-                            }}/>
-                    <Button type="button"
-                            title="Allebei"
-                            onClick={() => {
-                                filterMessages("forBoth")
-                            }}/>
-                    <Button type="button"
-                            title="Studenten"
-                            onClick={() => {
-                                filterMessages("forStudents")
-                            }}/>
+                <Button type="button"
+                        title="Studenten"
+                        classname="student-button"
+                        onClick={() => {
+                            filterMessages("forStudents")
+                        }}/>
+                <Button type="button"
+                        title="Allebei"
+                        classname="both-button"
+                        onClick={() => {
+                            filterMessages("forBoth")
+                        }}/>
+                <Button type="button"
+                        title="Buddies"
+                        classname="buddy-button"
+                        onClick={() => {
+                            filterMessages("forBuddies")
+                        }}/>
+
                 </span>
 
             {isAuth && newMessage && <NewMessage/>}

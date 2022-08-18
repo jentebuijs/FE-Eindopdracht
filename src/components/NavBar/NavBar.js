@@ -23,19 +23,20 @@ function NavBar() {
 
                 {!isAuth ?
                     <>
-                        <li><NavLink to="/registreren">Registratie</NavLink></li>
-                        <li><NavLink to="/inloggen">Inloggen</NavLink></li>
+                        <li><NavLink to="/registreren" activeClassName="active-navlink">Registratie</NavLink></li>
+                        <li><NavLink to="/inloggen" activeClassName="active-navlink">Inloggen</NavLink></li>
                     </> : <>
                         <li><NavLink to="/profielen" activeClassName="active-navlink">Profielen</NavLink></li>
-                        <li><NavLink to="/" activeClassName="active-navlink" onClick={logout}>Uitloggen</NavLink></li>
+                        <li><NavLink to="/" onClick={logout}>Uitloggen</NavLink></li>
                     </>
                 }
             </ul>
-            <ul>
-                {user && <li><NavLink to={`/profiel/${user.username}`}
-                                      activeClassName="active-navlink"><FaUserCircle/>Hallo, {user.username}!</NavLink>
-                </li>}
-            </ul>
+            { user &&
+                <span>
+                    <FaUserCircle color="#FFFFFF"/>
+                    <NavLink to={`/profiel/${user.username}`}
+                                        activeClassName="active-navlink">Hallo, {user.username}!</NavLink>
+                </span> }
         </nav>
     );
 }

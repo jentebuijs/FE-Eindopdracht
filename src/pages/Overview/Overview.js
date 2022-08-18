@@ -3,6 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import Header from "../../components/Header/Header";
 
 function Overview() {
     document.title = "DIGITAALBUDDY | Profielenoverzicht";
@@ -36,10 +37,12 @@ function Overview() {
 
     return (
         <>
-            <h1>Profielenoverzicht</h1>
-            {profiles && profiles.map((profile) => {
-                return (<ProfileCard key={profile.username} profile={profile}/>);
-            })}
+            <Header titel="Profielenoverzicht"/>
+            <div className="profile-card-container">
+                {profiles && profiles.map((profile) => {
+                    return (<ProfileCard key={profile.username} profile={profile}/>);
+                })}
+            </div>
         </>
     );
 }

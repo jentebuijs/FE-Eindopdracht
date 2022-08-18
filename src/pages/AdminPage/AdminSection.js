@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Message from "../../components/Message/Message";
 import {NotificationManager} from "react-notifications";
+import Header from "../../components/Header/Header";
 
 function AdminSection() {
     document.title = "DIGITAALBUDDY | Adminpagina"
@@ -43,6 +44,7 @@ function AdminSection() {
 
     return (
         <>
+            <Header titel="Admin" />
             {adminMessages && adminMessages.map((message) => {
                 return (
                     <Message key={message.id} message={message} judgement={judgement} />

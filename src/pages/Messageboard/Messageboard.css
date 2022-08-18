@@ -2,10 +2,29 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
 }
 
-.options{
+.options {
     display: flex;
     flex-direction: column;
     width: 150px;
+}
+
+.all-button {
+    color: white;
+    background-color: black;
+}
+
+.student-button {
+    background-color: #C80000;
+}
+
+.both-button {
+    background-color: #FCA016;
+}
+
+.buddy-button {
+    background-color: #FFD600;
 }

@@ -1,18 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
-
-:root {
-  --red: C80000;
-  --orange: FCA016;
-  --yellow: FFD600;
-  --black: 000000;
-}
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300&display=swap');
 
 body {
-  margin: 0;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   font-family: 'Roboto Condensed', 'Roboto', 'Oxygen',sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: 'Oswald', 'Roboto Condensed', sans-serif;
+}
+
+h1 {
+  font-size: xxx-large;
+}
+
+h2, h3 {
+  font-weight: lighter;
+  font-size: xx-large;
 }
 
 code {

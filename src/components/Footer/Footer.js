@@ -5,8 +5,8 @@ function Footer() {
     return (
         <footer>
             <span>
-                <FaRegCopyright size='10px'/>
                 <p>Jente Buijs 2022</p>
+                <FaRegCopyright size='12px'/>
             </span>
         </footer>
     );
