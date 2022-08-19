@@ -12,8 +12,6 @@ function Overview() {
     const [profiles, setProfiles] = useState([]);
     let sortedProfiles = [];
 
-    // const [visibleProfiles, setVisibleProfiles] = useState([]);
-
     useEffect(() => {
         const controller = new AbortController();
 

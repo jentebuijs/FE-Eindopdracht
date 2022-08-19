@@ -10,6 +10,14 @@ input {
     margin-bottom: 10px;
 }
 
+#buddy {
+    box-shadow: none;
+}
+
+#student {
+    box-shadow: none;
+}
+
 
 
 

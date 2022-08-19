@@ -57,72 +57,76 @@ function RequestOverview() {
 
     return (
         <>
-            { success &&
+            {success &&
                 <>
-                <section>
+                    <h3>Jouw vriendschapsverzoeken</h3>
+                    <section>
                     <span className="box-title">
-                        <h4  onClick={() => {
+                        <p onClick={() => {
                             toggleStatus({
                                 ...status,
                                 openAccepted: !status.openAccepted
                             })
-                        }}>Accepted</h4>
+                        }}>Accepted</p>
                         {!status.openAccepted && <p>{requests.accepted.length} berichten</p>}
                     </span>
-                    <div>
-                        {status.openAccepted && requests.accepted.map((request) => {
-                            return <Request key={request.id} request={request}/>
-                        })}
-                    </div>
-                </section>
+                        <div>
+                            {status.openAccepted && requests.accepted.map((request) => {
+                                return <Request key={request.id} request={request}/>
+                            })}
+                        </div>
+                    </section>
 
-                <section>
+                    <section>
                     <span className="box-title">
-                        <h3 onClick={() => {
-                                toggleStatus({
+                        <p onClick={() => {
+                            toggleStatus({
                                 ...status,
-                                openPending : !status.openPending})
-                            }}>Pending</h3>
+                                openPending: !status.openPending
+                            })
+                        }}>Pending</p>
                         {!status.openPending && <p>{requests.pending.length} berichten</p>}
                     </span>
-                    <div>
-                        {status.openPending && requests.pending.map((request) => {
-                            return <Request key={request.id} request={request} judgement={judgement}/>
-                        })}
-                    </div>
-                </section>
+                        <div>
+                            {status.openPending && requests.pending.map((request) => {
+                                return <Request key={request.id} request={request} judgement={judgement}/>
+                            })}
+                        </div>
+                    </section>
 
-                <section>
+                    <section>
                     <span className="box-title">
-                        <h3 onClick={() => {
-                                toggleStatus({
+                        <p onClick={() => {
+                            toggleStatus({
                                 ...status,
-                                openDeclined : !status.openDeclined})
-                            }}>Declined</h3>
+                                openDeclined: !status.openDeclined
+                            })
+                        }}>Declined</p>
                         {!status.openDeclined && <p>{requests.declined.length} berichten</p>}
                     </span>
-                    <div>
-                        {status.openDeclined && requests.declined.map((request) => {
-                            return <Request key={request.id} request={request} judgement={judgement}/>
-                        })}
-                    </div>
-                </section>
+                        <div>
+                            {status.openDeclined && requests.declined.map((request) => {
+                                return <Request key={request.id} request={request} judgement={judgement}/>
+                            })}
+                        </div>
+                    </section>
 
-                <section>
+                    <section>
                     <span className="box-title">
-                        <h3 onClick={() => {
-                                toggleStatus({
+                        <p onClick={() => {
+                            toggleStatus({
                                 ...status,
-                                openCancelled : !status.openCancelled})
-                            }}>Cancelled</h3>
+                                openCancelled: !status.openCancelled
+                            })
+                        }}>Cancelled</p>
                         {!status.openCancelled && <p>{requests.cancelled.length} berichten</p>}
                     </span>
-                    <div>
-                        {status.openCancelled && requests.cancelled.map((request) => {
-                            return <Request key={request.id} request={request} judgement={judgement}/>
-                        })}
-                    </div>
-                </section>
+                        <div>
+                            {status.openCancelled && requests.cancelled.map((request) => {
+                                return <Request key={request.id} request={request} judgement={judgement}/>
+                            })}
+                        </div>
+                    </section>
                 </>}
         </>
     );

@@ -1,8 +1,11 @@
 footer {
     border: 2px solid purple;
+    width: 100%;
     background-image: linear-gradient(to right, #C80000, #FCA016, #FFD600);
     display: flex;
     justify-content: center;
+    position: absolute;
+    bottom: 0;
 }
 
 span {

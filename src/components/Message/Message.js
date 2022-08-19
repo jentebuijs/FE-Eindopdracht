@@ -8,6 +8,16 @@ function Message({message, judgement}) {
     const {user, isAuth} = useContext(AuthContext);
     const [titleColor, setTitleColor] = useState('#FFFFFF');
 
+    useEffect(() => {
+        if (message.forBuddy === true && message.forStudent === false) {
+            setTitleColor('#FFD600');
+        } else if (message.forBuddy === false && message.forStudent === true) {
+            setTitleColor('#C80000');
+        } else if (message.forBuddy === true && message.forStudent === true) {
+            setTitleColor('#FCA016');
+        }
+    }, [])
+
     async function handleStatus(status) {
         const token = localStorage.getItem('token');
         try {
@@ -23,21 +33,12 @@ function Message({message, judgement}) {
         }
     }
 
-    useEffect(() => {
-        if (message.forBuddy === true && message.forStudent === false) {
-            setTitleColor('#FFD600');
-        } else if (message.forBuddy === false && message.forStudent === true) {
-            setTitleColor('#C80000');
-        } else if (message.forBuddy === true && message.forStudent === true) {
-            setTitleColor('#FCA016');
-        }
-    }, [])
 
 
     return (
         <>
             <div className="message-bar" style={{color: titleColor}}>
-                <h4 id="message-title">{message.title}</h4>
+                <p id="message-title">{message.title}</p>
             </div>
             <p>{message.content}</p>
 

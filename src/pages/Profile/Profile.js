@@ -11,6 +11,7 @@ import UserEdit from "../../components/UserEdit/UserEdit";
 import NewRequest from "../../components/newRequest/NewRequest";
 import Header from "../../components/Header/Header";
 import dtb from "../../assets/DTB.JPG";
+import {set} from "react-hook-form";
 
 function Profile() {
     const {user} = useContext(AuthContext);
@@ -29,6 +30,17 @@ function Profile() {
 
         fetchProfile(controller);
 
+        switch (profile.role) {
+            case "Buddy":
+                setBorderColor('#FFD600');
+                break;
+            case "Student" :
+                setBorderColor('#C80000');
+                break;
+            case "Admin" :
+                setBorderColor('#FCA016');
+        }
+
         return function cleanup() {
             controller.abort();
         }
@@ -41,17 +53,6 @@ function Profile() {
         toggleProfileEdit(false);
         toggleUserEdit(false);
         toggleNewRequest(false);
-
-        switch (profile.role) {
-            case "Buddy":
-                setBorderColor('#FFD600');
-                break;
-            case "Student" :
-                setBorderColor('#C80000');
-                break;
-            case "Admin" :
-                setBorderColor('#FCA016');
-        }
 
         return function cleanup() {
             controller.abort();
@@ -99,7 +100,7 @@ function Profile() {
                     { newRequest && <NewRequest key={username}
                                                 receiver={username}
                                                 sender={user.username}
-                                                toggleNewRequest={toggleNewRequest()}/> }
+                                                toggleNewRequest={toggleNewRequest}/> }
                 </div> }
 
             { profile &&
@@ -138,7 +139,10 @@ function Profile() {
                             </span> }
                     </div>
                 </section> }
-                { username === user.username && <RequestOverview/> }
+                { username === user.username &&
+                    <div className="request-container">
+                        <RequestOverview/>
+                    </div>  }
         </>
     );
 }

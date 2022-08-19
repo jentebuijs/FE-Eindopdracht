@@ -19,7 +19,7 @@ function App() {
     const {isAuth} = useContext(AuthContext);
 
     return (
-        <>
+        <div className="page-container">
             <NotificationContainer />
             <NavBar />
             <main>
@@ -48,7 +48,7 @@ function App() {
                 </Switch>
             </main>
             <Footer/>
-        </>
+        </div>
     );
 }
 
