@@ -8,6 +8,7 @@ import Header from "../../components/Header/Header";
 function AdminSection() {
     document.title = "DIGITAALBUDDY | Adminpagina"
     const [adminMessages, setAdminMessages] = useState([]);
+    const [cancelled, toggleCancelled] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -24,6 +25,7 @@ function AdminSection() {
                 setAdminMessages(response.data);
 
             } catch (e) {
+                toggleCancelled(true);
                 console.error(e);
                 NotificationManager.warning('Probeer het opnieuw', 'Er ging wat mis!', 1500);
             }
@@ -32,7 +34,9 @@ function AdminSection() {
         fetchAdminMessages();
 
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
     }, []);
 

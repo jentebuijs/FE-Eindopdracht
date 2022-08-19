@@ -6,6 +6,7 @@ import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
 import Header from "../../components/Header/Header";
 import React from "react";
+import {NotificationManager} from "react-notifications";
 
 function SignIn() {
     document.title = "DIGITAALBUDDY | Inloggen";
@@ -29,6 +30,7 @@ function SignIn() {
             login(jwtToken);
         } catch (e) {
             console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 

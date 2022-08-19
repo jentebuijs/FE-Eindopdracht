@@ -5,7 +5,6 @@
 }
 
 nav {
-    border: 2px solid darkgreen;
     background-image: linear-gradient(to right, #C80000, #FCA016, #FFD600);
     width: 100%;
     display: flex;

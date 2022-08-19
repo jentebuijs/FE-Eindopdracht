@@ -4,6 +4,7 @@ import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext";
+import {NotificationManager} from "react-notifications";
 
 function Request({request, judgement}) {
     const {user} = useContext(AuthContext);
@@ -22,6 +23,7 @@ function Request({request, judgement}) {
 
         } catch (e) {
             console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 

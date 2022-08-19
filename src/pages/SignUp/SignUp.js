@@ -18,7 +18,6 @@ function SignUp() {
     const authority = register("authority");
     const role = watch("authority");
 
-
     async function onSubmit(data) {
         try {
             await axios.post('http://localhost:8080/users/signup', data, {
@@ -32,14 +31,15 @@ function SignUp() {
 
         } catch (e) {
             console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
     return (
         <>
             <Header titel="Registreren"/>
-            <div className="sign-up-form">
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="sign-up-container">
+                <form id="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
                     <fieldset>
                         <legend>Gebruiker</legend>
                         <label htmlFor="username">Gebruikersnaam:</label>
@@ -57,9 +57,9 @@ function SignUp() {
                                     message: "Voer een gebruikersnaam in van maximaal 20 tekens"
                                 }
                             })} />
-                        <br/>
+
                         {errors.username && errors.username.message}
-                        <br/>
+
                         <label htmlFor="email">Emailadres:</label>
                         <input
                             type="text"
@@ -72,9 +72,9 @@ function SignUp() {
                                 }
                             })}
                         />
-                        <br/>
+
                         {errors.email && errors.email.message}
-                        <br/>
+
                         <label htmlFor="password">Wachtwoord:</label>
                         <input type="password" id="password" {...register("password", {
                             required: 'Dit veld is verplicht',
@@ -87,9 +87,9 @@ function SignUp() {
                                 message: "Het wachtwoord mag maximaal 20 tekens lang zijn"
                             }
                         })} />
-                        <br/>
+
                         {errors.password && errors.password.message}
-                        <br/>
+
                     </fieldset>
                     <fieldset>
                         <legend>Profiel</legend>
@@ -105,9 +105,9 @@ function SignUp() {
                                 message: "De voornaam mag maximaal 20 tekens lang zijn"
                             }
                         })} />
-                        <br/>
+
                         {errors.firstName && errors.firstName.message}
-                        <br/>
+
                         <label htmlFor="lastName">Achternaam:</label>
                         <input type="text" id="lastName" {...register("lastName", {
                             required: 'Dit veld is verplicht',
@@ -120,9 +120,9 @@ function SignUp() {
                                 message: "De achternaam mag maximaal 20 tekens lang zijn"
                             }
                         })} />
-                        <br/>
+
                         {errors.lastName && errors.lastName.message}
-                        <br/>
+
                         <label htmlFor="dob">Geboortedatum:</label>
                         <input type="Date" id="dob" {...register("dob", {
                             required: 'Dit veld is verplicht'
@@ -133,18 +133,18 @@ function SignUp() {
                                   {...register("aboutMe", {
                                       required: 'Dit veld is verplicht',
                                       minLength: {
-                                          value: 20,
-                                          message: "Vertel iets over jezelf"
+                                          value: 10,
+                                          message: "Vertel eens iets over jezelf!"
                                       },
                                       maxLength: {
                                           value: 255,
                                           message: "Maximaal 255 tekens"
                                       }
                                   })} />
-                        <br/>
+
                         {errors.dob && errors.dob.message}
-                        <br/>
-                        <div id="selectboxes">
+
+                        <div id="select-boxes">
                             <label htmlFor="authority">Ik wil mij aanmelden als:</label>
                             <select
                                 defaultValue="none"
@@ -161,7 +161,8 @@ function SignUp() {
                             </select>
                             {errors.authority && errors.authority.message}
                             {role === "Student" &&
-                                <label htmlFor="level">Nederlands Niveau:
+                                <>
+                                <label htmlFor="level">Nederlands Niveau:</label>
                                     <select defaultValue="none" id="level" {...register("Level")}>
                                         <option value="none" disabled hidden>Kies een optie:</option>
                                         <option value="BEGINNER">Beginner (A1)</option>
@@ -171,7 +172,7 @@ function SignUp() {
                                         <option value="ADVANCED"> Vergevorderd (C1)</option>
                                         <option value="PROFICIENT"> Vergevorderd (C2)</option>
                                     </select>
-                                </label>}
+                                </>}
                             {errors.level && errors.level.message}
                             <label htmlFor="frequency">Contact:</label>
                             <select defaultValue="none" id="frequency" {...register("frequency", {
@@ -184,9 +185,7 @@ function SignUp() {
                                 <option value="FEW_TIMES_A_MONTH"> Paar keer per maand</option>
                                 <option value="ONCE_A_MONTH"> Een keer per maand</option>
                             </select>
-                            <br/>
                             {errors.frequency && errors.frequency.message}
-                            <br/>
                         </div>
                     </fieldset>
                     <button type="submit">Registreren</button>

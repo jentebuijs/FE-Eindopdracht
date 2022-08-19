@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {NotificationManager} from "react-notifications";
 
-function NewRequest({sender, receiver, toggleNewRequest}) {
+function NewRequest({sender, receiver, toggleNewRequest, borderColor}) {
     const [message, setMessage] = useState('Hallo! Wil je met mij mailen?');
 
     async function sendRequest(e) {
@@ -28,18 +28,18 @@ function NewRequest({sender, receiver, toggleNewRequest}) {
 
         } catch (e) {
             console.error(e);
-        }
-
-        return function cleanup() {
-            controller.abort();
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
     return (
         <>
-            <form onSubmit={sendRequest}>
+            <form className="new-request-form"
+                  style={{borderColor: borderColor}}
+                  onSubmit={sendRequest}>
                 <label htmlFor="message">Uw bericht:</label>
                 <textarea id="message"
+                          rows="4"
                           placeholder="Hallo! Wil je met mij mailen?"
                           onChange={(e) => setMessage(e.target.value)}/>
                 <Button type="submit" title="Verstuur"/>

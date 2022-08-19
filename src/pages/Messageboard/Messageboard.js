@@ -15,7 +15,7 @@ function Messageboard() {
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
-    const [titleColor, setTitleColor] = useState('');
+    const [cancelled, toggleCancelled] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -34,17 +34,20 @@ function Messageboard() {
                 setVisibleMessages(response.data);
 
             } catch (e) {
+                toggleCancelled(true);
                 console.error(e);
-                NotificationManager.warning('Probeer het opnieuw', 'Er ging wat mis!', 1500);
+                NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
             }
         }
 
         fetchData();
 
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
-    }, []);
+    },[]);
 
     function filterMessages(messageType) {
         if (messageType === "forBuddies") {

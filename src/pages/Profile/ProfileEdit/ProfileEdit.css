@@ -1,5 +1,12 @@
 .profile-edit-form {
-    margin: 50px 0;
+    border: 5px solid;
+    border-radius: 15px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 600px;
 }
 
 #true {

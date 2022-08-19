@@ -3,12 +3,13 @@ import React, {useContext, useEffect, useState} from 'react';
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import Request from "./Request/Request";
-import {FaAngleDoubleDown, FaAngleDoubleUp} from "react-icons/fa";
+import {NotificationManager} from "react-notifications";
 
 function RequestOverview() {
     const {user} = useContext(AuthContext);
     const [requests, setRequests] = useState({});
     const [success, toggleSuccess] = useState(false);
+    const [cancelled, toggleCancelled] = useState(false);
     const [status, toggleStatus] = useState({
         openAccepted: false,
         openPending: false,
@@ -33,14 +34,18 @@ function RequestOverview() {
 
             } catch (e) {
                 toggleSuccess(false);
+                toggleCancelled(true);
                 console.error(e);
+                NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
             }
         }
 
         fetchRequests();
 
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
     }, []);
 
@@ -69,7 +74,7 @@ function RequestOverview() {
                                 ...status,
                                 openAccepted: !status.openAccepted
                             })
-                        }}>Accepted</p>
+                        }}>Geaccepteerd</p>
                         {!status.openAccepted && <p>{requests.accepted.length} berichten</p>}
                     </span>
                         <div>
@@ -86,7 +91,7 @@ function RequestOverview() {
                                 ...status,
                                 openPending: !status.openPending
                             })
-                        }}>Pending</p>
+                        }}>Openstaand</p>
                         {!status.openPending && <p>{requests.pending.length} berichten</p>}
                     </span>
                         <div>
@@ -103,7 +108,7 @@ function RequestOverview() {
                                 ...status,
                                 openDeclined: !status.openDeclined
                             })
-                        }}>Declined</p>
+                        }}>Afgewezen</p>
                         {!status.openDeclined && <p>{requests.declined.length} berichten</p>}
                     </span>
                         <div>
@@ -120,7 +125,7 @@ function RequestOverview() {
                                 ...status,
                                 openCancelled: !status.openCancelled
                             })
-                        }}>Cancelled</p>
+                        }}>Geannuleerd</p>
                         {!status.openCancelled && <p>{requests.cancelled.length} berichten</p>}
                     </span>
                         <div>

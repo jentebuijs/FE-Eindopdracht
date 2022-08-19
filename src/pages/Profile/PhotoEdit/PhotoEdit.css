@@ -1,3 +1,24 @@
 .image-preview {
     max-width: 25%;
 }
+
+.photo-edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 5px solid;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.photo-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.photo-edit-form img {
+    border-radius: 15px;
+}

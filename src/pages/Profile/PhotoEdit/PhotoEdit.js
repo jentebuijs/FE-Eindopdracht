@@ -3,8 +3,9 @@ import {useContext, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext";
 import {NotificationManager} from "react-notifications";
+import Button from "../../../components/Button/Button";
 
-function PhotoEdit({file, setFile, toggleFileUpload}) {
+function PhotoEdit({file, setFile, toggleFileUpload, borderColor}) {
     const {user: {username}} = useContext(AuthContext);
     const [previewUrl, setPreviewUrl] = useState('');
 
@@ -34,26 +35,29 @@ function PhotoEdit({file, setFile, toggleFileUpload}) {
             });
 
         } catch (e) {
-            console.error(e)
+            console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
     return (
-        <div className="page-container">
-            <h1>Afbeelding uploaden en preview bekijken</h1>
-            <form onSubmit={sendImage}>
-                <label htmlFor="user-image">
-                    Kies afbeelding:
-                    <input type="file" name="image-field" id="user-image" onChange={handleImageChange}/>
-                </label>
+        <div className="photo-edit-container" style={{borderColor: borderColor}}>
+            <h3>Hier kun je je profielfoto uploaden</h3>
+            <form className="photo-edit-form" onSubmit={sendImage}>
+                <label htmlFor="user-image">Kies afbeelding:</label>
+                <input type="file"
+                       name="image-field"
+                       id="user-image"
+                       onChange={handleImageChange}/>
                 {previewUrl &&
-                    <label>
-                        Preview:
+                    <>
+                        <label>Preview:</label>
                         <img src={previewUrl} alt="Voorbeeld van de afbeelding die zojuist gekozen is"
                              className="image-preview"/>
-                    </label>
+                    </>
                 }
-                <button type="submit">Uploaden</button>
+                <Button type="submit"
+                        title="Uploaden"/>
             </form>
         </div>
     );

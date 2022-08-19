@@ -1,0 +1,13 @@
+.home-container {
+    display: flex;
+    margin-bottom: 50px;
+}
+
+.home-container > p {
+    margin: 0 20px;
+    text-align: justify;
+}
+
+h1 {
+    margin-left: 20px;
+}

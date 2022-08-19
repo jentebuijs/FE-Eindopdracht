@@ -5,9 +5,9 @@ import {useForm} from "react-hook-form";
 import axios from "axios";
 import {NotificationManager} from "react-notifications";
 
-function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdit}) {
+function ProfileEdit({profileData, setProfileData, toggleProfileEdit, borderColor}) {
     const {user: {username}} = useContext(AuthContext);
-    const [profileDataData, setProfileDataData] = useState({...profileData});
+    const [profile, setProfile] = useState({...profileData});
     const {
         register,
         handleSubmit,
@@ -15,7 +15,7 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
     } = useForm();
 
     const handleInput = (e) => {
-        setProfileDataData({...profileDataData, [e.target.name]: e.target.value});
+        setProfile({...profile, [e.target.name]: e.target.value});
     };
 
     async function onSubmit(data) {
@@ -33,34 +33,18 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
 
         } catch (e) {
             console.error(e);
-            // if(e.name !== "CanceledError") {
-            //     NotificationManager.warning('Probeer het opnieuw', 'Er ging iets mis!', 1500);
-            // }
-
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
     return (
         <>
-            <form className="profile-edit-form" onSubmit={handleSubmit(onSubmit)}>
-                <span>
-                    <input {...register("activated", {required: true})}
-                           type="radio"
-                           value="true"
-                           defaultChecked={profileData.activated === true}
-                           id="true"/>
-                    <label htmlFor="true">Actief</label>
-                    <input  {...register("activated", {required: true})}
-                           type="radio"
-                           value=" false"
-                           defaultChecked={profileData.activated === false}
-                           id="false"/>
-                    <label htmlFor="false">Inactief</label>
-                </span>
+            <form className="profile-edit-form" style={{borderColor: borderColor}} onSubmit={handleSubmit(onSubmit)}>
+                <h3>Hier kun je je profiel aanpassen</h3>
                 <label htmlFor="firstName">Voornaam:</label>
                 <input type="text"
                        id="firstName"
-                       defaultValue={profileDataData.firstName}
+                       defaultValue={profile.firstName}
                        onChange={handleInput} {...register("firstName", {
                     minLength: {
                         value: 2,
@@ -71,13 +55,13 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                         message: "De voornaam mag maximaal 20 tekens lang zijn"
                     }
                 })} />
-                <br/>
+
                 {errors.firstName && errors.firstName.message}
-                <br/>
+
                 <label htmlFor="lastName">Achternaam:</label>
                 <input type="text"
                        id="lastName"
-                       defaultValue={profileDataData.lastName}
+                       defaultValue={profile.lastName}
                        onChange={handleInput} {...register("lastName", {
                     minLength: {
                         value: 3,
@@ -88,13 +72,13 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                         message: "De achternaam mag maximaal 20 tekens lang zijn"
                     }
                 })} />
-                <br/>
+
                 {errors.lastName && errors.lastName.message}
-                <br/>
+
                 <label htmlFor="aboutMe">Over mij:</label>
                 <textarea id="aboutMe"
                           rows="6"
-                          defaultValue={profileDataData.aboutMe}
+                          defaultValue={profile.aboutMe}
                           onChange={handleInput} {...register("aboutMe", {
                     minLength: {
                         value: 20,
@@ -105,10 +89,11 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                         message: "Maximaal 255 tekens"
                     }
                 })} />
-                <br/>
+
                 {profileData.role === "Student" &&
-                    <label htmlFor="level">Nederlands Niveau:
-                        <select defaultValue={profileDataData.level.key} id="level"
+                    <>
+                        <label htmlFor="level">Nederlands Niveau:</label>
+                        <select defaultValue={profile.level.key} id="level"
                                 onChange={handleInput} {...register("level")}>
                             <option value="BEGINNER">Beginner (A1)</option>
                             <option value="ELEMENTARY">Beginner (A2)</option>
@@ -117,10 +102,12 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                             <option value="ADVANCED">Vergevorderd (C1)</option>
                             <option value="PROFICIENT">Vergevorderd (C2)</option>
                         </select>
-                    </label>}
+                    </>}
+
                 {errors.level && errors.level.message}
+
                 <label htmlFor="frequency">Contact:</label>
-                <select defaultValue={profileDataData.frequency.key} id="frequency"
+                <select defaultValue={profile.frequency.key} id="frequency"
                         onChange={handleInput} {...register("frequency")}>
                     <option value="EVERY_DAY">Elke dag</option>
                     <option value="FEW_TIMES_A_WEEK">Een paar keer per week</option>
@@ -128,9 +115,24 @@ function ProfileEdit({profileData, setProfileData, profileEdit, toggleProfileEdi
                     <option value="FEW_TIMES_A_MONTH">Een paar keer per maand</option>
                     <option value="ONCE_A_MONTH">Een keer per maand</option>
                 </select>
-                <br/>
+
                 {errors.frequency && errors.frequency.message}
-                <br/>
+
+                <span>
+                    <input {...register("activated", {required: true})}
+                           type="radio"
+                           value="true"
+                           defaultChecked={profileData.activated === true}
+                           id="true"/>
+                    <label htmlFor="true">Actief</label>
+                    <input  {...register("activated", {required: true})}
+                            type="radio"
+                            value=" false"
+                            defaultChecked={profileData.activated === false}
+                            id="false"/>
+                    <label htmlFor="false">Inactief</label>
+                </span>
+
                 <button type="submit">Opslaan</button>
             </form>
         </>

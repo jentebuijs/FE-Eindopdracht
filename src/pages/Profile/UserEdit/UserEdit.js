@@ -4,6 +4,7 @@ import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext";
 import {useHistory} from "react-router-dom";
 import Button from "../../../components/Button/Button";
+import {NotificationManager} from "react-notifications";
 
 function UserEdit() {
     const {user: {username}, logout} = useContext(AuthContext);
@@ -23,6 +24,7 @@ function UserEdit() {
 
         } catch (e) {
             console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 

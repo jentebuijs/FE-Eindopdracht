@@ -11,7 +11,7 @@ import UserEdit from "./UserEdit/UserEdit";
 import NewRequest from "./newRequest/NewRequest";
 import Header from "../../components/Header/Header";
 import dtb from "../../assets/DTB.JPG";
-import {set} from "react-hook-form";
+import {NotificationManager} from "react-notifications";
 
 function Profile() {
     const {user} = useContext(AuthContext);
@@ -24,12 +24,21 @@ function Profile() {
     const [newRequest, toggleNewRequest] = useState(false);
     const [borderColor, setBorderColor] = useState('');
     const [profile, setProfile] = useState({});
+    const [cancelled, toggleCancelled] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
 
         fetchProfile(controller);
 
+        return function cleanup() {
+            if (cancelled) {
+                controller.abort();
+            }
+        }
+    }, []);
+
+    useEffect(() => {
         switch (profile.role) {
             case "Buddy":
                 setBorderColor('#FFD600');
@@ -39,12 +48,12 @@ function Profile() {
                 break;
             case "Admin" :
                 setBorderColor('#FCA016');
+                break;
+            default:
+                setBorderColor('#000000');
+                break;
         }
-
-        return function cleanup() {
-            controller.abort();
-        }
-    }, []);
+    }, [profile])
 
     useEffect(() => {
         const controller = new AbortController();
@@ -55,7 +64,9 @@ function Profile() {
         toggleNewRequest(false);
 
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
     }, [photoEdit, username]);
 
@@ -72,11 +83,9 @@ function Profile() {
             setProfile(response.data);
 
         } catch (e) {
+            toggleCancelled(true);
             console.error(e);
-        }
-
-        return function cleanup() {
-            controller.abort();
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
@@ -86,18 +95,20 @@ function Profile() {
 
             {profileEdit && <ProfileEdit profileData={profile}
                                          setProfileData={setProfile}
-                                         profileEdit={profileEdit}
-                                         toggleProfileEdit={toggleProfileEdit}/>}
+                                         toggleProfileEdit={toggleProfileEdit}
+                                         borderColor={borderColor}/>}
 
             {photoEdit && <PhotoEdit file={file}
                                      setFile={setFile}
-                                     toggleFileUpload={togglePhotoEdit}/>}
+                                     toggleFileUpload={togglePhotoEdit}
+                                     borderColor={borderColor}/>}
 
 
             {newRequest && <NewRequest key={username}
                                        receiver={username}
                                        sender={user.username}
-                                       toggleNewRequest={toggleNewRequest}/>}
+                                       toggleNewRequest={toggleNewRequest}
+                                       borderColor={borderColor}/>}
 
             {profile &&
                 <section className="profile-container" style={{borderColor: borderColor}}>
@@ -137,6 +148,7 @@ function Profile() {
                         {userEdit && <UserEdit/>}
                     </div>
                 </section>}
+
             {username === user.username &&
                 <RequestOverview/>}
         </>

@@ -1,5 +1,4 @@
 .container {
-    border: 2px solid lime;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,11 +6,9 @@
 
 .image-wrapper {
     display: flex;
-    border: 2px solid pink;
     margin-top: 100px;
 }
 
 .image-wrapper img {
     max-height: 100px;
-
 }

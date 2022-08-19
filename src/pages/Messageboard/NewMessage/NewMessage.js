@@ -32,6 +32,7 @@ function NewMessage({newMessage, toggleNewMessage}) {
 
         } catch (e) {
             console.error(e);
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 

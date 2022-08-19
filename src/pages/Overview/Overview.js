@@ -5,11 +5,13 @@ import ProfileCard from "./ProfileCard/ProfileCard";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 import {AuthContext} from "../../context/AuthContext";
+import {NotificationManager} from "react-notifications";
 
 function Overview() {
     const {user} = useContext(AuthContext);
     document.title = "DIGITAALBUDDY | Profielenoverzicht";
     const [profiles, setProfiles] = useState([]);
+    const [cancelled, toggleCancelled] = useState(false);
     let sortedProfiles = [];
 
     useEffect(() => {
@@ -24,16 +26,20 @@ function Overview() {
                     }, signal: controller.signal
                 });
                 setProfiles(response.data);
-                // setVisibleProfiles(response.data);
+
             } catch (e) {
+                toggleCancelled(true);
                 console.error(e);
+                NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
             }
         }
 
         fetchProfiles();
 
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
     }, []);
 
