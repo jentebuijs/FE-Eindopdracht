@@ -10,7 +10,6 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
-import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AdminSection from "./pages/AdminPage/AdminSection";
 import NavBar from "./components/NavBar/NavBar";

@@ -1,7 +1,7 @@
 import './Overview.css'
 import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import ProfileCard from "./ProfileCard/ProfileCard";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 import {AuthContext} from "../../context/AuthContext";

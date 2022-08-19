@@ -5,7 +5,7 @@ import Message from "../../components/Message/Message";
 import Button from "../../components/Button/Button";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import NewMessage from "../../components/NewMessage/NewMessage";
+import NewMessage from "./NewMessage/NewMessage";
 import {NotificationManager} from "react-notifications";
 import Header from "../../components/Header/Header";
 

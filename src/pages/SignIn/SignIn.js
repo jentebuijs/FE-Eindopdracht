@@ -9,9 +9,9 @@ import React from "react";
 
 function SignIn() {
     document.title = "DIGITAALBUDDY | Inloggen";
-    const { login } = useContext(AuthContext);
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
+    const {login} = useContext(AuthContext);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     async function makeLoginRequest(e) {
         e.preventDefault();
@@ -27,15 +27,16 @@ function SignIn() {
             });
             const jwtToken = response.data;
             login(jwtToken);
-        } catch(e) {
+        } catch (e) {
             console.error(e);
         }
     }
 
     return (
         <>
-            <Header titel="Inloggen" />
-                <form className="sign-in-form" onSubmit={makeLoginRequest}>
+            <Header titel="Inloggen"/>
+            <div className="sign-in-container">
+                <form id="sign-in-form" onSubmit={makeLoginRequest}>
                     <input
                         type="text"
                         id="username"
@@ -53,10 +54,14 @@ function SignIn() {
                         title="Log in"
                     />
                 </form>
+            </div>
+            <div className="link-container">
                 <p>Nog geen account?</p>
-                <Link to="/registreren">Klik hier om je te registreren!</Link>
+                <Link id='sign-up-link' to="/registreren">Klik hier om je te registreren!</Link>
+            </div>
         </>
     );
 }
+
 
 export default SignIn;

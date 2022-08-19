@@ -3,9 +3,14 @@ main  {
     margin-right: 5%;
 }
 
+label {
+    color: black;
+}
+
 input {
     color: black;
     border-radius: 5px;
+    width: 75%;
     background-image: linear-gradient(to right, rgba(200,0,0,0.5), rgba(252,160,2,0.5), rgba(255,214,0,0.5));
     -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
     box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
@@ -15,14 +20,18 @@ textarea {
     color: black;
     border-radius: 5px;
     margin-bottom: 10px;
+    width: 75%;
     background-image: linear-gradient(to right, rgba(200,0,0,0.5), rgba(252,160,2,0.5), rgba(255,214,0,0.5));
     -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
     box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
 }
 
 .page-container {
-    position: relative;
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    /*position: relative;*/
+    /*min-height: 100vh;*/
 }
 
 #icon {

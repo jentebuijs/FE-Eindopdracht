@@ -2,7 +2,7 @@ import './NewMessage.css';
 import React from "react";
 import {useState, useEffect} from "react";
 import axios from "axios";
-import Button from "../Button/Button";
+import Button from "../../../components/Button/Button";
 import {NotificationManager} from "react-notifications";
 
 function NewMessage({newMessage, toggleNewMessage}) {

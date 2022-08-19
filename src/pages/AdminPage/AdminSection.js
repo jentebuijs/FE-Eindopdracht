@@ -1,3 +1,4 @@
+import './AdminSection.css'
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Message from "../../components/Message/Message";
@@ -27,11 +28,12 @@ function AdminSection() {
                 NotificationManager.warning('Probeer het opnieuw', 'Er ging wat mis!', 1500);
             }
         }
-            fetchAdminMessages();
 
-            return function cleanup() {
-                controller.abort();
-            }
+        fetchAdminMessages();
+
+        return function cleanup() {
+            controller.abort();
+        }
     }, []);
 
     function judgement(message) {
@@ -44,12 +46,14 @@ function AdminSection() {
 
     return (
         <>
-            <Header titel="Admin" />
-            {adminMessages && adminMessages.map((message) => {
-                return (
-                    <Message key={message.id} message={message} judgement={judgement} />
-                );
-            })}
+            <Header titel="Admin"/>
+            <div className="admin-container">
+                {adminMessages && adminMessages.map((message) => {
+                    return (
+                        <Message key={message.id} message={message} judgement={judgement}/>
+                    );
+                })}
+            </div>
         </>
     );
 }

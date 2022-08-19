@@ -2,7 +2,7 @@ import './RequestOverview.css'
 import React, {useContext, useEffect, useState} from 'react';
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import Request from "../../components/Request/Request";
+import Request from "./Request/Request";
 import {FaAngleDoubleDown, FaAngleDoubleUp} from "react-icons/fa";
 
 function RequestOverview() {
@@ -59,7 +59,9 @@ function RequestOverview() {
         <>
             {success &&
                 <>
-                    <h3>Jouw vriendschapsverzoeken</h3>
+                    <div className="title-container">
+                        <h3>Jouw vriendschapsverzoeken</h3>
+                    </div>
                     <section>
                     <span className="box-title">
                         <p onClick={() => {

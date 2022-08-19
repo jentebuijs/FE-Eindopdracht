@@ -1,6 +1,6 @@
 import './ProfileCard.css'
 import {Link} from "react-router-dom";
-import dtb from '../../assets/DTB.JPG';
+import dtb from '../../../assets/DTB.JPG';
 
 function ProfileCard({profile}) {
     return (

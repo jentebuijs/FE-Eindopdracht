@@ -1,5 +1,5 @@
 import './NewRequest.css'
-import Button from "../Button/Button";
+import Button from "../../../components/Button/Button";
 import React, {useState} from "react";
 import axios from "axios";
 import {NotificationManager} from "react-notifications";

@@ -33,18 +33,12 @@ function Message({message, judgement}) {
         }
     }
 
-
-
     return (
         <>
             <div className="message-bar" style={{color: titleColor}}>
                 <p id="message-title">{message.title}</p>
-            </div>
-            <p>{message.content}</p>
-
-            {
-                isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
-                <span>
+                { isAuth && user.authorities.includes("ROLE_ADMIN") && message.approved === false &&
+                    <span id="admin-icons">
                     <FaThumbsUp onClick={() => {
                         handleStatus("accepted")
                     }}/>
@@ -52,8 +46,10 @@ function Message({message, judgement}) {
                     <FaThumbsDown onClick={() => {
                         handleStatus("declined")
                     }}/>
-                </span>
-            }
+                </span> }
+            </div>
+            <p>{message.content}</p>
+
         </>
     )
         ;

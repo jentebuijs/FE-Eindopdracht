@@ -1,12 +1,20 @@
 .message-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     background-color: black;
     border-radius: 15px;
-    padding: 1px;
+    height: 40px;
     -webkit-box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
     box-shadow: 3px 5px 15px 5px rgba(0,0,0,0.3);
 }
 
 #message-title {
     margin-left: 15px;
+}
+
+#admin-icons {
+    width: 50px;
+    color: white;
 }

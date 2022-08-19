@@ -4,11 +4,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
+import PhotoEdit from "./PhotoEdit/PhotoEdit";
 import RequestOverview from "../RequestOverview/RequestOverview";
-import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
-import UserEdit from "../../components/UserEdit/UserEdit";
-import NewRequest from "../../components/newRequest/NewRequest";
+import ProfileEdit from "./ProfileEdit/ProfileEdit";
+import UserEdit from "./UserEdit/UserEdit";
+import NewRequest from "./newRequest/NewRequest";
 import Header from "../../components/Header/Header";
 import dtb from "../../assets/DTB.JPG";
 import {set} from "react-hook-form";
@@ -84,44 +84,41 @@ function Profile() {
         <>
             <Header titel="Profiel"/>
 
-            { username === user.username ?
-                <div>
-                    { profileEdit && <ProfileEdit profileData={profile}
-                                                 setProfileData={setProfile}
-                                                 profileEdit={profileEdit}
-                                                 toggleProfileEdit={toggleProfileEdit}/> }
-                    { photoEdit && <PhotoEdit file={file}
-                                              setFile={setFile}
-                                              toggleFileUpload={togglePhotoEdit}/> }
-                    { userEdit && <UserEdit/> }
-                </div>
-                :
-                <div>
-                    { newRequest && <NewRequest key={username}
-                                                receiver={username}
-                                                sender={user.username}
-                                                toggleNewRequest={toggleNewRequest}/> }
-                </div> }
+            {profileEdit && <ProfileEdit profileData={profile}
+                                         setProfileData={setProfile}
+                                         profileEdit={profileEdit}
+                                         toggleProfileEdit={toggleProfileEdit}/>}
 
-            { profile &&
+            {photoEdit && <PhotoEdit file={file}
+                                     setFile={setFile}
+                                     toggleFileUpload={togglePhotoEdit}/>}
+
+
+            {newRequest && <NewRequest key={username}
+                                       receiver={username}
+                                       sender={user.username}
+                                       toggleNewRequest={toggleNewRequest}/>}
+
+            {profile &&
                 <section className="profile-container" style={{borderColor: borderColor}}>
                     <div className="profile-text">
-                        { username === user.username ?
-                            <h1>Hallo, {profile.firstName}!</h1> : <h1>Hallo, ik ben {profile.firstName}</h1> }
+                        {username === user.username ?
+                            <h1>Hallo, {profile.firstName}!</h1> : <h1>Hallo, ik ben {profile.firstName}</h1>}
 
                         <div className="details">
                             <p>Naam: {profile.firstName} {profile.lastName}</p>
                             <p>Leeftijd: {profile.age}</p>
                             <p>Over mij: {profile.aboutMe}</p>
-                            { profile.frequency && <p>Contactvoorkeur: {profile.frequency.value}</p> }
-                            { profile.level && <p>Nederlands Niveau: {profile.level.value}</p> }
+                            {profile.frequency && <p>Contactvoorkeur: {profile.frequency.value}</p>}
+                            {profile.level && <p>Nederlands Niveau: {profile.level.value}</p>}
                             <p>Profielinformatie blablabla</p>
                         </div>
                     </div>
                     <div className="profile-img">
-                        { profile.photo ?
-                            <img src={profile.photo.url} alt="profielfoto"/> : <img src={dtb} alt="standaardafbeelding"/> }
-                        { profile && username === user.username ?
+                        {profile.photo ?
+                            <img src={profile.photo.url} alt="profielfoto"/> :
+                            <img src={dtb} alt="standaardafbeelding"/>}
+                        {profile && username === user.username ?
                             <span className="icons">
                                 <FaUserEdit size='25px'
                                             id="icon"
@@ -136,13 +133,12 @@ function Profile() {
                                 <FaRegEnvelope size='25px'
                                                id="icon"
                                                onClick={() => toggleNewRequest(!newRequest)}/>
-                            </span> }
+                            </span>}
+                        {userEdit && <UserEdit/>}
                     </div>
-                </section> }
-                { username === user.username &&
-                    <div className="request-container">
-                        <RequestOverview/>
-                    </div>  }
+                </section>}
+            {username === user.username &&
+                <RequestOverview/>}
         </>
     );
 }

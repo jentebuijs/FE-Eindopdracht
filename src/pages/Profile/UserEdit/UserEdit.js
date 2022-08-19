@@ -1,9 +1,9 @@
 import './UserEdit.css'
 import React, {useContext, useState} from "react";
 import axios from "axios";
-import {AuthContext} from "../../context/AuthContext";
+import {AuthContext} from "../../../context/AuthContext";
 import {useHistory} from "react-router-dom";
-import Button from "../Button/Button";
+import Button from "../../../components/Button/Button";
 
 function UserEdit() {
     const {user: {username}, logout} = useContext(AuthContext);

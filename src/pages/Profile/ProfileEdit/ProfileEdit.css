@@ -1,0 +1,12 @@
+.profile-edit-form {
+    margin: 50px 0;
+}
+
+#true {
+    color: black;
+    box-shadow: none;
+}
+
+#false {
+    box-shadow: none;
+}

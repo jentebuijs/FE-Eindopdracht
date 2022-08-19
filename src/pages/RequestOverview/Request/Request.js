@@ -3,7 +3,7 @@ import {FaExclamationTriangle, FaThumbsDown, FaThumbsUp} from "react-icons/fa";
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import {AuthContext} from "../../context/AuthContext";
+import {AuthContext} from "../../../context/AuthContext";
 
 function Request({request, judgement}) {
     const {user} = useContext(AuthContext);
