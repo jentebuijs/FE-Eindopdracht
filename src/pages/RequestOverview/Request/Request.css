@@ -1,0 +1,15 @@
+.request {
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 30px);
+    padding: 0 15px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, rgba(200,0,0,0.5), rgba(252,160,2,0.5), rgba(255,214,0,0.5));
+    height: 40px;
+    margin: 10px 0;
+    list-style-type: none;
+}
+
+

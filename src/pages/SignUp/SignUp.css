@@ -1,4 +1,35 @@
-.sign-up-form {
+fieldset {
+    display: flex;
+    width: 75%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sign-up-container {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin: 50px 0;
+}
+
+#sign-up-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 75%;
+    height: 900px;
+    padding: 50px 0;
+    border: 5px solid #FCA016;
+    border-radius: 15px;
+}
+
+#select-boxes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 200px;
 }

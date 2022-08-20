@@ -1,0 +1,9 @@
+.new-request-form {
+    border: 5px solid;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 200px;
+}

@@ -5,38 +5,49 @@ import Message from "../../components/Message/Message";
 import Button from "../../components/Button/Button";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import NewMessage from "../../components/NewMessage/NewMessage";
-import AdminSection from "../../components/AdminSection/AdminSection";
+import NewMessage from "./NewMessage/NewMessage";
+import {NotificationManager} from "react-notifications";
+import Header from "../../components/Header/Header";
 
 function Messageboard() {
-    const {user: {authorities}, isAuth} = useContext(AuthContext);
+    document.title = "DIGITAALBUDDY | Prikbord";
+    const {isAuth} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [visibleMessages, setVisibleMessages] = useState([]);
     const [newMessage, toggleNewMessage] = useState(false);
+    const [cancelled, toggleCancelled] = useState(false);
 
     useEffect(() => {
-        const fetchController = new AbortController;
-        const {signal} = fetchController;
-        // const CancelToken = axios.CancelToken;
-        // const source = CancelToken.source();
+        const controller = new AbortController();
+
         async function fetchData() {
-            // e.preventDefault();
             try {
-                const result = await axios.get("http://localhost:8080/messages", {signal})
-                // {cancelToken: source.token})
-                setMessages(result.data);
-                setVisibleMessages(result.data);
+                const response = await axios.get("http://localhost:8080/messages",
+                    {
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        signal: controller.signal
+                    });
+
+                setMessages(response.data);
+                setVisibleMessages(response.data);
+
             } catch (e) {
+                toggleCancelled(true);
                 console.error(e);
+                NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
             }
         }
 
         fetchData();
+
         return function cleanup() {
-            // source.cancel();
-            fetchController.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
-    }, []);
+    },[]);
 
     function filterMessages(messageType) {
         if (messageType === "forBuddies") {
@@ -61,43 +72,51 @@ function Messageboard() {
 
     return (
         <>
-            {/*ternary operator of functie*/}
-            <AdminSection />
-                {console.log(messages)}
-                {console.log(visibleMessages)}
-                <span className="buttons">
-                    {isAuth && <FaPlusCircle onClick={() => {
-                        toggleNewMessage(!newMessage)
-                    }}/>}
-                    <Button type="button"
-                            title="Alles"
+            <Header titel="Prikbord"/>
+            <span className="buttons">
+                    {isAuth &&
+                        <FaPlusCircle
+                            size='20px'
+                            color='black'
                             onClick={() => {
-                                filterMessages("all")
-                            }}/>
-                    <Button type="button"
-                            title="Buddies"
-                            onClick={() => {
-                                filterMessages("forBuddies")
-                            }}/>
-                    <Button type="button"
-                            title="Allebei"
-                            onClick={() => {
-                                filterMessages("forBoth")
-                            }}/>
-                    <Button type="button"
-                            title="Studenten"
-                            onClick={() => {
-                                filterMessages("forStudents")
-                            }}/>
+                                toggleNewMessage(!newMessage)
+                            }}/>}
+                <Button type="button"
+                        title="Alles"
+                        classname="all-button"
+                        onClick={() => {
+                            filterMessages("all")
+                        }}/>
+                <Button type="button"
+                        title="Studenten"
+                        classname="student-button"
+                        onClick={() => {
+                            filterMessages("forStudents")
+                        }}/>
+                <Button type="button"
+                        title="Allebei"
+                        classname="both-button"
+                        onClick={() => {
+                            filterMessages("forBoth")
+                        }}/>
+                <Button type="button"
+                        title="Buddies"
+                        classname="buddy-button"
+                        onClick={() => {
+                            filterMessages("forBuddies")
+                        }}/>
+
                 </span>
 
-                { isAuth && newMessage && <NewMessage/> }
+            {isAuth && newMessage && <NewMessage newMessage={newMessage} toggleNewMessage={toggleNewMessage}/>}
 
+            <div className="message-container">
                 {visibleMessages && visibleMessages.map((message) => {
                     return (
                         <Message key={message.id} message={message}/>
                     );
                 })}
+            </div>
         </>
     );
 }

@@ -1,12 +1,16 @@
 import './Header.css'
-import NavBar from "../NavBar/NavBar";
+import logo from '../../assets/logo.JPG';
 
-function Header() {
+function Header({titel}) {
+
     return (
-        <header>
-            <NavBar />
-            <p>Header</p>
-        </header>
+        <div className="container">
+            <div className="image-wrapper">
+                <img src={logo} alt="logo"/>
+            </div>
+            <h2>{titel}</h2>
+        </div>
+
     );
 }
 

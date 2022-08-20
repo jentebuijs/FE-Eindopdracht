@@ -1,103 +1,156 @@
 import './Profile.css'
 import {FaRegEdit, FaPhotoVideo, FaUserEdit, FaRegEnvelope} from "react-icons/fa";
 import React, {useContext, useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
-import Button from "../../components/Button/Button";
-import PhotoEdit from "../../components/PhotoEdit/PhotoEdit";
-import RequestOverview from "../../components/RequestOverview/RequestOverview";
-import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
-import UserEdit from "../../components/UserEdit/UserEdit";
-import NewRequest from "../../components/newRequest/NewRequest";
+import PhotoEdit from "./PhotoEdit/PhotoEdit";
+import RequestOverview from "../RequestOverview/RequestOverview";
+import ProfileEdit from "./ProfileEdit/ProfileEdit";
+import UserEdit from "./UserEdit/UserEdit";
+import NewRequest from "./newRequest/NewRequest";
+import Header from "../../components/Header/Header";
+import dtb from "../../assets/DTB.JPG";
+import {NotificationManager} from "react-notifications";
 
 function Profile() {
-    const {username} = useParams();
     const {user} = useContext(AuthContext);
-    const [buttons, toggleButtons] = useState({});
+    document.title = `DIGITAALBUDDY | Profiel van ${user.username}`
+    const {username} = useParams();
+    const [file, setFile] = useState();
     const [profileEdit, toggleProfileEdit] = useState(false);
     const [userEdit, toggleUserEdit] = useState(false);
-    const [fileUpload, toggleFileUpload] = useState(false);
+    const [photoEdit, togglePhotoEdit] = useState(false);
     const [newRequest, toggleNewRequest] = useState(false);
+    const [borderColor, setBorderColor] = useState('');
     const [profile, setProfile] = useState({});
+    const [cancelled, toggleCancelled] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
+
         fetchProfile(controller);
+
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
     }, []);
 
     useEffect(() => {
+        switch (profile.role) {
+            case "Buddy":
+                setBorderColor('#FFD600');
+                break;
+            case "Student" :
+                setBorderColor('#C80000');
+                break;
+            case "Admin" :
+                setBorderColor('#FCA016');
+                break;
+            default:
+                setBorderColor('#000000');
+                break;
+        }
+    }, [profile])
+
+    useEffect(() => {
         const controller = new AbortController();
+
         fetchProfile(controller);
         toggleProfileEdit(false);
         toggleUserEdit(false);
-        toggleFileUpload(false);
         toggleNewRequest(false);
+
         return function cleanup() {
-            controller.abort();
+            if (cancelled) {
+                controller.abort();
+            }
         }
-    }, [username]);
+    }, [photoEdit, username]);
+
 
     async function fetchProfile(controller) {
-        const token = localStorage.getItem('token');
         try {
             const response = await axios.get(`http://localhost:8080/profiles?username=${username}`, {
                 headers: {
                     "Content-type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }, signal: controller.signal
             });
-            console.log(response);
+
             setProfile(response.data);
+
         } catch (e) {
+            toggleCancelled(true);
             console.error(e);
-        }
-        return function cleanup() {
-            controller.abort();
+            NotificationManager.error('Probeer het opnieuw', 'Er is iets misgegaan!', 1500);
         }
     }
 
     return (
         <>
-            {username === user.username ?
-                <span>
-                    {profileEdit && <ProfileEdit profileData={profile}/>}
-                    {fileUpload && <PhotoEdit/>}
-                    {userEdit && <UserEdit/>}
-                </span>
-                :
-                <span>
-                    {newRequest && <NewRequest key={username} receiver={username} sender={user.username}/>}
-                </span>}
-            {profile &&
-                <section>
-                    <div>
-                        {username === user.username ?
-                            <h2>Hallo, {username}!</h2> : <h2>Hallo, ik ben {username}</h2>}
+            <Header titel="Profiel"/>
 
-                        <p>Naam: {profile.firstName} {profile.lastName}</p>
-                        <p>Leeftijd: {profile.age}</p>
-                        <p>Profielinformatie blablabla</p>
+            {profileEdit && <ProfileEdit profileData={profile}
+                                         setProfileData={setProfile}
+                                         toggleProfileEdit={toggleProfileEdit}
+                                         borderColor={borderColor}/>}
+
+            {photoEdit && <PhotoEdit file={file}
+                                     setFile={setFile}
+                                     toggleFileUpload={togglePhotoEdit}
+                                     borderColor={borderColor}/>}
+
+
+            {newRequest && <NewRequest key={username}
+                                       receiver={username}
+                                       sender={user.username}
+                                       toggleNewRequest={toggleNewRequest}
+                                       borderColor={borderColor}/>}
+
+            {profile &&
+                <section className="profile-container" style={{borderColor: borderColor}}>
+                    <div className="profile-text">
+                        {username === user.username ?
+                            <h1>Hallo, {profile.firstName}!</h1> : <h1>Hallo, ik ben {profile.firstName}</h1>}
+
+                        <div className="details">
+                            <p>Naam: {profile.firstName} {profile.lastName}</p>
+                            <p>Leeftijd: {profile.age}</p>
+                            <p>Over mij: {profile.aboutMe}</p>
+                            {profile.frequency && <p>Contactvoorkeur: {profile.frequency.value}</p>}
+                            {profile.level && <p>Nederlands Niveau: {profile.level.value}</p>}
+                            <p>Profielinformatie blablabla</p>
+                        </div>
                     </div>
-                    <div>
+                    <div className="profile-img">
+                        {profile.photo ?
+                            <img src={profile.photo.url} alt="profielfoto"/> :
+                            <img src={dtb} alt="standaardafbeelding"/>}
                         {profile && username === user.username ?
-                            <span>
-                    <FaUserEdit onClick={() => toggleUserEdit(!userEdit)}/>
-                    <FaRegEdit onClick={() => toggleProfileEdit(!profileEdit)}/>
-                    <FaPhotoVideo onClick={() => toggleFileUpload(!fileUpload)}/>
-                            </span> : <span>
-                        <FaRegEnvelope onClick={() => toggleNewRequest(!newRequest)}/>
+                            <span className="icons">
+                                <FaUserEdit size='25px'
+                                            id="icon"
+                                            onClick={() => toggleUserEdit(!userEdit)}/>
+                                <FaRegEdit size='25px'
+                                           id="icon"
+                                           onClick={() => toggleProfileEdit(!profileEdit)}/>
+                                <FaPhotoVideo size='25px'
+                                              id="icon"
+                                              onClick={() => togglePhotoEdit(!photoEdit)}/>
+                            </span> : <span className="icons">
+                                <FaRegEnvelope size='25px'
+                                               id="icon"
+                                               onClick={() => toggleNewRequest(!newRequest)}/>
                             </span>}
-                        {profile.photo && <img src={profile.photo.url} alt="profielfoto"/>}
+                        {userEdit && <UserEdit/>}
                     </div>
-                </section>
-            }
+                </section>}
+
             {username === user.username &&
-                <RequestOverview/>
-            }
+                <RequestOverview/>}
         </>
     );
 }

@@ -1,0 +1,16 @@
+.box-title {
+    color: white;
+    width: calc(100% - 30px);
+    background-color: black;
+    border-radius: 15px;
+    padding: 0 15px;
+    height: 50px;
+    margin: 15px 0;
+    -webkit-box-shadow: 3px 5px 15px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 3px 5px 15px 5px rgba(0, 0, 0, 0.3);
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+}
